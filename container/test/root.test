@@ -1,0 +1,22 @@
+//typedefs 
+typedef RootTest<int,host> RootTest_int_host_; 
+typedef RootTest<int,host> RootTest_int_host_; 
+typedef RootTest<int,host> RootTest_int_host_; 
+typedef RootTest<int,host> RootTest_int_host_; 
+typedef RootTest<int,host> RootTest_int_host_; 
+typedef RootTest<float,host> RootTest_float_host_; 
+typedef RootTest<float,host> RootTest_float_host_; 
+typedef RootTest<float,host> RootTest_float_host_; 
+typedef RootTest<float,host> RootTest_float_host_; 
+typedef RootTest<float,host> RootTest_float_host_; 
+//Tests/benchmarks 
+TEST_F(RootTest_int_host_,ResizeTesthost){this->ResizeTest();}
+TEST_F(RootTest_int_host_,ResizeClearTesthost){this->ResizeClearTest();}
+TEST_F(RootTest_int_host_,GetSetTesthost){this->GetSetTest();}
+TEST_F(RootTest_int_host_,SwapTesthost){this->SwapTest();}
+TEST_F(RootTest_int_host_,AssignTesthost){this->AssignTest();}
+TEST_F(RootTest_float_host_,ResizeTesthost){this->ResizeTest();}
+TEST_F(RootTest_float_host_,ResizeClearTesthost){this->ResizeClearTest();}
+TEST_F(RootTest_float_host_,GetSetTesthost){this->GetSetTest();}
+TEST_F(RootTest_float_host_,SwapTesthost){this->SwapTest();}
+TEST_F(RootTest_float_host_,AssignTesthost){this->AssignTest();}

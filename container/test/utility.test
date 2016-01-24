@@ -1,0 +1,22 @@
+//typedefs 
+typedef UtilityTest<DOWN> UtilityTest_DOWN_; 
+typedef UtilityTest<DOWN> UtilityTest_DOWN_; 
+typedef UtilityTest<DOWN> UtilityTest_DOWN_; 
+typedef UtilityTest<DOWN> UtilityTest_DOWN_; 
+typedef UtilityTest<DOWN> UtilityTest_DOWN_; 
+typedef UtilityTest<UP> UtilityTest_UP_; 
+typedef UtilityTest<UP> UtilityTest_UP_; 
+typedef UtilityTest<UP> UtilityTest_UP_; 
+typedef UtilityTest<UP> UtilityTest_UP_; 
+typedef UtilityTest<UP> UtilityTest_UP_; 
+//Tests/benchmarks 
+TEST_F(UtilityTest_DOWN_,MoveTestDOWN){this->MoveTest();}
+TEST_F(UtilityTest_DOWN_,NextTestDOWN){this->NextTest();}
+TEST_F(UtilityTest_DOWN_,emptytestDOWN){this->emptytest();}
+TEST_F(UtilityTest_DOWN_,SetTestDOWN){this->SetTest();}
+TEST_F(UtilityTest_DOWN_,NextSizeTestDOWN){this->NextSizeTest();}
+TEST_F(UtilityTest_UP_,MoveTestUP){this->MoveTest();}
+TEST_F(UtilityTest_UP_,NextTestUP){this->NextTest();}
+TEST_F(UtilityTest_UP_,emptytestUP){this->emptytest();}
+TEST_F(UtilityTest_UP_,SetTestUP){this->SetTest();}
+TEST_F(UtilityTest_UP_,NextSizeTestUP){this->NextSizeTest();}

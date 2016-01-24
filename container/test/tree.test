@@ -1,0 +1,130 @@
+//typedefs 
+typedef TreeTest<int,device> TreeTest_int_device_; 
+typedef TreeTest<int,device> TreeTest_int_device_; 
+typedef TreeTest<int,device> TreeTest_int_device_; 
+typedef TreeTest<int,device> TreeTest_int_device_; 
+typedef TreeTest<int,device> TreeTest_int_device_; 
+typedef TreeTest<int,device> TreeTest_int_device_; 
+typedef TreeTest<int,device> TreeTest_int_device_; 
+typedef TreeTest<int,device> TreeTest_int_device_; 
+typedef TreeTest<float,device> TreeTest_float_device_; 
+typedef TreeTest<float,device> TreeTest_float_device_; 
+typedef TreeTest<float,device> TreeTest_float_device_; 
+typedef TreeTest<float,device> TreeTest_float_device_; 
+typedef TreeTest<float,device> TreeTest_float_device_; 
+typedef TreeTest<float,device> TreeTest_float_device_; 
+typedef TreeTest<float,device> TreeTest_float_device_; 
+typedef TreeTest<float,device> TreeTest_float_device_; 
+typedef TreeTest<int,host> TreeTest_int_host_; 
+typedef TreeTest<int,host> TreeTest_int_host_; 
+typedef TreeTest<int,host> TreeTest_int_host_; 
+typedef TreeTest<int,host> TreeTest_int_host_; 
+typedef TreeTest<int,host> TreeTest_int_host_; 
+typedef TreeTest<int,host> TreeTest_int_host_; 
+typedef TreeTest<int,host> TreeTest_int_host_; 
+typedef TreeTest<int,host> TreeTest_int_host_; 
+typedef TreeTest<float,host> TreeTest_float_host_; 
+typedef TreeTest<float,host> TreeTest_float_host_; 
+typedef TreeTest<float,host> TreeTest_float_host_; 
+typedef TreeTest<float,host> TreeTest_float_host_; 
+typedef TreeTest<float,host> TreeTest_float_host_; 
+typedef TreeTest<float,host> TreeTest_float_host_; 
+typedef TreeTest<float,host> TreeTest_float_host_; 
+typedef TreeTest<float,host> TreeTest_float_host_; 
+typedef TreeTest<int,pinned> TreeTest_int_pinned_; 
+typedef TreeTest<int,pinned> TreeTest_int_pinned_; 
+typedef TreeTest<int,pinned> TreeTest_int_pinned_; 
+typedef TreeTest<int,pinned> TreeTest_int_pinned_; 
+typedef TreeTest<int,pinned> TreeTest_int_pinned_; 
+typedef TreeTest<int,pinned> TreeTest_int_pinned_; 
+typedef TreeTest<int,pinned> TreeTest_int_pinned_; 
+typedef TreeTest<int,pinned> TreeTest_int_pinned_; 
+typedef TreeTest<float,pinned> TreeTest_float_pinned_; 
+typedef TreeTest<float,pinned> TreeTest_float_pinned_; 
+typedef TreeTest<float,pinned> TreeTest_float_pinned_; 
+typedef TreeTest<float,pinned> TreeTest_float_pinned_; 
+typedef TreeTest<float,pinned> TreeTest_float_pinned_; 
+typedef TreeTest<float,pinned> TreeTest_float_pinned_; 
+typedef TreeTest<float,pinned> TreeTest_float_pinned_; 
+typedef TreeTest<float,pinned> TreeTest_float_pinned_; 
+typedef TreeTest<int,unified> TreeTest_int_unified_; 
+typedef TreeTest<int,unified> TreeTest_int_unified_; 
+typedef TreeTest<int,unified> TreeTest_int_unified_; 
+typedef TreeTest<int,unified> TreeTest_int_unified_; 
+typedef TreeTest<int,unified> TreeTest_int_unified_; 
+typedef TreeTest<int,unified> TreeTest_int_unified_; 
+typedef TreeTest<int,unified> TreeTest_int_unified_; 
+typedef TreeTest<int,unified> TreeTest_int_unified_; 
+typedef TreeTest<float,unified> TreeTest_float_unified_; 
+typedef TreeTest<float,unified> TreeTest_float_unified_; 
+typedef TreeTest<float,unified> TreeTest_float_unified_; 
+typedef TreeTest<float,unified> TreeTest_float_unified_; 
+typedef TreeTest<float,unified> TreeTest_float_unified_; 
+typedef TreeTest<float,unified> TreeTest_float_unified_; 
+typedef TreeTest<float,unified> TreeTest_float_unified_; 
+typedef TreeTest<float,unified> TreeTest_float_unified_; 
+//Tests/benchmarks 
+TEST_F(TreeTest_int_device_,SwapTestdevice){this->SwapTest();}
+TEST_F(TreeTest_int_device_,SetGetTestdevice){this->SetGetTest();}
+TEST_F(TreeTest_int_device_,AssignmentTestdevice){this->AssignmentTest();}
+TEST_F(TreeTest_int_device_,ConstructorTestdevice){this->ConstructorTest();}
+TEST_F(TreeTest_int_device_,GetBranchTestdevice){this->GetBranchTest();}
+TEST_F(TreeTest_int_device_,AddBranchTestdevice){this->AddBranchTest();}
+TEST_F(TreeTest_int_device_,RemoveBranchTestdevice){this->RemoveBranchTest();}
+TEST_F(TreeTest_int_device_,EqualityTestdevice){this->EqualityTest();}
+TEST_F(TreeTest_float_device_,SwapTestdevice){this->SwapTest();}
+TEST_F(TreeTest_float_device_,SetGetTestdevice){this->SetGetTest();}
+TEST_F(TreeTest_float_device_,AssignmentTestdevice){this->AssignmentTest();}
+TEST_F(TreeTest_float_device_,ConstructorTestdevice){this->ConstructorTest();}
+TEST_F(TreeTest_float_device_,GetBranchTestdevice){this->GetBranchTest();}
+TEST_F(TreeTest_float_device_,AddBranchTestdevice){this->AddBranchTest();}
+TEST_F(TreeTest_float_device_,RemoveBranchTestdevice){this->RemoveBranchTest();}
+TEST_F(TreeTest_float_device_,EqualityTestdevice){this->EqualityTest();}
+TEST_F(TreeTest_int_host_,SwapTesthost){this->SwapTest();}
+TEST_F(TreeTest_int_host_,SetGetTesthost){this->SetGetTest();}
+TEST_F(TreeTest_int_host_,AssignmentTesthost){this->AssignmentTest();}
+TEST_F(TreeTest_int_host_,ConstructorTesthost){this->ConstructorTest();}
+TEST_F(TreeTest_int_host_,GetBranchTesthost){this->GetBranchTest();}
+TEST_F(TreeTest_int_host_,AddBranchTesthost){this->AddBranchTest();}
+TEST_F(TreeTest_int_host_,RemoveBranchTesthost){this->RemoveBranchTest();}
+TEST_F(TreeTest_int_host_,EqualityTesthost){this->EqualityTest();}
+TEST_F(TreeTest_float_host_,SwapTesthost){this->SwapTest();}
+TEST_F(TreeTest_float_host_,SetGetTesthost){this->SetGetTest();}
+TEST_F(TreeTest_float_host_,AssignmentTesthost){this->AssignmentTest();}
+TEST_F(TreeTest_float_host_,ConstructorTesthost){this->ConstructorTest();}
+TEST_F(TreeTest_float_host_,GetBranchTesthost){this->GetBranchTest();}
+TEST_F(TreeTest_float_host_,AddBranchTesthost){this->AddBranchTest();}
+TEST_F(TreeTest_float_host_,RemoveBranchTesthost){this->RemoveBranchTest();}
+TEST_F(TreeTest_float_host_,EqualityTesthost){this->EqualityTest();}
+TEST_F(TreeTest_int_pinned_,SwapTestpinned){this->SwapTest();}
+TEST_F(TreeTest_int_pinned_,SetGetTestpinned){this->SetGetTest();}
+TEST_F(TreeTest_int_pinned_,AssignmentTestpinned){this->AssignmentTest();}
+TEST_F(TreeTest_int_pinned_,ConstructorTestpinned){this->ConstructorTest();}
+TEST_F(TreeTest_int_pinned_,GetBranchTestpinned){this->GetBranchTest();}
+TEST_F(TreeTest_int_pinned_,AddBranchTestpinned){this->AddBranchTest();}
+TEST_F(TreeTest_int_pinned_,RemoveBranchTestpinned){this->RemoveBranchTest();}
+TEST_F(TreeTest_int_pinned_,EqualityTestpinned){this->EqualityTest();}
+TEST_F(TreeTest_float_pinned_,SwapTestpinned){this->SwapTest();}
+TEST_F(TreeTest_float_pinned_,SetGetTestpinned){this->SetGetTest();}
+TEST_F(TreeTest_float_pinned_,AssignmentTestpinned){this->AssignmentTest();}
+TEST_F(TreeTest_float_pinned_,ConstructorTestpinned){this->ConstructorTest();}
+TEST_F(TreeTest_float_pinned_,GetBranchTestpinned){this->GetBranchTest();}
+TEST_F(TreeTest_float_pinned_,AddBranchTestpinned){this->AddBranchTest();}
+TEST_F(TreeTest_float_pinned_,RemoveBranchTestpinned){this->RemoveBranchTest();}
+TEST_F(TreeTest_float_pinned_,EqualityTestpinned){this->EqualityTest();}
+TEST_F(TreeTest_int_unified_,SwapTestunified){this->SwapTest();}
+TEST_F(TreeTest_int_unified_,SetGetTestunified){this->SetGetTest();}
+TEST_F(TreeTest_int_unified_,AssignmentTestunified){this->AssignmentTest();}
+TEST_F(TreeTest_int_unified_,ConstructorTestunified){this->ConstructorTest();}
+TEST_F(TreeTest_int_unified_,GetBranchTestunified){this->GetBranchTest();}
+TEST_F(TreeTest_int_unified_,AddBranchTestunified){this->AddBranchTest();}
+TEST_F(TreeTest_int_unified_,RemoveBranchTestunified){this->RemoveBranchTest();}
+TEST_F(TreeTest_int_unified_,EqualityTestunified){this->EqualityTest();}
+TEST_F(TreeTest_float_unified_,SwapTestunified){this->SwapTest();}
+TEST_F(TreeTest_float_unified_,SetGetTestunified){this->SetGetTest();}
+TEST_F(TreeTest_float_unified_,AssignmentTestunified){this->AssignmentTest();}
+TEST_F(TreeTest_float_unified_,ConstructorTestunified){this->ConstructorTest();}
+TEST_F(TreeTest_float_unified_,GetBranchTestunified){this->GetBranchTest();}
+TEST_F(TreeTest_float_unified_,AddBranchTestunified){this->AddBranchTest();}
+TEST_F(TreeTest_float_unified_,RemoveBranchTestunified){this->RemoveBranchTest();}
+TEST_F(TreeTest_float_unified_,EqualityTestunified){this->EqualityTest();}

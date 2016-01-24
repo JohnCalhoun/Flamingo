@@ -1,0 +1,66 @@
+//typedefs 
+typedef LocationTest<host> LocationTest_host_; 
+typedef LocationTest<unified> LocationTest_unified_; 
+typedef LocationTest<device> LocationTest_device_; 
+typedef LocationTest<pinned> LocationTest_pinned_; 
+typedef LocationTest<host> LocationTest_host_; 
+typedef LocationTest<unified> LocationTest_unified_; 
+typedef LocationTest<device> LocationTest_device_; 
+typedef LocationTest<pinned> LocationTest_pinned_; 
+typedef LocationTest<host> LocationTest_host_; 
+typedef LocationTest<unified> LocationTest_unified_; 
+typedef LocationTest<device> LocationTest_device_; 
+typedef LocationTest<pinned> LocationTest_pinned_; 
+typedef LocationTest<host> LocationTest_host_; 
+typedef LocationTest<unified> LocationTest_unified_; 
+typedef LocationTest<device> LocationTest_device_; 
+typedef LocationTest<pinned> LocationTest_pinned_; 
+typedef LocationTest<host> LocationTest_host_; 
+typedef LocationTest<unified> LocationTest_unified_; 
+typedef LocationTest<device> LocationTest_device_; 
+typedef LocationTest<pinned> LocationTest_pinned_; 
+typedef LocationTest<host> LocationTest_host_; 
+typedef LocationTest<unified> LocationTest_unified_; 
+typedef LocationTest<device> LocationTest_device_; 
+typedef LocationTest<pinned> LocationTest_pinned_; 
+typedef LocationTest<host> LocationTest_host_; 
+typedef LocationTest<unified> LocationTest_unified_; 
+typedef LocationTest<device> LocationTest_device_; 
+typedef LocationTest<pinned> LocationTest_pinned_; 
+typedef LocationTest<host> LocationTest_host_; 
+typedef LocationTest<unified> LocationTest_unified_; 
+typedef LocationTest<device> LocationTest_device_; 
+typedef LocationTest<pinned> LocationTest_pinned_; 
+//Tests/benchmarks 
+TEST_F(LocationTest_host_,sourceindextestSingle){this->sourceindextestSingle();}
+TEST_F(LocationTest_unified_,sourceindextestSingle){this->sourceindextestSingle();}
+TEST_F(LocationTest_device_,sourceindextestSingle){this->sourceindextestSingle();}
+TEST_F(LocationTest_pinned_,sourceindextestSingle){this->sourceindextestSingle();}
+TEST_F(LocationTest_host_,cudaextracttestSingle){this->cudaextracttestSingle();}
+TEST_F(LocationTest_unified_,cudaextracttestSingle){this->cudaextracttestSingle();}
+TEST_F(LocationTest_device_,cudaextracttestSingle){this->cudaextracttestSingle();}
+TEST_F(LocationTest_pinned_,cudaextracttestSingle){this->cudaextracttestSingle();}
+TEST_F(LocationTest_host_,cudainserttestSingle){this->cudainserttestSingle();}
+TEST_F(LocationTest_unified_,cudainserttestSingle){this->cudainserttestSingle();}
+TEST_F(LocationTest_device_,cudainserttestSingle){this->cudainserttestSingle();}
+TEST_F(LocationTest_pinned_,cudainserttestSingle){this->cudainserttestSingle();}
+TEST_F(LocationTest_host_,cudablockmovetestSingle){this->cudablockmovetestSingle();}
+TEST_F(LocationTest_unified_,cudablockmovetestSingle){this->cudablockmovetestSingle();}
+TEST_F(LocationTest_device_,cudablockmovetestSingle){this->cudablockmovetestSingle();}
+TEST_F(LocationTest_pinned_,cudablockmovetestSingle){this->cudablockmovetestSingle();}
+TEST_F(LocationTest_host_,overlaptestSingle){this->overlaptestSingle();}
+TEST_F(LocationTest_unified_,overlaptestSingle){this->overlaptestSingle();}
+TEST_F(LocationTest_device_,overlaptestSingle){this->overlaptestSingle();}
+TEST_F(LocationTest_pinned_,overlaptestSingle){this->overlaptestSingle();}
+TEST_F(LocationTest_host_,copytestSingle){this->copytestSingle();}
+TEST_F(LocationTest_unified_,copytestSingle){this->copytestSingle();}
+TEST_F(LocationTest_device_,copytestSingle){this->copytestSingle();}
+TEST_F(LocationTest_pinned_,copytestSingle){this->copytestSingle();}
+TEST_F(LocationTest_host_,mallocfreetestSingle){this->mallocfreetestSingle();}
+TEST_F(LocationTest_unified_,mallocfreetestSingle){this->mallocfreetestSingle();}
+TEST_F(LocationTest_device_,mallocfreetestSingle){this->mallocfreetestSingle();}
+TEST_F(LocationTest_pinned_,mallocfreetestSingle){this->mallocfreetestSingle();}
+TEST_F(LocationTest_host_,filltestSingle){this->filltestSingle();}
+TEST_F(LocationTest_unified_,filltestSingle){this->filltestSingle();}
+TEST_F(LocationTest_device_,filltestSingle){this->filltestSingle();}
+TEST_F(LocationTest_pinned_,filltestSingle){this->filltestSingle();}

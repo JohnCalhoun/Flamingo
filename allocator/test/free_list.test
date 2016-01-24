@@ -1,0 +1,8 @@
+//typedefs 
+//Tests/benchmarks 
+TEST_F(FreeListTest,CoutTestSingle){this->CoutTestSingle();}
+TEST_F(FreeListTest,FindFreeHandleTestSingle){this->FindFreeHandleTestSingle();}
+TEST_F(FreeListTest,FindReservedHandleTestSingle){this->FindReservedHandleTestSingle();}
+TEST_F(FreeListTest,CoutTestThreaded){this->CoutTestThreaded();}
+TEST_F(FreeListTest,FindFreeHandleTestThreaded){this->FindFreeHandleTestThreaded();}
+TEST_F(FreeListTest,FindReservedHandleTestThreaded){this->FindReservedHandleTestThreaded();}

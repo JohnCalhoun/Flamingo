@@ -1,0 +1,57 @@
+/** @mainpage FLAMINGO Multiagent Simulation Engine 
+*
+*	@section Intro
+*	FLAMINGO is project inspired by Dr. Paul Richmonds on <a href="flamegpu.com">Flame Gpu</a> with the goal of extending multiagents simulations to a gpu cluster enviroment. Flamingo is developed and test on the Schoenberg cluster at Texas Tech University as part of the <a href='schoenberg.ttu.edu/lazarus'>LAZARUS</a> project. Flamingo is designed with these goals in mind:
+*	-# high performance
+*		- Writing in C++ with heavy use of Template metaprograming and Gpu acceleration through Cuda
+*	-# portablity
+*		- Mostly written in standard C++11 with as few external libraries as possible
+*	-# Ease of Use and Maintance
+*		-The code is well documented 
+*	-# Robustness
+*		- <a href='https://code.google.com/p/googletest/'>GoogleTest</a> is used for unite testing of all components and <a href='https://github.com/DigitalInBlue/Celero'>Celero</a> is used for benchmarking and verification of performance. 
+*
+*	FLAMINGO is build from a number of modules each with its own github repository:
+*	-# Allocator
+*	-# Container
+*	-# Scheduler
+*	-# Load Balancer
+*	-# Message Passing
+*	-# Agent Definetion 
+*
+*	@section modules Module descriptions
+*
+*
+*		@subsection allocator Allocator
+*		The Allocator Module contains Allocator class that implements the C++11 <a href='http://en.cppreference.com/w/cpp/concept/Allocator'>allocator concept</a> with two policy types,strategy and location
+*
+*		The Module provides three strategy types: 
+*			-# Buddy Block Allocator
+*			-# Standard allocator
+*			-# object pool
+*
+*			### Buddy Block Allocator: ###
+*				Implemets a [Buddy Block Allocator](https://en.wikipedia.org/wiki/Buddy_memory_allocation). In short, this allocats memory in large blocks, and distrutes the blocks in powers of two. it also avoids memory fragmentation and out performs the the Cuda memory allocators when there are multiple allocations in program
+*
+*			### Standard allocator: ###
+*				is just a wrap around the various Malloc calls
+*
+*			### Object Pool: ###
+*				Contains a collection of idenicatly typed objects that are checked out and returned as needed. 
+*
+*		@subsection container Container
+*
+*
+*		@subsection scheduler Scheduler
+*
+*
+*		@subsection load Load Balancer
+*
+*
+*		@subsection message Message Passing
+*
+*
+*		@subsection agnet Agent Definetion 
+*
+*
+**/

@@ -1,0 +1,94 @@
+#ifndef ROOT_H
+#define ROOT_H
+#include<location.cu>
+#include<cuda.h>
+
+#define __both__ __device__ __host__ 
+
+template<typename T, typename A,typename L>
+class rootSingle{
+	public:
+	typedef A		Allocator;
+	typedef T		value_type;
+
+	typedef typename Allocator::Location_Policy	Location;
+	typedef typename Allocator::pointer		Pointer;
+	typedef typename Allocator::size_type		size_type;
+	
+	typedef typename Allocator::rebind<Pointer,Location>::other Allocator_ptr;
+	typedef typename Allocator_ptr::pointer		Root_ptr; 
+	private:
+	Allocator_ptr allocator; 
+
+	Root_ptr _root; 
+	size_type	_size;
+
+	public:
+	rootSingle();
+	rootSingle(size_type);
+	~rootSingle(); 
+
+	void clear();
+	void resize(size_type);
+
+	__both__ Pointer	get(size_type)const;
+	void				set(Pointer,size_type); 
+	void				set(size_type);
+	size_type			size()const;
+	rootSingle&		operator=(const rootSingle&);
+};
+template<typename T, typename A, typename L>
+class rootDouble{
+	public:
+	typedef T		value_type;
+	//device side
+	typedef A		Allocator_dev;
+
+	typedef typename Allocator_dev::Location_Policy	Location_dev;
+	typedef typename Allocator_dev::pointer			Pointer_dev;
+	typedef typename Allocator_dev::size_type		size_type;
+	
+	typedef typename Allocator_dev::rebind<Pointer_dev,Location_dev>::other Allocator_ptr_dev;
+	typedef typename Allocator_ptr_dev::pointer		Root_dev; 
+	//host side
+	typedef location<host>		Location_host;
+	typedef typename Allocator_dev::rebind<T,Location_host>::other	Allocator_host; 
+	
+	typedef typename Allocator_host::pointer		Pointer_host;
+	typedef typename Allocator_host::rebind<Pointer_host,Location_host>::other 
+											Allocator_ptr_host;
+	typedef typename Allocator_ptr_host::pointer		Root_host; 
+	private:
+	Allocator_ptr_host allocatorHost;
+	Allocator_ptr_dev allocatorDev;
+
+	Root_dev	_rootHost;
+	Root_host _rootDevice;
+
+	size_type _size; 
+	void sync();
+
+	public: 
+	rootDouble();
+	rootDouble(size_type);
+	~rootDouble(); 
+
+	void clear(); 
+	void resize(size_type);
+	__both__ Pointer_dev get(size_type)const;
+	void set(Pointer_dev,size_type); 
+	void set(size_type); 
+	size_type size()const;
+
+	rootDouble& operator=(const rootDouble&);
+};
+
+template<typename T,typename A,typename L>
+class Root :public rootSingle<T,A,L>{};
+
+template<typename T,typename A>
+class Root<T,A,device> :public rootDouble<T,A,device>{};
+
+#undef __both__
+#include"root.inl"
+#endif

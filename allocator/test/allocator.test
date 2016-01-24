@@ -1,0 +1,14 @@
+//typedefs 
+typedef AllocatorTest<BUDDY<int,location<HOST> > > AllocatorTest_BUDDY_int_location_HOST___; 
+typedef AllocatorTest<BUDDY<int,location<HOST> > > AllocatorTest_BUDDY_int_location_HOST___; 
+typedef AllocatorTest<BUDDY<int,location<MANAGED> > > AllocatorTest_BUDDY_int_location_MANAGED___; 
+typedef AllocatorTest<BUDDY<int,location<MANAGED> > > AllocatorTest_BUDDY_int_location_MANAGED___; 
+typedef AllocatorTest<BUDDY<int,location<PINNED> > > AllocatorTest_BUDDY_int_location_PINNED___; 
+typedef AllocatorTest<BUDDY<int,location<PINNED> > > AllocatorTest_BUDDY_int_location_PINNED___; 
+//Tests/benchmarks 
+TEST_F(AllocatorTest_BUDDY_int_location_HOST___,CopyTestSingle){this->CopyTestSingle();}
+TEST_F(AllocatorTest_BUDDY_int_location_HOST___,CopyTestThreaded){this->CopyTestThreaded();}
+TEST_F(AllocatorTest_BUDDY_int_location_MANAGED___,CopyTestSingle){this->CopyTestSingle();}
+TEST_F(AllocatorTest_BUDDY_int_location_MANAGED___,CopyTestThreaded){this->CopyTestThreaded();}
+TEST_F(AllocatorTest_BUDDY_int_location_PINNED___,CopyTestSingle){this->CopyTestSingle();}
+TEST_F(AllocatorTest_BUDDY_int_location_PINNED___,CopyTestThreaded){this->CopyTestThreaded();}

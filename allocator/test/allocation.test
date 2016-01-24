@@ -1,0 +1,98 @@
+//typedefs 
+typedef BuddyAllocTest<BUDDY<int,location<HOST> > > BuddyAllocTest_BUDDY_int_location_HOST___; 
+typedef BuddyAllocTest<BUDDY<int,location<HOST> > > BuddyAllocTest_BUDDY_int_location_HOST___; 
+typedef BuddyAllocTest<BUDDY<int,location<HOST> > > BuddyAllocTest_BUDDY_int_location_HOST___; 
+typedef BuddyAllocTest<STANDARD<int,location<HOST> > > BuddyAllocTest_STANDARD_int_location_HOST___; 
+typedef BuddyAllocTest<STANDARD<int,location<HOST> > > BuddyAllocTest_STANDARD_int_location_HOST___; 
+typedef BuddyAllocTest<STANDARD<int,location<HOST> > > BuddyAllocTest_STANDARD_int_location_HOST___; 
+typedef BuddyAllocTest<BUDDY<int,location<DEVICE> > > BuddyAllocTest_BUDDY_int_location_DEVICE___; 
+typedef BuddyAllocTest<BUDDY<int,location<DEVICE> > > BuddyAllocTest_BUDDY_int_location_DEVICE___; 
+typedef BuddyAllocTest<BUDDY<int,location<DEVICE> > > BuddyAllocTest_BUDDY_int_location_DEVICE___; 
+typedef BuddyAllocTest<STANDARD<int,location<DEVICE> > > BuddyAllocTest_STANDARD_int_location_DEVICE___; 
+typedef BuddyAllocTest<STANDARD<int,location<DEVICE> > > BuddyAllocTest_STANDARD_int_location_DEVICE___; 
+typedef BuddyAllocTest<STANDARD<int,location<DEVICE> > > BuddyAllocTest_STANDARD_int_location_DEVICE___; 
+typedef BuddyAllocTest<BUDDY<int,location<MANAGED> > > BuddyAllocTest_BUDDY_int_location_MANAGED___; 
+typedef BuddyAllocTest<BUDDY<int,location<MANAGED> > > BuddyAllocTest_BUDDY_int_location_MANAGED___; 
+typedef BuddyAllocTest<BUDDY<int,location<MANAGED> > > BuddyAllocTest_BUDDY_int_location_MANAGED___; 
+typedef BuddyAllocTest<STANDARD<int,location<MANAGED> > > BuddyAllocTest_STANDARD_int_location_MANAGED___; 
+typedef BuddyAllocTest<STANDARD<int,location<MANAGED> > > BuddyAllocTest_STANDARD_int_location_MANAGED___; 
+typedef BuddyAllocTest<STANDARD<int,location<MANAGED> > > BuddyAllocTest_STANDARD_int_location_MANAGED___; 
+typedef BuddyAllocTest<BUDDY<int,location<PINNED> > > BuddyAllocTest_BUDDY_int_location_PINNED___; 
+typedef BuddyAllocTest<BUDDY<int,location<PINNED> > > BuddyAllocTest_BUDDY_int_location_PINNED___; 
+typedef BuddyAllocTest<BUDDY<int,location<PINNED> > > BuddyAllocTest_BUDDY_int_location_PINNED___; 
+typedef BuddyAllocTest<STANDARD<int,location<PINNED> > > BuddyAllocTest_STANDARD_int_location_PINNED___; 
+typedef BuddyAllocTest<STANDARD<int,location<PINNED> > > BuddyAllocTest_STANDARD_int_location_PINNED___; 
+typedef BuddyAllocTest<STANDARD<int,location<PINNED> > > BuddyAllocTest_STANDARD_int_location_PINNED___; 
+typedef BuddyAllocTest<BUDDY<int,location<HOST> > > BuddyAllocTest_BUDDY_int_location_HOST___; 
+typedef BuddyAllocTest<BUDDY<int,location<HOST> > > BuddyAllocTest_BUDDY_int_location_HOST___; 
+typedef BuddyAllocTest<BUDDY<int,location<HOST> > > BuddyAllocTest_BUDDY_int_location_HOST___; 
+typedef BuddyAllocTest<STANDARD<int,location<HOST> > > BuddyAllocTest_STANDARD_int_location_HOST___; 
+typedef BuddyAllocTest<STANDARD<int,location<HOST> > > BuddyAllocTest_STANDARD_int_location_HOST___; 
+typedef BuddyAllocTest<STANDARD<int,location<HOST> > > BuddyAllocTest_STANDARD_int_location_HOST___; 
+typedef BuddyAllocTest<BUDDY<int,location<DEVICE> > > BuddyAllocTest_BUDDY_int_location_DEVICE___; 
+typedef BuddyAllocTest<BUDDY<int,location<DEVICE> > > BuddyAllocTest_BUDDY_int_location_DEVICE___; 
+typedef BuddyAllocTest<BUDDY<int,location<DEVICE> > > BuddyAllocTest_BUDDY_int_location_DEVICE___; 
+typedef BuddyAllocTest<STANDARD<int,location<DEVICE> > > BuddyAllocTest_STANDARD_int_location_DEVICE___; 
+typedef BuddyAllocTest<STANDARD<int,location<DEVICE> > > BuddyAllocTest_STANDARD_int_location_DEVICE___; 
+typedef BuddyAllocTest<STANDARD<int,location<DEVICE> > > BuddyAllocTest_STANDARD_int_location_DEVICE___; 
+typedef BuddyAllocTest<BUDDY<int,location<MANAGED> > > BuddyAllocTest_BUDDY_int_location_MANAGED___; 
+typedef BuddyAllocTest<BUDDY<int,location<MANAGED> > > BuddyAllocTest_BUDDY_int_location_MANAGED___; 
+typedef BuddyAllocTest<BUDDY<int,location<MANAGED> > > BuddyAllocTest_BUDDY_int_location_MANAGED___; 
+typedef BuddyAllocTest<STANDARD<int,location<MANAGED> > > BuddyAllocTest_STANDARD_int_location_MANAGED___; 
+typedef BuddyAllocTest<STANDARD<int,location<MANAGED> > > BuddyAllocTest_STANDARD_int_location_MANAGED___; 
+typedef BuddyAllocTest<STANDARD<int,location<MANAGED> > > BuddyAllocTest_STANDARD_int_location_MANAGED___; 
+typedef BuddyAllocTest<BUDDY<int,location<PINNED> > > BuddyAllocTest_BUDDY_int_location_PINNED___; 
+typedef BuddyAllocTest<BUDDY<int,location<PINNED> > > BuddyAllocTest_BUDDY_int_location_PINNED___; 
+typedef BuddyAllocTest<BUDDY<int,location<PINNED> > > BuddyAllocTest_BUDDY_int_location_PINNED___; 
+typedef BuddyAllocTest<STANDARD<int,location<PINNED> > > BuddyAllocTest_STANDARD_int_location_PINNED___; 
+typedef BuddyAllocTest<STANDARD<int,location<PINNED> > > BuddyAllocTest_STANDARD_int_location_PINNED___; 
+typedef BuddyAllocTest<STANDARD<int,location<PINNED> > > BuddyAllocTest_STANDARD_int_location_PINNED___; 
+//Tests/benchmarks 
+TEST_F(BuddyAllocTest_BUDDY_int_location_HOST___,MaxSizeTestSingle){this->MaxSizeTestSingle();}
+TEST_F(BuddyAllocTest_BUDDY_int_location_HOST___,AllocDeallocTestSingle){this->AllocDeallocTestSingle();}
+TEST_F(BuddyAllocTest_BUDDY_int_location_HOST___,MultiAllocDeallocTestSingle){this->MultiAllocDeallocTestSingle();}
+TEST_F(BuddyAllocTest_STANDARD_int_location_HOST___,MaxSizeTestSingle){this->MaxSizeTestSingle();}
+TEST_F(BuddyAllocTest_STANDARD_int_location_HOST___,AllocDeallocTestSingle){this->AllocDeallocTestSingle();}
+TEST_F(BuddyAllocTest_STANDARD_int_location_HOST___,MultiAllocDeallocTestSingle){this->MultiAllocDeallocTestSingle();}
+TEST_F(BuddyAllocTest_BUDDY_int_location_DEVICE___,MaxSizeTestSingle){this->MaxSizeTestSingle();}
+TEST_F(BuddyAllocTest_BUDDY_int_location_DEVICE___,AllocDeallocTestSingle){this->AllocDeallocTestSingle();}
+TEST_F(BuddyAllocTest_BUDDY_int_location_DEVICE___,MultiAllocDeallocTestSingle){this->MultiAllocDeallocTestSingle();}
+TEST_F(BuddyAllocTest_STANDARD_int_location_DEVICE___,MaxSizeTestSingle){this->MaxSizeTestSingle();}
+TEST_F(BuddyAllocTest_STANDARD_int_location_DEVICE___,AllocDeallocTestSingle){this->AllocDeallocTestSingle();}
+TEST_F(BuddyAllocTest_STANDARD_int_location_DEVICE___,MultiAllocDeallocTestSingle){this->MultiAllocDeallocTestSingle();}
+TEST_F(BuddyAllocTest_BUDDY_int_location_MANAGED___,MaxSizeTestSingle){this->MaxSizeTestSingle();}
+TEST_F(BuddyAllocTest_BUDDY_int_location_MANAGED___,AllocDeallocTestSingle){this->AllocDeallocTestSingle();}
+TEST_F(BuddyAllocTest_BUDDY_int_location_MANAGED___,MultiAllocDeallocTestSingle){this->MultiAllocDeallocTestSingle();}
+TEST_F(BuddyAllocTest_STANDARD_int_location_MANAGED___,MaxSizeTestSingle){this->MaxSizeTestSingle();}
+TEST_F(BuddyAllocTest_STANDARD_int_location_MANAGED___,AllocDeallocTestSingle){this->AllocDeallocTestSingle();}
+TEST_F(BuddyAllocTest_STANDARD_int_location_MANAGED___,MultiAllocDeallocTestSingle){this->MultiAllocDeallocTestSingle();}
+TEST_F(BuddyAllocTest_BUDDY_int_location_PINNED___,MaxSizeTestSingle){this->MaxSizeTestSingle();}
+TEST_F(BuddyAllocTest_BUDDY_int_location_PINNED___,AllocDeallocTestSingle){this->AllocDeallocTestSingle();}
+TEST_F(BuddyAllocTest_BUDDY_int_location_PINNED___,MultiAllocDeallocTestSingle){this->MultiAllocDeallocTestSingle();}
+TEST_F(BuddyAllocTest_STANDARD_int_location_PINNED___,MaxSizeTestSingle){this->MaxSizeTestSingle();}
+TEST_F(BuddyAllocTest_STANDARD_int_location_PINNED___,AllocDeallocTestSingle){this->AllocDeallocTestSingle();}
+TEST_F(BuddyAllocTest_STANDARD_int_location_PINNED___,MultiAllocDeallocTestSingle){this->MultiAllocDeallocTestSingle();}
+TEST_F(BuddyAllocTest_BUDDY_int_location_HOST___,MaxSizeTestThreaded){this->MaxSizeTestThreaded();}
+TEST_F(BuddyAllocTest_BUDDY_int_location_HOST___,AllocDeallocTestThreaded){this->AllocDeallocTestThreaded();}
+TEST_F(BuddyAllocTest_BUDDY_int_location_HOST___,MultiAllocDeallocTestThreaded){this->MultiAllocDeallocTestThreaded();}
+TEST_F(BuddyAllocTest_STANDARD_int_location_HOST___,MaxSizeTestThreaded){this->MaxSizeTestThreaded();}
+TEST_F(BuddyAllocTest_STANDARD_int_location_HOST___,AllocDeallocTestThreaded){this->AllocDeallocTestThreaded();}
+TEST_F(BuddyAllocTest_STANDARD_int_location_HOST___,MultiAllocDeallocTestThreaded){this->MultiAllocDeallocTestThreaded();}
+TEST_F(BuddyAllocTest_BUDDY_int_location_DEVICE___,MaxSizeTestThreaded){this->MaxSizeTestThreaded();}
+TEST_F(BuddyAllocTest_BUDDY_int_location_DEVICE___,AllocDeallocTestThreaded){this->AllocDeallocTestThreaded();}
+TEST_F(BuddyAllocTest_BUDDY_int_location_DEVICE___,MultiAllocDeallocTestThreaded){this->MultiAllocDeallocTestThreaded();}
+TEST_F(BuddyAllocTest_STANDARD_int_location_DEVICE___,MaxSizeTestThreaded){this->MaxSizeTestThreaded();}
+TEST_F(BuddyAllocTest_STANDARD_int_location_DEVICE___,AllocDeallocTestThreaded){this->AllocDeallocTestThreaded();}
+TEST_F(BuddyAllocTest_STANDARD_int_location_DEVICE___,MultiAllocDeallocTestThreaded){this->MultiAllocDeallocTestThreaded();}
+TEST_F(BuddyAllocTest_BUDDY_int_location_MANAGED___,MaxSizeTestThreaded){this->MaxSizeTestThreaded();}
+TEST_F(BuddyAllocTest_BUDDY_int_location_MANAGED___,AllocDeallocTestThreaded){this->AllocDeallocTestThreaded();}
+TEST_F(BuddyAllocTest_BUDDY_int_location_MANAGED___,MultiAllocDeallocTestThreaded){this->MultiAllocDeallocTestThreaded();}
+TEST_F(BuddyAllocTest_STANDARD_int_location_MANAGED___,MaxSizeTestThreaded){this->MaxSizeTestThreaded();}
+TEST_F(BuddyAllocTest_STANDARD_int_location_MANAGED___,AllocDeallocTestThreaded){this->AllocDeallocTestThreaded();}
+TEST_F(BuddyAllocTest_STANDARD_int_location_MANAGED___,MultiAllocDeallocTestThreaded){this->MultiAllocDeallocTestThreaded();}
+TEST_F(BuddyAllocTest_BUDDY_int_location_PINNED___,MaxSizeTestThreaded){this->MaxSizeTestThreaded();}
+TEST_F(BuddyAllocTest_BUDDY_int_location_PINNED___,AllocDeallocTestThreaded){this->AllocDeallocTestThreaded();}
+TEST_F(BuddyAllocTest_BUDDY_int_location_PINNED___,MultiAllocDeallocTestThreaded){this->MultiAllocDeallocTestThreaded();}
+TEST_F(BuddyAllocTest_STANDARD_int_location_PINNED___,MaxSizeTestThreaded){this->MaxSizeTestThreaded();}
+TEST_F(BuddyAllocTest_STANDARD_int_location_PINNED___,AllocDeallocTestThreaded){this->AllocDeallocTestThreaded();}
+TEST_F(BuddyAllocTest_STANDARD_int_location_PINNED___,MultiAllocDeallocTestThreaded){this->MultiAllocDeallocTestThreaded();}

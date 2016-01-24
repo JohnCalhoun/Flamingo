@@ -1,0 +1,34 @@
+//typedefs 
+typedef IteratorTest<int,host> IteratorTest_int_host_; 
+typedef IteratorTest<int,host> IteratorTest_int_host_; 
+typedef IteratorTest<float,host> IteratorTest_float_host_; 
+typedef IteratorTest<float,host> IteratorTest_float_host_; 
+typedef IteratorTest<int,device> IteratorTest_int_device_; 
+typedef IteratorTest<int,device> IteratorTest_int_device_; 
+typedef IteratorTest<float,device> IteratorTest_float_device_; 
+typedef IteratorTest<float,device> IteratorTest_float_device_; 
+typedef IteratorTest<int,pinned> IteratorTest_int_pinned_; 
+typedef IteratorTest<int,pinned> IteratorTest_int_pinned_; 
+typedef IteratorTest<float,pinned> IteratorTest_float_pinned_; 
+typedef IteratorTest<float,pinned> IteratorTest_float_pinned_; 
+typedef IteratorTest<int,unified> IteratorTest_int_unified_; 
+typedef IteratorTest<int,unified> IteratorTest_int_unified_; 
+typedef IteratorTest<float,unified> IteratorTest_float_unified_; 
+typedef IteratorTest<float,unified> IteratorTest_float_unified_; 
+//Tests/benchmarks 
+TEST_F(IteratorTest_int_host_,EmptyTestSingle){this->EmptyTestSingle();};
+TEST_F(IteratorTest_int_host_,EmptyTestThreaded){this->EmptyTestThreaded();};
+TEST_F(IteratorTest_float_host_,EmptyTestSingle){this->EmptyTestSingle();};
+TEST_F(IteratorTest_float_host_,EmptyTestThreaded){this->EmptyTestThreaded();};
+TEST_F(IteratorTest_int_device_,EmptyTestSingle){this->EmptyTestSingle();};
+TEST_F(IteratorTest_int_device_,EmptyTestThreaded){this->EmptyTestThreaded();};
+TEST_F(IteratorTest_float_device_,EmptyTestSingle){this->EmptyTestSingle();};
+TEST_F(IteratorTest_float_device_,EmptyTestThreaded){this->EmptyTestThreaded();};
+TEST_F(IteratorTest_int_pinned_,EmptyTestSingle){this->EmptyTestSingle();};
+TEST_F(IteratorTest_int_pinned_,EmptyTestThreaded){this->EmptyTestThreaded();};
+TEST_F(IteratorTest_float_pinned_,EmptyTestSingle){this->EmptyTestSingle();};
+TEST_F(IteratorTest_float_pinned_,EmptyTestThreaded){this->EmptyTestThreaded();};
+TEST_F(IteratorTest_int_unified_,EmptyTestSingle){this->EmptyTestSingle();};
+TEST_F(IteratorTest_int_unified_,EmptyTestThreaded){this->EmptyTestThreaded();};
+TEST_F(IteratorTest_float_unified_,EmptyTestSingle){this->EmptyTestSingle();};
+TEST_F(IteratorTest_float_unified_,EmptyTestThreaded){this->EmptyTestThreaded();};

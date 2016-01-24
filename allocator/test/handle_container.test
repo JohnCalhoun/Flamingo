@@ -1,0 +1,8 @@
+//typedefs 
+//Tests/benchmarks 
+TEST_F(HandleContainerTest,FindHandleTestSingle){this->FindHandleTestSingle();}
+TEST_F(HandleContainerTest,FindRemoveHandleTestSingle){this->FindRemoveHandleTestSingle();}
+TEST_F(HandleContainerTest,HandleListTestSingle){this->HandleListTestSingle();}
+TEST_F(HandleContainerTest,FindHandleTestThreaded){this->FindHandleTestThreaded();}
+TEST_F(HandleContainerTest,FindRemoveHandleTestThreaded){this->FindRemoveHandleTestThreaded();}
+TEST_F(HandleContainerTest,HandleListTestThreaded){this->HandleListTestThreaded();}

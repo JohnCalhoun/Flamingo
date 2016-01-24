@@ -1,0 +1,8 @@
+//typedefs 
+//Tests/benchmarks 
+TEST_F(FreeContainerTest,FindReturnHandleTestSingle){this->FindReturnHandleTestSingle();}
+TEST_F(FreeContainerTest,FindRemoveHandleTestSingle){this->FindRemoveHandleTestSingle();}
+TEST_F(FreeContainerTest,Size2OrderTestSingle){this->Size2OrderTestSingle();}
+TEST_F(FreeContainerTest,FindReturnHandleTestThreaded){this->FindReturnHandleTestThreaded();}
+TEST_F(FreeContainerTest,FindRemoveHandleTestThreaded){this->FindRemoveHandleTestThreaded();}
+TEST_F(FreeContainerTest,Size2OrderTestThreaded){this->Size2OrderTestThreaded();}

@@ -1,0 +1,154 @@
+#define __both__ __device__ __host__
+//********************************Root Single************************
+template<typename T,typename A,typename L>
+rootSingle<T,A,L>::rootSingle(){
+	_root=NULL;
+	resize(0); 
+}
+template<typename T,typename A,typename L>
+rootSingle<T,A,L>::rootSingle(rootSingle<T,A,L>::size_type s){
+	resize(s);
+}
+template<typename T,typename A,typename L>
+rootSingle<T,A,L>::~rootSingle(){
+	clear();
+}
+template<typename T,typename A,typename L>
+void rootSingle<T,A,L>::clear(){
+	if(_root){
+		allocator.deallocate(_root);
+		_root=NULL;
+	}
+	_size=0; 
+}
+template<typename T,typename A,typename L>
+void rootSingle<T,A,L>::resize(rootSingle<T,A,L>::size_type s){
+	if(s>0){
+		_root=allocator.allocate(s);
+		_size=s;
+	}else{
+		clear();
+	}
+}
+template<typename T,typename A,typename L>
+__both__ rootSingle<T,A,L>::Pointer rootSingle<T,A,L>::get(rootSingle<T,A,L>::size_type index)const{
+	return *(_root+index);
+}
+template<typename T,typename A,typename L>
+void rootSingle<T,A,L>::set(	rootSingle<T,A,L>::Pointer p,
+						rootSingle<T,A,L>::size_type index){
+	_root[index]=p; 
+}
+template<typename T,typename A,typename L>
+rootSingle<T,A,L>::size_type rootSingle<T,A,L>::size()const{
+	return _size;  
+}
+template<typename T,typename A,typename L>
+rootSingle<T,A,L>& rootSingle<T,A,L>::operator=(const rootSingle<T,A,L>& other){
+	clear();
+     if(other.size()>0){
+		if(other.size()!=this->size() or !this->getRootHost() )
+			this->resize( other.size() );
+			int size=this->size()*sizeof(T);
+
+			for(int x=0;x<this->size();x++){
+				Pointer src=other.get(x);
+				Pointer dst=this->get(x);
+				if(src){
+					if(!dst){
+						set(x);
+						dst=this->get(x);
+					}
+					Location::MemCopy(src,dst,size);
+				}
+			}
+		}
+	return *this;
+}
+//********************************Root Single************************
+//********************************Root Double************************
+template<typename T,typename A,typename L>
+rootDouble<T,A,L>::rootDouble(){
+	resize(0);
+	_rootHost=NULL;
+	_rootDevice=NULL;
+}
+template<typename T,typename A,typename L>
+rootDouble<T,A,L>::rootDouble(rootDouble<T,A,L>::size_type size){
+	resize(size);
+}
+template<typename T,typename A,typename L>
+rootDouble<T,A,L>::~rootDouble(){
+	clear(); 
+}
+template<typename T,typename A,typename L>
+void rootDouble<T,A,L>::clear(){
+	if(_rootHost){
+		allocatorHost.deallocate(_rootHost);
+		allocatorDev.deallocate(_rootDevice);
+		_rootHost=NULL;
+		_rootDevice=NULL;
+	}
+	_size=0;
+}
+template<typename T,typename A,typename L>
+void rootDouble<T,A,L>::sync(){
+	Location_dev::MemCopy(	_rootHost,
+						_rootDevice,
+						_size*sizeof(Pointer_dev)
+					); 
+}
+template<typename T,typename A,typename L>
+void rootDouble<T,A,L>::resize(rootDouble<T,A,L>::size_type s){
+	if(s>0){
+		_rootHost=allocatorHost.allocate(s);
+		_rootDevice=allocatorDev.allocate(s);
+		_size=s;
+	}else{
+		clear();
+	}
+}
+template<typename T,typename A,typename L>
+__both__ rootDouble<T,A,L>::Pointer_dev rootDouble<T,A,L>::get(
+							rootDouble<T,A,L>::size_type index)const{
+	#ifdef __CUDA_ARCH__
+		return *(_rootDevice+index);
+	#else
+		return *(_rootHost+index);
+	#endif
+}
+template<typename T,typename A,typename L>
+void rootDouble<T,A,L>::set(	rootDouble<T,A,L>::Pointer_dev p,
+						rootDouble<T,A,L>::size_type index){
+	_rootHost[index]=p; 
+	sync(); 
+}
+template<typename T,typename A,typename L>
+rootDouble<T,A,L>::size_type rootDouble<T,A,L>::size()const{
+	return _size;  
+}
+template<typename T,typename A,typename L>
+rootDouble<T,A,L>& rootDouble<T,A,L>::operator=(const rootDouble<T,A,L>& other){
+	clear();
+     if(other.size()>0){
+		if(other.size()!=this->size() or !this->getRootHost() )
+			this->resize( other.size() );
+			int size=this->size()*sizeof(T);
+
+			for(int x=0;x<this->size();x++){
+				Pointer_dev src=other.get(x);
+				Pointer_dev dst=this->get(x);
+				if(src){
+					if(!dst){
+						set(x);
+						dst=this->get(x);
+					}
+					Location_dev::MemCopy(src,dst,size);
+				}
+			}
+		}
+	sync();
+	return *this;
+}
+//********************************Root Double************************
+#undef __both__

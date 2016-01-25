@@ -1,3 +1,0 @@
-Add device side test for HAT
-
-

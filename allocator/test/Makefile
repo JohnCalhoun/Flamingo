@@ -1,5 +1,5 @@
 CC=nvcc
-UTIL=/home/john/projects/flamingo/utilities
+UTIL=../../utilities
 FOLDERS=-I ../source_files -isystem /usr/include -L/usr/lib64 -I $(UTIL)
 LINKS=-lgtest -lpthread -lboost_thread-mt 
 SOURCE_DIR=../source_files

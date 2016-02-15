@@ -1,0 +1,10 @@
+Load Balancer
+	purpose
+; provide load balancing 
+	classes
+		node
+			tracks its attraction to locations 
+			has a location 
+			interface to adjust attraction
+			check repel/attraction forces 
+			virtual move method

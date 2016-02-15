@@ -1,0 +1,59 @@
+Data Frame 
+	purpose
+	: give basic data structure that abstracts out memory/data structure needs
+	: each column is implemented as vectors but provides row like access
+	: easily move rows from one dataframe to another 
+	: use allocator class for all memory management  
+	classes
+		transporter 
+		address 
+		: host and id information
+		: uniquly ids dataframe 
+		columns 
+		: vector
+		dataframe
+		: zipped row of columns
+		: address 
+		: move methods through transporter and address classes 
+		: memoryspace location
+		: random access iterator to tuples(rows)
+		: rows
+		:	insert and remove groups of rows, non contiguous 
+		datafame.iterator 
+	libraries
+		thrust
+		: implement the columns as host and device vectors 
+		: use zipped iterator for row access 
+		flamingo::allocator
+	interactions
+		load balancer
+		: memory location can be querried 
+		: rows can be moved to other dataframes 
+		scheduler
+		: can querry memory location
+		: request to be moved to another 
+		movement 
+		: move rows to other 
+Transporter
+	purpose
+; provided high level interface for moving large segments of data frame rows across nodes 
+; not exposed outside of data frame class
+	classes
+		payload
+		: data.frame row packed into contiguous segment 
+		: destination dataframe address 
+		shipper
+		: package payload
+		:	turn data frame rows into contiguous segments 
+		: send payload
+		:	use appriate api calls 
+		:	node2node
+		:		mpi
+		:	innode
+		:		flammingo allocator memcpy 
+		: recieve payload
+		:	unpack data 
+		:	put into data.frame 
+	libraries
+		mpi
+		: for node to node messages

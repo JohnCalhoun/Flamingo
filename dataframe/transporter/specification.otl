@@ -1,0 +1,24 @@
+Transporter
+	purpose
+; provided high level interace for moving large segments of dataframe rows accross nodes 
+; subclass to dataframe, only exposure 
+	classes
+		payload
+			data.frame
+			destination dataframe 
+		shipper
+			package payload
+			send payload
+			recieve payload
+			batch and single methods
+	libraries
+		mpi
+		cuda
+	implementation
+		node-node
+			mpi
+		memory-location to memory-location
+			host 
+			device
+			managed
+			unified 

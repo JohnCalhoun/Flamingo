@@ -34,6 +34,7 @@ class Free_List {
      Free_Container<T> free_container;
 
      bool vacant();
+	bool allFree();
 
      void split(pointer&, size_type);
      pointer find_free_handle(size_type /*size*/);
@@ -55,7 +56,15 @@ std::ostream& operator<<(std::ostream& out, Free_List<T>& free_list) {
 
 template <typename T>
 bool Free_List<T>::vacant() {
+	//true  - free container is not empty 
+	//false - free container is empty
      return !(free_container.empty());
+}
+template <typename T>
+bool Free_List<T>::allFree() {
+	//true  - reserved container is empty 
+	//false - reserved container is not empty
+     return (reserved_container.empty());
 }
 
 template <typename T>

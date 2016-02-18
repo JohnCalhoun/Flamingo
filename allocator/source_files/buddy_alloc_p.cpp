@@ -48,11 +48,11 @@ class buddy_alloc_policy : public Policy {
      typedef std::list<tuple> bank;
      typedef typename bank::iterator iter;
 
-     template <typename U, typename L>
+/*     template <typename U, typename L>
      struct rebind {
           typedef buddy_alloc_policy<U, L> other;
      };
-
+*/
      static bank _bank;
      static std::mutex mutex;
 
@@ -61,6 +61,7 @@ class buddy_alloc_policy : public Policy {
      buddy_alloc_policy(const buddy_alloc_policy<T, Policy>&);
 
      void addbank(iter&);
+	void removebank(iter&); 
 
      //    memory allocation
      pointer allocate(size_type);
@@ -150,6 +151,21 @@ void buddy_alloc_policy<T, Policy>::addbank(
      }
 }
 
+template <typename T, typename Policy>
+void buddy_alloc_policy<T, Policy>::removebank(
+    buddy_alloc_policy<T, Policy>::iter& it) {
+     if (it == _bank.end()) {
+          std::lock_guard<std::mutex> lock(mutex);
+          if (it == _bank.end()) {
+			if( (it->second)->allFree() ){
+				Policy::Delete(it->first);
+				delete(it->second);
+				_bank.pop_back(); 				
+			}
+		}
+     }
+}
+
 //************************************************allocate/deallocate***********************************************
 // allocate
 template <typename T, typename Policy>
@@ -172,16 +188,16 @@ buddy_alloc_policy<T, Policy>::pointer buddy_alloc_policy<T, Policy>::allocate(
 // deallocate
 template <typename T, typename Policy>
 void buddy_alloc_policy<T, Policy>::deallocate(
-    buddy_alloc_policy<T, Policy>::pointer p) {
+			buddy_alloc_policy<T, Policy>::pointer p) {
      // search for matching base pointer
-     auto it =
-         std::find_if(_bank.begin(), _bank.end(),
+     auto it = std::find_if(_bank.begin(), _bank.end(),
                       [&p](tuple t) { return (t.first) == (p._base_pointer); });
 
      int offset = p._offset;
      handle_ptr handle = (it->second)->find_reserved_handle(offset);
      (it->second)->combine(handle);
      (it->second)->add_free_handle(handle);
+	removebank(it); 		
 }
 
 template <typename T, typename Policy>

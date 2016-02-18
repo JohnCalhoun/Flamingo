@@ -1,7 +1,7 @@
 CC=nvcc
 UTIL=../../utilities
 FOLDERS=-I ../source_files -isystem /usr/include -L/usr/lib64 -I $(UTIL)
-LINKS=-lgtest -lpthread -lboost_thread-mt 
+LINKS=-lgtest -lpthread -lboost_thread 
 SOURCE_DIR=../source_files
 COVERAGE=$(UTIL)/coverage.py
 CFLAGS=--std=c++11 -g -G -pg -O0

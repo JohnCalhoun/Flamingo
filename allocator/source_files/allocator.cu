@@ -26,7 +26,7 @@
  *
  * typedef allocation_policy<int,device>::allocator Allocator;
  * Allocator allocator;
- * Allocator::pointer p=allocator.allocatoe(sizeof(int)*2);
+ * Allocator::pointer p=allocator.allocate(sizeof(int)*2);
  * \endcode
  *
  */

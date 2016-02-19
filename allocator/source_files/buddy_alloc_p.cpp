@@ -36,6 +36,7 @@ class buddy_alloc_policy : public Policy {
      typedef std::size_t size_type;
      typedef typename Handle<T>::difference_type difference_type;
 
+
      typedef std::false_type propagate_on_container_copy_assignment;
      typedef std::false_type propagate_on_container_move_assignment;
      typedef std::false_type propagate_on_container_swap;

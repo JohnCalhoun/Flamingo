@@ -1,4 +1,0 @@
-//typedefs 
-//Tests/benchmarks 
-TEST_F(DataFrameTest,EmptyTestSingle){this->EmptyTestSingle();};
-TEST_F(DataFrameTest,EmptyTestThreaded){this->EmptyTestThreaded();};

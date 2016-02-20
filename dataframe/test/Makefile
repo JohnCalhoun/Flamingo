@@ -9,10 +9,16 @@ CFLAGS=--std=c++11 -g -G -pg -O0
 #********************************tests*********************************
 
 #dataframe tests
-dataframe.test:dataframe_test.cu $(COVERAGE)
+dataframe.test:dataframe_test.cu $(COVERAGE) ../source_files/*
 	python $(COVERAGE) -i ./dataframe_test.cu
 dataframe_test:dataframe_test.cu dataframe.test
 	clear && $(CC) -o dataframe_test main_test.cu $(FOLDERS) $(LINKS) $(CFLAGS) -D DATAFRAME_TEST
+
+#iterator tests
+iterator.test:iterator.cu $(COVERAGE) ../source_files/*
+	python $(COVERAGE) -i ./dataframe_test.cu
+iterator_test:iterator.cu iterator.test
+	clear && $(CC) -o iterator_test main_test.cu $(FOLDERS) $(LINKS) $(CFLAGS) -D ITERATOR_TEST
 
 .PHONY:run
 run:all

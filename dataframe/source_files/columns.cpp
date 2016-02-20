@@ -5,31 +5,26 @@
 #include <location.cu> 
 #include <thrust/device_vector.h>
 #include <thrust/host_vector.h>
+#include <boost/mpl/int.hpp>
+#include <boost/mpl/at.hpp>
+#include <boost/mpl/vector.hpp>
 
 template<typename T,typename L>
-class column : public thrust::host_vector<T>{};
-
-template<typename T>
-class column<T,host> : public thrust::host_vector<
-						T,
-						typename allocation_policy<T,host>::allocator>{
+struct column_traits {
+	typedef thrust::device_vector<T,typename allocation_policy<T,L>::allocator> column;
+	typedef location<L> location;
 };
 
 template<typename T>
-class column<T,device> : public thrust::device_vector<
-						T,
-						typename allocation_policy<T,device>::allocator>{
+struct column_traits<T,host> {
+	typedef thrust::host_vector<T,typename allocation_policy<T,host>::allocator> column;
+	typedef location<host> location;
 };
-template<typename T>
-class column<T,pinned> : public thrust::device_vector<
-						T,
-						typename allocation_policy<T,pinned>::allocator>{
-};
-template<typename T>
-class column<T,unified> : public thrust::device_vector<
-						T,
-						typename allocation_policy<T,unified>::allocator>{
+
+template<int n,typename L,typename vec>
+struct column_return{
+	typedef typename boost::mpl::at<vec,boost::mpl::int_<n> >::type base;
+	typedef typename column_traits<base,L>::column* type;  
 };
 
 #endif 
-

@@ -2,16 +2,18 @@
 #ifndef DATAFRAME
 #define DATAFRAME
 
+#include <location.cu> 
 #include "columns.cpp"
 #include "iterator.cpp"
 #include "traits.cpp"
 #include <vector>
+#include <array>
 
 template<class ... Type>
 class dataframe : public traits<Type...> {
 	//typedefs
 	typedef std::vector<void*> branch;
-	
+	typedef std::array<Memory,traits<Type...>::num_column> locations; 
 
 	public:
 	typedef dataframe_iterator<Type...>	iterator;

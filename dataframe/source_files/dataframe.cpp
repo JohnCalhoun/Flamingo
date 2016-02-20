@@ -10,10 +10,10 @@
 #include <array>
 
 template<class ... Type>
-class dataframe : public traits<Type...> {
+class dataframe {	
 	//typedefs
 	typedef std::vector<void*> branch;
-	typedef std::array<Memory,traits<Type...>::num_column> locations; 
+	typedef std::array<Memory,sizeof...(Type)> locations; 
 
 	public:
 	typedef dataframe_iterator<Type...>	iterator;
@@ -38,8 +38,8 @@ class dataframe : public traits<Type...> {
 	private:
 	iterator row_access(size_type n); 		
 
-	template<int n,typename L>
-	typename traits<Type...>::column_return<n,L>::type column_access();
+	template<int n,Memory M>
+	typename traits<Type...>::column_return<n,M>::type column_access();
 
 	template<int n,typename S,typename D>
 	void move_column(); 	

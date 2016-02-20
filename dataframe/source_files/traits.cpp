@@ -17,20 +17,16 @@ struct traits {
 	typedef boost::mpl::vector<Type...>	type_vector;	
 	typedef thrust::tuple<Type...>		tuple;
 	typedef thrust::zip_iterator<tuple>	zip;
- 
-	typedef typename boost::mpl::size<type_vector>::type size;
 
 	typedef tuple			value_type;
 	typedef value_type&		reference;
 	typedef unsigned long	size_type; 
 	typedef long			difference_type; 
 
-	const int num_column=size::value;
-
-	template<int n,typename L>
+	template<int n,Memory M>
 	struct column_return{
 		typedef typename boost::mpl::at<type_vector,boost::mpl::int_<n> >::type base;
-		typedef typename column_traits<base,L>::column* type;  
+		typedef typename column_traits<base,M>::column* type;  
 	};
 };
 

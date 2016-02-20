@@ -30,9 +30,9 @@
  * \endcode
  *
  */
-template <typename T, typename L>
+template <typename T, Memory M>
 struct allocation_policy {
-     typedef buddy_alloc_policy<T, location<L> > allocator;
+     typedef buddy_alloc_policy<T, location<M> > allocator;
 };
 
 template <typename T>

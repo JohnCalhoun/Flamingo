@@ -6,10 +6,10 @@
 #include <thrust/device_vector.h>
 #include <thrust/host_vector.h>
 
-template<typename T,typename L>
+template<typename T,Memory M>
 struct column_traits {
-	typedef thrust::device_vector<T,typename allocation_policy<T,L>::allocator> column;
-	typedef location<L> location;
+	typedef thrust::device_vector<T,typename allocation_policy<T,M>::allocator> column;
+	typedef location<M> location;
 };
 
 template<typename T>

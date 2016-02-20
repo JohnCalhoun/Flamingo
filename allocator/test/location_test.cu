@@ -11,7 +11,7 @@
 #include<stdlib.h>
 
 // host location test
-template <typename T>
+template <Memory M>
 class LocationTest : public ::testing::Test {
 	protected:
 	typedef int test_type;
@@ -34,7 +34,7 @@ class LocationTest : public ::testing::Test {
 		free(h_ptr);
 		cudaFree(d_ptr);
 	}
-	location<T> policy;
+	location<M> policy;
 
 	DEFINE(mallocfreetest, LOCATION_THREADS)
      DEFINE(copytest, LOCATION_THREADS)
@@ -48,16 +48,16 @@ class LocationTest : public ::testing::Test {
 
 };
 
-template <typename T>
-void LocationTest<T>::mallocfreetest() {
+template <Memory M>
+void LocationTest<M>::mallocfreetest() {
      void* p = NULL;
      p = policy.New(10);
      policy.Delete(p);
      EXPECT_TRUE(p);
 };
 
-template <typename T>
-void LocationTest<T>::copytest() {
+template <Memory M>
+void LocationTest<M>::copytest() {
      int a = 1;
      int* a_ptr = &a;
      int b = 0;
@@ -86,8 +86,8 @@ void LocationTest<device>::copytest() {
      EXPECT_EQ(1, b);
 };
 
-template <typename T>
-void LocationTest<T>::filltest() {
+template <Memory M>
+void LocationTest<M>::filltest() {
 	int locallength=10;
 	int size = locallength*sizeof(int);
 	int value=2;
@@ -104,8 +104,8 @@ void LocationTest<T>::filltest() {
 
 }
 
-template <typename T>
-void LocationTest<T>::overlaptest() {
+template <Memory M>
+void LocationTest<M>::overlaptest() {
 	int offset=2;
 	int locallength=length-offset;
 	int localsize=locallength*sizeof(test_type);
@@ -136,8 +136,8 @@ void LocationTest<host>::overlaptest() {
 	}
 }
 
-template <typename T>
-void LocationTest<T>::cudaextracttest() {
+template <Memory M>
+void LocationTest<M>::cudaextracttest() {
 	pointer tmp;
 	int block=4;
 	int offset=2;
@@ -158,8 +158,8 @@ void LocationTest<T>::cudaextracttest() {
 	cudaFree(tmp);
 }
 
-template <typename T>
-void LocationTest<T>::cudainserttest() {
+template <Memory M>
+void LocationTest<M>::cudainserttest() {
 	pointer tmp;
 	int block=4;
 	int offset=2;
@@ -184,8 +184,8 @@ void LocationTest<T>::cudainserttest() {
 	}	cudaFree(tmp); 
 }
 
-template <typename T>
-void LocationTest<T>::cudablockmovetest() {
+template <Memory M>
+void LocationTest<M>::cudablockmovetest() {
 	pointer tmp;
 	int block=4;
 	int offset=2;
@@ -207,8 +207,8 @@ void LocationTest<T>::cudablockmovetest() {
 	cudaFree(tmp); 
 }
 
-template <typename T>
-void LocationTest<T>::sourceindextest() {
+template <Memory M>
+void LocationTest<M>::sourceindextest() {
 	#define NUMOFTEST_SIDT 12
 	int param[NUMOFTEST_SIDT][3];
 	for(int i=0; i<NUMOFTEST_SIDT; i++){

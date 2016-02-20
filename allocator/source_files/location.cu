@@ -30,10 +30,8 @@
  *  @brief empty struct representing Cuda unified memory memory
  */
 
-struct host {};
-struct pinned {};
-struct device {};
-struct unified {};
+
+enum Memory { host,pinned,device,unified };
 
 template <typename pointer, typename Item>
 __global__ void cuda_fill(pointer dst, int count, Item item);
@@ -72,7 +70,7 @@ void cuda_memmove(pointer, pointer, value_type*, int, int, int, int*, int*);
  *	provide an interface to streams for the memcopy functions
  *
  * */
-template <typename T>
+template <Memory M>
 class location {
     public:
      void* New(size_t);
@@ -138,9 +136,9 @@ class location {
  */
 
 /** \cond  **/
-template <typename T>
+template <Memory M>
 template <typename pointer, typename size_type>
-void location<T>::MemCopy(pointer src_ptr, pointer dst_ptr, size_type size) {
+void location<M>::MemCopy(pointer src_ptr, pointer dst_ptr, size_type size) {
      typedef typename std::remove_pointer<pointer>::type value_type;
      typedef thrust::reverse_iterator<pointer> reverse_iterator;
      if (src_ptr <= (dst_ptr + size) && dst_ptr <= (src_ptr + size)) {
@@ -217,9 +215,9 @@ void location<host>::MemCopy(pointer src_ptr, pointer dst_ptr, size_type size) {
 };
 
 /** \ingroup allocator-module */
-template <typename T>
+template <Memory M>
 template <typename pointer, typename Item>
-void location<T>::fill_in(pointer dst, int count, Item item) {
+void location<M>::fill_in(pointer dst, int count, Item item) {
      int blocksize;
      int mingridsize;
      int gridsize;

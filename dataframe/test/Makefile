@@ -9,9 +9,9 @@ CFLAGS=--std=c++11 -g -G -pg -O0
 #********************************tests*********************************
 
 #dataframe tests
-dataframe.test:dataframe_test.cu $(COVERAGE) ../source_files/*
-	python $(COVERAGE) -i ./dataframe_test.cu
-dataframe_test:dataframe_test.cu dataframe.test
+dataframe.test:container.cu $(COVERAGE) ../source_files/*
+	python $(COVERAGE) -i ./container.cu
+dataframe_test:container.cu dataframe.test
 	clear && $(CC) -o dataframe_test main_test.cu $(FOLDERS) $(LINKS) $(CFLAGS) -D DATAFRAME_TEST
 
 #iterator tests

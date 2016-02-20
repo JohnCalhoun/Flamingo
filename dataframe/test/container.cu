@@ -5,7 +5,7 @@
 #define DATAFRAME_SIZE 10 
 
 #include<MacroUtilities.cpp>
-#include<dataframe.cu>
+#include<dataframe.cpp>
 #include<vector>
 #include<thread>
 #include<stdio.h>
@@ -15,7 +15,6 @@ class dataframeTest : public ::testing::Test{
 	public:
 	typedef dataframe<Type... >		Container;
 	typedef typename Container::iterator	iterator;
-	Container _container; 
 	
 	DEFINE(ConstructorTest,	DATAFRAME_THREADS)
 	DEFINE(AssignmentTest,	DATAFRAME_THREADS)	
@@ -30,12 +29,12 @@ class dataframeTest : public ::testing::Test{
 };
 
 template<class ... Type>
-void dataframeTest<T,L>::EmptyTest(){
+void dataframeTest<Type...>::EmptyTest(){
 
 }
 
 template<class ... Type>
-void dataframeTest<T,L>::InsertTest(){
+void dataframeTest<Type...>::InsertTest(){
 /*	Container local;
 	int s=local.size();
 	local.insert(local.begin(),1);
@@ -44,14 +43,14 @@ void dataframeTest<T,L>::InsertTest(){
 }
 
 template<class ... Type>
-void dataframeTest<T,L>::AccessTest(){
+void dataframeTest<Type...>::AccessTest(){
 /*	auto it=global_host.begin();	
 	int r=*it;
 	EXPECT_EQ(r,0); 
 */
 }
 template<class ... Type>
-void dataframeTest<T,L>::ModifyTest(){
+void dataframeTest<Type...>::ModifyTest(){
 /*	Container local;
 	local=global_host;
 
@@ -65,11 +64,11 @@ void dataframeTest<T,L>::ModifyTest(){
 */
 }
 template<class ... Type>
-void dataframeTest<T,L>::ConstructorTest(){
+void dataframeTest<Type...>::ConstructorTest(){
 //	Container local_vector; 
 };
 template<class ... Type>
-void dataframeTest<T,L>::AssignmentTest(){
+void dataframeTest<Type...>::AssignmentTest(){
 /*
 	Container local_vector; 
 	local_vector=vector;	
@@ -77,11 +76,11 @@ void dataframeTest<T,L>::AssignmentTest(){
 */
 };
 template<class ... Type>
-void dataframeTest<T,L>::EqualityTest(){
+void dataframeTest<Type...>::EqualityTest(){
 //	EXPECT_TRUE(vector==vector);
 };
 template<class ... Type>
-void dataframeTest<T,L>::BeginEndTest(){
+void dataframeTest<Type...>::BeginEndTest(){
 /*
 	typedef typename Container::iterator iterator; 
 	
@@ -92,7 +91,7 @@ void dataframeTest<T,L>::BeginEndTest(){
 */
 };
 template<class ... Type>
-void dataframeTest<T,L>::LockTest(){
+void dataframeTest<Type...>::LockTest(){
 /*
 	vector.lock();
 	global_host[0]++;
@@ -104,7 +103,7 @@ void dataframeTest<T,L>::LockTest(){
 */
 }
 template<class ... Type>
-void dataframeTest<T,L>::QuerryTest(){
+void dataframeTest<Type...>::QuerryTest(){
 /*
 	typedef typename Container::size_type size;	
 

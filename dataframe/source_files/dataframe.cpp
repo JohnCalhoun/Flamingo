@@ -10,15 +10,17 @@
 #include <vector>
 #include <array>
 
-class dataframeBase {}; 
+struct dataframeBase {
+	typedef addressbook<dataframeBase>			AddressBook;
+	static AddressBook	_addressbook;
+}; 
 
 template<class ... Type>
 class dataframe : public dataframeBase{	
 	//typedefs
 	typedef std::vector<void*>				branch;
 	typedef std::array<Memory,sizeof...(Type)>	locations; 
-	typedef unsigned int					ID;
-	typedef addressbook<ID,dataframeBase*>		AddressBook;
+	typedef AddressBook::Value				ID;
 
 	public:
 	typedef dataframe_iterator<Type...>	iterator;
@@ -32,7 +34,6 @@ class dataframe : public dataframeBase{
 	private:
 	branch		_branch;
 	ID			_id; 
-	AddressBook	_addressbook;
 
 	public:
 	dataframe();

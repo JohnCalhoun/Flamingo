@@ -14,6 +14,7 @@
 #include <thrust/iterator/zip_iterator.h>
 #include <boost/type_traits/add_pointer.hpp>
 #include <boost/mpl/placeholders.hpp>
+#include <boost/mpl/range_c.hpp>
 #include <cstddef> 
 
 using boost::mpl::placeholders::_1;
@@ -29,6 +30,7 @@ struct traits {
 	typedef thrust::tuple<pointer_vector>		pointer_tuple;
 	typedef thrust::zip_iterator<pointer_tuple>	pointer_zip;
 
+	typedef boost::mpl::range_c<int,0,sizeof...(Type)> range;
 
 	typedef value_tuple			value_type;
 	typedef pointer_tuple		pointer; 
@@ -41,6 +43,13 @@ struct traits {
 		typedef typename boost::mpl::at<type_vector,boost::mpl::int_<n> >::type base;
 		typedef typename column<base,M>::type type;  
 	};
+
+	template<int n>
+	struct Return{
+		typedef typename boost::mpl::at<type_vector,boost::mpl::int_<n> >::type	type_base;
+		typedef typename boost::mpl::at<pointer_vector,boost::mpl::int_<n> >::type pointer_base;
+	};
+
 };
 
 #endif 

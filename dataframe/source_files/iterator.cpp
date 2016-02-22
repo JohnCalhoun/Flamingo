@@ -44,15 +44,7 @@ class dataframe_iterator: public traits<Type...> {
 	 reference operator[](size_type); //optional
 };
 
-
-
-
-
-
-
-
-
-
+#include "iterator.inl"
 
 #endif 
 

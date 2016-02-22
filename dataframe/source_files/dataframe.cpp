@@ -18,9 +18,9 @@ struct dataframeBase {
 template<class ... Type>
 class dataframe : public dataframeBase{	
 	//typedefs
-	typedef std::vector<void*>				branch;
+	typedef std::vector<columnBase*>			branch;
 	typedef std::array<Memory,sizeof...(Type)>	locations; 
-	typedef AddressBook::Value				ID;
+	typedef const AddressBook::Value			ID;
 
 	public:
 	typedef dataframe_iterator<Type...>	iterator;
@@ -50,13 +50,13 @@ class dataframe : public dataframeBase{
 	typename traits<Type...>::column_return<n,M>::type column_access();
 
 	template<int n,typename S,typename D>
-	void move_column(); 	
+	void move_column_location(); 	
 
 	public:
 	void assign(iterator,iterator);
 	void assign(size_type,value_type);
 
-	reference operator=(dataframe);
+	reference operator=(const dataframe<Type...>&);
 	reference at();
 	reference operator[](size_type);
 	reference front();
@@ -84,7 +84,7 @@ class dataframe : public dataframeBase{
 	void pop_front();
 	void resize(size_type);
 	void resize(size_type,value_type);	
-	void swap(dataframe&); 
+	void swap(dataframe<Type...>&); 
 	
 	bool operator==(const dataframe<Type...>&);
 	bool operator!=(const dataframe<Type...>&);

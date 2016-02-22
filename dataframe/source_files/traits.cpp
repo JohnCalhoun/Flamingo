@@ -26,7 +26,7 @@ struct traits {
 	template<int n,Memory M>
 	struct column_return{
 		typedef typename boost::mpl::at<type_vector,boost::mpl::int_<n> >::type base;
-		typedef typename column_traits<base,M>::column* type;  
+		typedef typename column<base,M>::type type;  
 	};
 };
 

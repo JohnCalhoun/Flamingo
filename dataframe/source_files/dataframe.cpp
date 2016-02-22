@@ -6,14 +6,19 @@
 #include "columns.cpp"
 #include "iterator.cpp"
 #include "traits.cpp"
+#include "addressbook.cpp"
 #include <vector>
 #include <array>
 
+class dataframeBase {}; 
+
 template<class ... Type>
-class dataframe {	
+class dataframe : public dataframeBase{	
 	//typedefs
-	typedef std::vector<void*> branch;
-	typedef std::array<Memory,sizeof...(Type)> locations; 
+	typedef std::vector<void*>				branch;
+	typedef std::array<Memory,sizeof...(Type)>	locations; 
+	typedef unsigned int					ID;
+	typedef addressbook<ID,dataframeBase*>		AddressBook;
 
 	public:
 	typedef dataframe_iterator<Type...>	iterator;
@@ -25,7 +30,9 @@ class dataframe {
 	typedef typename traits<Type...>::type_vector	type_vector;
 
 	private:
-	branch _branch;
+	branch		_branch;
+	ID			_id; 
+	AddressBook	_addressbook;
 
 	public:
 	dataframe();

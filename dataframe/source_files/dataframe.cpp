@@ -29,6 +29,7 @@ class dataframe : public dataframeBase{
 	typedef typename traits<Type...>::difference_type	difference_type;
 	typedef typename traits<Type...>::reference		reference;
 	typedef typename traits<Type...>::value_type		value_type;
+	typedef typename traits<Type...>::pointer		pointer;
 	typedef typename traits<Type...>::type_vector	type_vector;
 
 	private:

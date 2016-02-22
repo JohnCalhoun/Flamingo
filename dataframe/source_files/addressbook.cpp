@@ -10,11 +10,12 @@
 template<typename Object>
 class addressbook {
 	public:
-	typedef unsigned int	Key;
-	typedef Object*		Value;
+	typedef unsigned int			Key;
+	typedef Object*				Value;
+	typedef std::map<Key,Value>		Map;
+	typedef typename Map::iterator	iterator; 
 
 	private:
-	typedef std::map<Key,Value>		Map;
 
 	typedef flamingo::threading::shared_mutex			Mutex;
 	typedef flamingo::threading::shared_lock_guard<Mutex>	shared_guard;

@@ -10,7 +10,7 @@ addressbook<Object>::~addressbook(){
 }
 
 template<typename Object>
-addressbook<Object>::Key addressbook<Object>::objectToKey(const Object& object){
+addressbook<Object>::Key addressbook<Object>::objectToKey(const Object& object)const{
 	Key key=static_cast<Key>(&object);
 	return key;
 }
@@ -35,7 +35,7 @@ void addressbook<Object>::remove(addressbook<Object>::Key key){
 
 template<typename Object>
 template<typename T>
-T* addressbook<Object>::find(addressbook<Object>::Key key){
+T* addressbook<Object>::find(addressbook<Object>::Key key)const{
 	shared_guard guard(_mutex); 
 
 	iterator it=_map.find(key);

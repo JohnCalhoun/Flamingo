@@ -32,7 +32,7 @@ class addressbook {
 
 	//member functions
 	private:
-	Key objectToKey(const Object&); 
+	Key objectToKey(const Object&)const; 
 
 	public:
 	template<typename T>
@@ -41,7 +41,7 @@ class addressbook {
 	void remove(Key); 
 
 	template<typename T>
-	T* find(Key); 
+	T* find(Key)const; 
 };
 
 #include "addressbook.inl"

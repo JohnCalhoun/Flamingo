@@ -13,8 +13,11 @@
 template<class ... Type>
 class dataframeTest : public ::testing::Test{
 	public:
-	typedef dataframe<Type... >		Container;
-	typedef typename Container::iterator	iterator;
+	typedef dataframe<Type... >				Container;
+	typedef typename Container::iterator		iterator;
+	typedef typename Container::value_type		element; 
+	
+
 	
 	DEFINE(ConstructorTest,	DATAFRAME_THREADS)
 	DEFINE(AssignmentTest,	DATAFRAME_THREADS)	
@@ -29,58 +32,59 @@ class dataframeTest : public ::testing::Test{
 };
 
 template<class ... Type>
-void dataframeTest<Type...>::EmptyTest(){
+void dataframeTest<Type...>::EmptyTest()
+{
 
 }
 
 template<class ... Type>
-void dataframeTest<Type...>::InsertTest(){
+void dataframeTest<Type...>::InsertTest()
+{
 /*	Container local;
 	int s=local.size();
-	local.insert(local.begin(),1);
+	local.insert(local.begin(),element);
 	EXPECT_TRUE(s<local.size());
 */
 }
 
 template<class ... Type>
-void dataframeTest<Type...>::AccessTest(){
-/*	auto it=global_host.begin();	
-	int r=*it;
-	EXPECT_EQ(r,0); 
-*/
-}
-template<class ... Type>
-void dataframeTest<Type...>::ModifyTest(){
-/*	Container local;
-	local=global_host;
-
-	for(int i=0; i<DATAFRAME_SIZE; i++){
-		EXPECT_EQ(local[i],i);
-		local[i]=i+1;
-	}
-	for(int i=0; i<DATAFRAME_SIZE; i++){
-		EXPECT_EQ(local[i],i+1);
-	}
-*/
-}
-template<class ... Type>
-void dataframeTest<Type...>::ConstructorTest(){
-//	Container local_vector; 
-};
-template<class ... Type>
-void dataframeTest<Type...>::AssignmentTest(){
+void dataframeTest<Type...>::AccessTest()
+{
 /*
-	Container local_vector; 
-	local_vector=vector;	
-	EXPECT_TRUE(local_vector==vector); 
+*/
+}
+template<class ... Type>
+void dataframeTest<Type...>::ModifyTest()
+{
+/*	
+*/
+}
+template<class ... Type>
+void dataframeTest<Type...>::ConstructorTest()
+{
+//	Container local; 
+};
+template<class ... Type>
+void dataframeTest<Type...>::AssignmentTest()
+{
+/*
+	Container local;
+	container other;
+	
+	//
+	
+	other=local;	
+	EXPECT_TRUE(other==local); 
 */
 };
 template<class ... Type>
-void dataframeTest<Type...>::EqualityTest(){
+void dataframeTest<Type...>::EqualityTest()
+{
 //	EXPECT_TRUE(vector==vector);
 };
 template<class ... Type>
-void dataframeTest<Type...>::BeginEndTest(){
+void dataframeTest<Type...>::BeginEndTest()
+{
 /*
 	typedef typename Container::iterator iterator; 
 	
@@ -91,7 +95,8 @@ void dataframeTest<Type...>::BeginEndTest(){
 */
 };
 template<class ... Type>
-void dataframeTest<Type...>::LockTest(){
+void dataframeTest<Type...>::LockTest()
+{
 /*
 	vector.lock();
 	global_host[0]++;
@@ -103,7 +108,8 @@ void dataframeTest<Type...>::LockTest(){
 */
 }
 template<class ... Type>
-void dataframeTest<Type...>::QuerryTest(){
+void dataframeTest<Type...>::QuerryTest()
+{
 /*
 	typedef typename Container::size_type size;	
 

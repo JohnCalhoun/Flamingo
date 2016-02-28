@@ -19,16 +19,19 @@ class dataframeBase {
 
 template<class ... Type>
 class dataframe : public dataframeBase{	
+	typedef typename traits<Type...>::size_type		size_type;
+	static const size_type _numCol=sizeof...(Type); 	
+	
 	//typedefs
-	typedef std::vector<columnBase*>			branch;
-	typedef std::array<Memory,sizeof...(Type)>	locations; 
-	typedef const AddressBook::Key			ID;
+
 	typedef dataframeBase					base;
 
 	public:
+	typedef std::array<columnbase*,_numCol>	branch;
+
+
 	typedef dataframe_iterator<Type...>	iterator;
 
-	typedef typename traits<Type...>::size_type		size_type;
 	typedef typename traits<Type...>::difference_type	difference_type;
 	typedef typename traits<Type...>::reference		reference;
 	typedef typename traits<Type...>::value_type		value_type;
@@ -38,11 +41,12 @@ class dataframe : public dataframeBase{
 
 	private:
 	branch		_branch;
-	ID			_id; 
 
 	public:
 	dataframe();
-	dataframe(const dataframe&);
+	dataframe(const dataframe<Type...>&);
+	dataframe(dataframe<Type...>&&);
+	dataframe(size_type);
 	dataframe(size_type,value_type);
 	dataframe(iterator,iterator);
 

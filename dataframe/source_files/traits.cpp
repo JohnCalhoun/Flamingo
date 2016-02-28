@@ -31,14 +31,13 @@ struct vector2tuple{
 		typedef std::tuple<T...>	type;
 	};
 
-	typedef typename boost::mpl::size<vector>::type Value;	
-	typedef typename tuple_add<Value::value,vector>::type type;
+	typedef typename boost::mpl::size<vector>::type size;	
+	typedef typename tuple_add<size::value,vector>::type type;
 };
 
 using boost::mpl::placeholders::_1;
 template<class ... Type>
 struct traits {
-
 	typedef boost::mpl::vector<Type...>	type_vector;	
 	typedef typename boost::mpl::transform<type_vector,std::add_pointer<_1> >::type pointer_vector;
 	typedef typename boost::mpl::transform<type_vector,std::add_lvalue_reference<_1> >::type reference_vector;
@@ -65,7 +64,7 @@ struct traits {
 		typedef boost::mpl::int_<n> value;
 
 		typedef typename boost::mpl::at<type_vector,value >::type base;
-		typedef typename column<base,M>::type type;  
+		typedef typename column<base>::type type;  
 	};
 
 	template<int n>

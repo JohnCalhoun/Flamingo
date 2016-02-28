@@ -152,7 +152,7 @@ bool dataframe_iterator<Type...>::operator!=(const dataframe_iterator<Type...>& 
 
 template<class ... Type>
 bool dataframe_iterator<Type...>::operator<(const dataframe_iterator<Type...>& other) const{
-	bool result=thrust::get<0>(_pointer)<thrust::get<0>(other.get_pointer());
+	bool result=_pointer<other.get_pointer();
 	return result;
 } 
 

@@ -1,5 +1,6 @@
 //dataframe.inl
 #include "dataframe.cpp"
+#include "functors.cpp"
 /*
 //-----------------private member functions
 template<class ... Type>
@@ -23,19 +24,25 @@ template<int n,typename S,typename D>
 {
 
 }; 	
-
+*/
 //-------------------constructors/descrutors 
 template<class ... Type>
 	dataframe<Type...>::dataframe()
 {
-
+	_branch.fill(NULL);	
 };
+
+
 template<class ... Type>
 	dataframe<Type...>::dataframe(
-		const dataframe<Type...>&)
-{
-
+		const dataframe<Type...>& other)
+{	
+	dataframe_functors::copy<_numCol,Type...> copier; 
+	copier(_branch,other._branch); 
 };
+
+
+/*
 template<class ... Type>
 	dataframe<Type...>::dataframe(
 		dataframe<Type...>::size_type,
@@ -50,11 +57,14 @@ template<class ... Type>
 {
 
 };
+*/
 template<class ... Type>
 	dataframe<Type...>::~dataframe()
 {
 
-}; 
+};
+
+/* 
 //-------------------container member functions-------------
 //-------------------consts
 template<class ... Type>

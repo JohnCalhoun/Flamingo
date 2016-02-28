@@ -17,7 +17,7 @@ class dataframeTest : public ::testing::Test{
 	typedef typename Container::iterator		iterator;
 	typedef typename Container::value_type		element; 
 	
-
+	Container global_container; 	
 	
 	DEFINE(ConstructorTest,	DATAFRAME_THREADS)
 	DEFINE(AssignmentTest,	DATAFRAME_THREADS)	
@@ -62,7 +62,8 @@ void dataframeTest<Type...>::ModifyTest()
 template<class ... Type>
 void dataframeTest<Type...>::ConstructorTest()
 {
-//	Container local; 
+	Container local;
+	Container local_empty_copy(global_container);
 };
 template<class ... Type>
 void dataframeTest<Type...>::AssignmentTest()

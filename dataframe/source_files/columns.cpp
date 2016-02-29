@@ -52,7 +52,7 @@ struct column : public columnbase {
 	};
 	
 	Memory _location;
-	void* ptr; 
+	void* _ptr; 
 
 	column();
 	column(int);
@@ -73,9 +73,11 @@ struct column : public columnbase {
 	template<Memory M>
 	typename Return<M>::type access(); 	
 	
-	void*			access_raw(); 
+	void* access_raw(); 
 
-column<T>& operator=(const column<T>& );
+	void swap(column<T>& );
+
+	column<T>& operator=(const column<T>& );
 };
 #include "columns.inl"
 #endif 

@@ -6,25 +6,94 @@
 template<typename T>
 column<T>::column(){
 	DEFAULT_COLUMN* tmp=new DEFAULT_COLUMN();	
-	ptr=static_cast<void*>(tmp); 
+	_ptr=static_cast<void*>(tmp); 
 	_location=DEFAULT_LOCATION;
 }
 
 template<typename T>
 column<T>::column(int n){
 	DEFAULT_COLUMN* tmp=new DEFAULT_COLUMN(n);	
-	ptr=static_cast<void*>(tmp); 
+	_ptr=static_cast<void*>(tmp); 
 	_location=DEFAULT_LOCATION;
 }
 
 template<typename T>
-column<T>::column(const column<T>& ){
-	
+column<T>::column(const column<T>& other){
+	switch(getlocation())
+	{
+		case host:
+		{
+			delete static_cast<host_column*>(_ptr);
+			break; 
+		}
+		case device:
+		{
+			delete static_cast<device_column*>(_ptr); 
+			break; 
+		}
+		case pinned:
+		{
+			delete static_cast<pinned_column*>(_ptr); 
+			break; 
+		}
+		case unified:
+		{
+			delete static_cast<unified_column*>(_ptr); 
+			break; 
+		}
+
+	}
+	switch(other.getlocation())
+	{
+		case host:
+		{
+			*static_cast<host_column*>(_ptr)=*static_cast<host_column*>(other._ptr); 
+			break; 
+		}
+		case device:
+		{
+			*static_cast<device_column*>(_ptr)=*static_cast<device_column*>(other._ptr); 
+			break; 
+		}
+		case pinned:
+		{
+			*static_cast<pinned_column*>(_ptr)=*static_cast<pinned_column*>(other._ptr); 
+			break; 
+		}
+		case unified:
+		{
+			*static_cast<unified_column*>(_ptr)=*static_cast<unified_column*>(other._ptr); 
+			break; 
+		}
+	}
 }
 
 template<typename T>
 column<T>::~column(){
-	delete ptr; 
+	switch(getlocation())
+	{
+		case host:
+		{
+			delete static_cast<host_column*>(_ptr); 
+			break; 
+		}
+		case device:
+		{
+			delete static_cast<device_column*>(_ptr); 
+			break; 
+		}
+		case pinned:
+		{
+			delete static_cast<pinned_column*>(_ptr); 
+			break; 
+		}
+		case unified:
+		{
+			delete static_cast<unified_column*>(_ptr); 
+			break; 
+		}
+
+	}
 } 
 
 template<typename T>
@@ -32,7 +101,7 @@ template<typename Aloc>
 column<T>::column(const thrust::device_vector<T,Aloc>& other){
 	device_column* tmp=new device_column();
 	*tmp=other;
-	ptr=static_cast<void*>(tmp); 
+	_ptr=static_cast<void*>(tmp); 
 	_location=device;
 } 
 
@@ -41,7 +110,7 @@ template<typename Aloc>
 column<T>::column(const thrust::host_vector<T,Aloc>& other){
 	host_column* tmp=new host_column();
 	*tmp=other;
-	ptr=static_cast<void*>(tmp); 
+	_ptr=static_cast<void*>(tmp); 
 	_location=host;
 } 
 
@@ -56,35 +125,35 @@ void column<T>::move(){
 		{
 			case host:
 			{
-				host_column* base=static_cast<host_column*>(ptr); 
+				host_column* base=static_cast<host_column*>(_ptr); 
 				*tmp=*base;
 				delete base;
-				ptr=static_cast<void*>(tmp);				
+				_ptr=static_cast<void*>(tmp);				
 				break;
 			}
 			case device:
 			{
-				host_column* base=static_cast<device_column*>(ptr); 
+				host_column* base=static_cast<device_column*>(_ptr); 
 				*tmp=*base;
 				delete base;
-				ptr=static_cast<void*>(tmp);				
+				_ptr=static_cast<void*>(tmp);				
 				break;
 			}
 			case pinned:
 			{
-				host_column* base=static_cast<pinned_column*>(ptr); 
+				host_column* base=static_cast<pinned_column*>(_ptr); 
 				*tmp=*base;
 				delete base;
-				ptr=static_cast<void*>(tmp);				
+				_ptr=static_cast<void*>(tmp);				
 				break;
 			}
 
 			case unified:
 			{
-				host_column* base=static_cast<unified_column*>(ptr); 
+				host_column* base=static_cast<unified_column*>(_ptr); 
 				*tmp=*base;
 				delete base;
-				ptr=static_cast<void*>(tmp);				
+				_ptr=static_cast<void*>(tmp);				
 				break;
 			}
 
@@ -104,51 +173,19 @@ typename column<T>::Return<M>::type column<T>::access(){
 
 template<typename T>
 void* column<T>::access_raw(){
-	return ptr; 
+	return _ptr; 
+} 
+
+template<typename T>
+void column<T>::swap(column<T>& other ){
+	std::swap(_location,other._location);
+	std::swap(_ptr,other._ptr);
 } 
 
 template<typename T>
 column<T>& column<T>::operator=(const column<T>& other){
-	switch(getlocation())
-	{
-		case host:
-		{
-			delete static_cast<host_column*>(ptr); 
-		}
-		case device:
-		{
-			delete static_cast<device_column*>(ptr); 
-		}
-		case pinned:
-		{
-			delete static_cast<pinned_column*>(ptr); 
-		}
-		case unified:
-		{
-			delete static_cast<unified_column*>(ptr); 
-		}
-
-	}
-	switch(other.getlocation())
-	{
-		case host:
-		{
-			*static_cast<host_column*>(ptr)=*static_cast<host_column*>(other.ptr); 
-		}
-		case device:
-		{
-			*static_cast<device_column*>(ptr)=*static_cast<device_column*>(other.ptr); 
-		}
-		case pinned:
-		{
-			*static_cast<pinned_column*>(ptr)=*static_cast<pinned_column*>(other.ptr); 
-		}
-		case unified:
-		{
-			*static_cast<unified_column*>(ptr)=*static_cast<unified_column*>(other.ptr); 
-		}
-
-	}
+	column<T> tmp(other);
+	swap(tmp);
 	return *this;
 }
 

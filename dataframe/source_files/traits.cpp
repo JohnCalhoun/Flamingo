@@ -59,7 +59,9 @@ struct traits {
 	typedef std::size_t			size_type; 
 	typedef std::ptrdiff_t		difference_type; 
 
-	template<int n,Memory M>
+	typedef std::array<columnbase*,sizeof...(Type)> ColumnArray;
+
+	template<int n>
 	struct column_return{
 		typedef boost::mpl::int_<n> value;
 
@@ -71,10 +73,15 @@ struct traits {
 	struct Return{
 		typedef boost::mpl::int_<n> value;
 
-		typedef typename boost::mpl::at<type_vector,value >::type		type_base;
-		typedef typename boost::mpl::at<pointer_vector,value >::type	pointer_base;
-		typedef typename boost::mpl::at<reference_vector,value >::type	reference_base;
+		typedef typename 
+			boost::mpl::at<type_vector,value >::type		type_base;
+		typedef typename 
+			boost::mpl::at<pointer_vector,value >::type	pointer_base;
+		typedef typename 
+			boost::mpl::at<reference_vector,value >::type	reference_base;
 	};
+
+	static const size_type _numCol=sizeof...(Type);
 };
 
 #endif 

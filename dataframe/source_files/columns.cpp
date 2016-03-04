@@ -29,8 +29,6 @@ struct memory2type<unified>{
 	typedef boost::mpl::int_<4> type; 
 };
 
-
-
 template<typename T>
 struct column : public columnbase {
 	typedef thrust::device_vector<T,typename allocation_policy<T,device>::allocator>	device_column;
@@ -76,8 +74,17 @@ struct column : public columnbase {
 	void* access_raw(); 
 
 	void swap(column<T>& );
-
 	column<T>& operator=(const column<T>& );
+	//--------vector functions
+	typedef typename host_column::size_type size_type; 
+	
+	size_type max_size()const;
+	bool empty()const;
+	void reserve(size_type)const;
+	size_type capacity()const;
+
+
 };
+
 #include "columns.inl"
 #endif 

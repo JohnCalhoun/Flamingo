@@ -63,7 +63,7 @@ template<class ... Type>
 void dataframeTest<Type...>::ConstructorTest()
 {
 	Container local;
-	Container local_empty_copy(global_container);
+	Container local_empty_copy(local);
 };
 template<class ... Type>
 void dataframeTest<Type...>::AssignmentTest()
@@ -111,14 +111,15 @@ void dataframeTest<Type...>::LockTest()
 template<class ... Type>
 void dataframeTest<Type...>::QuerryTest()
 {
-/*
+
 	typedef typename Container::size_type size;	
 
-	size a=vector.size();
-	size b=vector.max_size();
-	size c=vector.capacity();
-	bool d=vector.empty();
-*/
+//	size a=global_container.size();
+
+//	size b=global_container.max_size();
+//	size c=global_container.capacity();
+//	boo d=global_container.empty();
+
 }
 
 

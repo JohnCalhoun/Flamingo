@@ -19,28 +19,24 @@ class dataframeBase {
 
 template<class ... Type>
 class dataframe : public dataframeBase{	
-	typedef typename traits<Type...>::size_type		size_type;
-	static const size_type _numCol=sizeof...(Type); 	
-	
-	//typedefs
 
+	//typedefs
 	typedef dataframeBase					base;
 
 	public:
-	typedef std::array<columnbase*,_numCol>	branch;
-
-
-	typedef dataframe_iterator<Type...>	iterator;
-
+	typedef typename traits<Type...>::size_type		size_type;
+		
+	typedef dataframe_iterator<Type...>			iterator;
 	typedef typename traits<Type...>::difference_type	difference_type;
 	typedef typename traits<Type...>::reference		reference;
 	typedef typename traits<Type...>::value_type		value_type;
 	typedef typename traits<Type...>::pointer		pointer;
 	typedef typename traits<Type...>::type_vector	type_vector;
 	typedef typename traits<Type...>::pointer_zip	zip_it;
+	typedef typename traits<Type...>::ColumnArray	ColumnArray;
 
 	private:
-	branch		_branch;
+	ColumnArray		_column_array;
 
 	public:
 	dataframe();
@@ -55,11 +51,8 @@ class dataframe : public dataframeBase{
 	private:
 	iterator row_access(size_type n); 		
 
-	template<int n,Memory M>
-	typename traits<Type...>::column_return<n,M>::type column_access();
-
-	template<int n,typename S,typename D>
-	void move_column_location(); 	
+	template<int n>
+	typename traits<Type...>::column_return<n>::type* column_access();
 
 	public:
 	void assign(iterator,iterator);

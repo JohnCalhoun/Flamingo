@@ -1,5 +1,7 @@
 //iterator.inl
 #include "iterator.cpp"
+#include "iterator_functors.cpp"
+
 //private functions
 template<class ... Type>
 dataframe_iterator<Type...>::pointer dataframe_iterator<Type...>::get_pointer() const{
@@ -128,6 +130,16 @@ template<class ... Type>
 dataframe_iterator<Type...>::dataframe_iterator(const dataframe_iterator<Type...>& other){
 	_pointer=other.get_pointer();
 }
+
+template<class ... Type>
+dataframe_iterator<Type...>::dataframe_iterator(
+	const dataframe_iterator<Type...>::ColumnArray& array)
+{
+	typename iterator_functors::assign<traits<Type...>::_numCol,Type...> assigner; 
+	assigner(array,_pointer); 
+//std::array<columnbase*,_colnum
+}
+
 
 template<class ... Type>
 dataframe_iterator<Type...>::~dataframe_iterator(){}

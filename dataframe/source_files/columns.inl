@@ -19,31 +19,8 @@ column<T>::column(int n){
 
 template<typename T>
 column<T>::column(const column<T>& other){
-	switch(getlocation())
-	{
-		case host:
-		{
-			delete static_cast<host_column*>(_ptr);
-			break; 
-		}
-		case device:
-		{
-			delete static_cast<device_column*>(_ptr); 
-			break; 
-		}
-		case pinned:
-		{
-			delete static_cast<pinned_column*>(_ptr); 
-			break; 
-		}
-		case unified:
-		{
-			delete static_cast<unified_column*>(_ptr); 
-			break; 
-		}
-
-	}
-	switch(other.getlocation())
+	_location=other.getlocation(); 
+	switch(_location)
 	{
 		case host:
 		{
@@ -188,7 +165,28 @@ column<T>& column<T>::operator=(const column<T>& other){
 	swap(tmp);
 	return *this;
 }
+/*
+template<typename T>
+column<T>::size_type column<T>::max_size()const
+{
 
+}
+
+template<typename T>
+bool column<T>::empty()const{
+
+}
+
+template<typename T>
+void column<T>::reserve(size_type)const{
+
+}
+
+template<typename T>
+column<T>::size_type column<T>::capacity()const{
+
+}
+*/
 #undef DEFAULT
 
 

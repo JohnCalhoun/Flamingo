@@ -8,28 +8,24 @@ template<class ... Type>
 	dataframe<Type...>::row_access(dataframe<Type...>::size_type n){
 
 }; 		
-
+*/
 template<class ... Type>
-template<int n,Memory M>
-	typename traits<Type...>::column_return<n,M>::type 
+template<int n>
+	typename traits<Type...>::column_return<n>::type* 
 	dataframe<Type...>::column_access()
 {
-
+	typedef typename traits<Type...>::column_return<n>::type column; 
+	
+	columnbase*	base_ptr	=_column_array[n];
+	column*	column_ptr	=static_cast<column*>(base_ptr);	
+	return column_ptr;
 };
 
-template<class ... Type>
-template<int n,typename S,typename D>
-	void 
-	dataframe<Type...>::move_column_location()
-{
-
-}; 	
-*/
 //-------------------constructors/descrutors 
 template<class ... Type>
 	dataframe<Type...>::dataframe()
 {
-	_branch.fill(NULL);	
+	_column_array.fill(NULL);	
 };
 
 
@@ -37,12 +33,12 @@ template<class ... Type>
 	dataframe<Type...>::dataframe(
 		const dataframe<Type...>& other)
 {	
-	dataframe_functors::copy<_numCol,Type...> copier; 
-	copier(_branch,other._branch); 
+	dataframe_functors::copy<traits<Type...>::_numCol,Type...> copier; 
+	copier(_column_array,other._column_array); 
 };
 
 
-/*
+
 template<class ... Type>
 	dataframe<Type...>::dataframe(
 		dataframe<Type...>::size_type,
@@ -50,6 +46,7 @@ template<class ... Type>
 {
 
 };
+
 template<class ... Type>
 	dataframe<Type...>::dataframe(
 		dataframe<Type...>::iterator,
@@ -57,11 +54,11 @@ template<class ... Type>
 {
 
 };
-*/
+
 template<class ... Type>
 	dataframe<Type...>::~dataframe()
 {
-
+	
 };
 
 /* 
@@ -109,16 +106,20 @@ template<class ... Type>
 {
 
 };
+*/
+
 template<class ... Type>
 	dataframe<Type...>::size_type 
 	dataframe<Type...>::size()const
 {
-
+	return end()-begin(); 	
 };
+/*
 template<class ... Type>
 	dataframe<Type...>::size_type 
 	dataframe<Type...>::max_size()const
 {
+	
 
 };
 template<class ... Type>
@@ -139,6 +140,8 @@ template<class ... Type>
 {
 
 };
+*/
+/*
 //-------------------non consts
 template<class ... Type>
 	void 

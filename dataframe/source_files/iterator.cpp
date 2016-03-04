@@ -17,6 +17,8 @@ class dataframe_iterator: public traits<Type...> {
 	typedef typename traits<Type...>::reference			reference;
 	typedef typename traits<Type...>::pointer			pointer;
 	typedef typename traits<Type...>::range				range; 
+	typedef typename traits<Type...>::ColumnArray		ColumnArray;
+
  
 	typedef std::random_access_iterator_tag			iterator_category;
 	
@@ -26,6 +28,7 @@ class dataframe_iterator: public traits<Type...> {
 	public:
 	dataframe_iterator();
 	dataframe_iterator(const dataframe_iterator<Type...>&);
+	dataframe_iterator(const ColumnArray&); 
 	dataframe_iterator(pointer p):_pointer(p){}; 
 	~dataframe_iterator();
 

@@ -165,6 +165,40 @@ column<T>& column<T>::operator=(const column<T>& other){
 	swap(tmp);
 	return *this;
 }
+template<typename T>
+column<T>::size_type column<T>::size()const
+{
+	size_type size; 
+	switch(getlocation())
+	{
+		case host:
+		{
+			host_column* host_ptr= static_cast<host_column*>(_ptr); 
+			size=host_ptr->size(); 
+			break; 
+		}
+		case device:
+		{
+			device_column* device_ptr=static_cast<device_column*>(_ptr); 
+			size=device_ptr->size(); 
+			break; 
+		}
+		case pinned:
+		{
+			pinned_column* pinned_ptr=static_cast<pinned_column*>(_ptr); 
+			size=pinned_ptr->size(); 
+			break; 
+		}
+		case unified:
+		{
+			unified_column* unified_ptr=static_cast<unified_column*>(_ptr); 
+			size=unified_ptr->size(); 
+			break; 
+		}
+
+	}
+	return size; 
+}
 /*
 template<typename T>
 column<T>::size_type column<T>::max_size()const

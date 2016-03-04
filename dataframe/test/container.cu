@@ -113,8 +113,9 @@ void dataframeTest<Type...>::QuerryTest()
 {
 
 	typedef typename Container::size_type size;	
+	Container local;
 
-//	size a=global_container.size();
+	size a=local.size();
 
 //	size b=global_container.max_size();
 //	size c=global_container.capacity();

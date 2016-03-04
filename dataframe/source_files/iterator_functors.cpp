@@ -13,9 +13,12 @@ namespace iterator_functors{
 		typedef typename traits<Type...>::Return<n>::pointer_base pointer; 
 		
 		column<type>* col_ptr=static_cast<column<type>*>(col_array[n]);
-		void* void_ptr=col_ptr->access_raw(); 
-		std::get<n>(it_pointer)=static_cast<pointer>(void_ptr);
-
+		if(col_ptr){
+			void* void_ptr=col_ptr->access_raw(); 
+			std::get<n>(it_pointer)=static_cast<pointer>(void_ptr);
+		}else{
+			std::get<n>(it_pointer)=NULL;
+		}
 		assign<n-1,Type...> assigner;
 		assigner(col_array,it_pointer); 	
 		}
@@ -30,8 +33,12 @@ namespace iterator_functors{
 		typedef typename traits<Type...>::Return<0>::pointer_base pointer; 
 		
 		column<type>* col_ptr=static_cast<column<type>*>(col_array[0]);
-		void* void_ptr=col_ptr->access_raw(); 
-		std::get<0>(it_pointer)=static_cast<pointer>(void_ptr);
+		if(col_ptr){
+			void* void_ptr=col_ptr->access_raw(); 
+			std::get<0>(it_pointer)=static_cast<pointer>(void_ptr);
+		}else{
+			std::get<0>(it_pointer)=NULL;
+		}
 		}
 	};
 }

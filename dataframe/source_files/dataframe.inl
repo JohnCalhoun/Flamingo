@@ -82,24 +82,31 @@ template<class ... Type>
 {
 
 };
+*/
 template<class ... Type>
 	dataframe<Type...>::iterator 
 	dataframe<Type...>::begin()const
 {
-
+	iterator it(_column_array); 
+	return it; 
 };
+/*
 template<class ... Type>
 	dataframe<Type...>::zip_it  
 	dataframe<Type...>::begin_zip()const
 {
 
 };
+*/
 template<class ... Type>
 	dataframe<Type...>::iterator 
 	dataframe<Type...>::end()const
 {
-
+	iterator it=begin(); 
+	it+=size()+1; 	
+	return it;
 }; 
+/*
 template<class ... Type>
 	dataframe<Type...>::zip_it 
 	dataframe<Type...>::end_zip()const
@@ -112,7 +119,16 @@ template<class ... Type>
 	dataframe<Type...>::size_type 
 	dataframe<Type...>::size()const
 {
-	return end()-begin(); 	
+	typedef typename traits<Type...>::Return<0>::type_base type; 
+	size_type size;	
+
+	column<type>* col_ptr=static_cast<column<type>*>(_column_array[0]);
+	if(col_ptr){	
+		size=col_ptr->size(); 
+	}else{
+		size=0;
+	}
+	return size;
 };
 /*
 template<class ... Type>

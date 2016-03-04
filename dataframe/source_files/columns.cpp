@@ -78,12 +78,11 @@ struct column : public columnbase {
 	//--------vector functions
 	typedef typename host_column::size_type size_type; 
 	
+	size_type size()const;
 	size_type max_size()const;
 	bool empty()const;
 	void reserve(size_type)const;
 	size_type capacity()const;
-
-
 };
 
 #include "columns.inl"

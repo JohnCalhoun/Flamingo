@@ -3,9 +3,9 @@
 #define DATAFRAME
 
 #include <location.cu> 
+#include "traits.cpp"
 #include "columns.cpp"
 #include "iterator.cpp"
-#include "traits.cpp"
 #include "addressbook.cpp"
 #include <vector>
 #include <array>
@@ -41,9 +41,9 @@ class dataframe : public dataframeBase{
 	public:
 	dataframe();
 	dataframe(const dataframe<Type...>&);
-	dataframe(dataframe<Type...>&&);
-	dataframe(size_type);
+	dataframe(dataframe<Type...>&&);	
 	dataframe(size_type,value_type);
+	dataframe(size_type);
 	dataframe(iterator,iterator);
 
 	~dataframe(); 
@@ -52,7 +52,7 @@ class dataframe : public dataframeBase{
 	iterator row_access(size_type n); 		
 
 	template<int n>
-	typename traits<Type...>::column_return<n>::type* column_access();
+	typename column_return<n,Type...>::type* column_access();
 
 	public:
 	void assign(iterator,iterator);

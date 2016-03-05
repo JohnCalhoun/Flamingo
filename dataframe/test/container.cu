@@ -62,8 +62,14 @@ void dataframeTest<Type...>::ModifyTest()
 template<class ... Type>
 void dataframeTest<Type...>::ConstructorTest()
 {
+	typedef typename Container::value_type value_type;
+
 	Container local;
 	Container local_empty_copy(local);
+
+	value_type value(0,0,0,0);
+	Container local2(10,value); 
+		
 };
 template<class ... Type>
 void dataframeTest<Type...>::AssignmentTest()
@@ -116,10 +122,9 @@ void dataframeTest<Type...>::QuerryTest()
 	Container local;
 
 	size a=local.size();
-
-//	size b=global_container.max_size();
+	size b=global_container.max_size();
 //	size c=global_container.capacity();
-//	boo d=global_container.empty();
+	bool d=global_container.empty();
 
 }
 

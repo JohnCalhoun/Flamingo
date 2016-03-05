@@ -11,7 +11,7 @@ template<class ... Type>
 */
 template<class ... Type>
 template<int n>
-	typename traits<Type...>::column_return<n>::type* 
+	typename column_return<n,Type...>::type* 
 	dataframe<Type...>::column_access()
 {
 	typedef typename traits<Type...>::column_return<n>::type column; 
@@ -41,10 +41,11 @@ template<class ... Type>
 
 template<class ... Type>
 	dataframe<Type...>::dataframe(
-		dataframe<Type...>::size_type,
-		dataframe<Type...>::value_type)
+		dataframe<Type...>::size_type s,
+		dataframe<Type...>::value_type v)
 {
-
+	dataframe_functors::fill<traits<Type...>::_numCol,Type...> filler;
+	filler(_column_array,s,v); 
 };
 
 template<class ... Type>
@@ -130,20 +131,39 @@ template<class ... Type>
 	}
 	return size;
 };
-/*
+
 template<class ... Type>
 	dataframe<Type...>::size_type 
 	dataframe<Type...>::max_size()const
 {
-	
+	typedef typename traits<Type...>::Return<0>::type_base type; 
+	size_type max_size;	
 
+	column<type>* col_ptr=static_cast<column<type>*>(_column_array[0]);
+	if(col_ptr){	
+		max_size=col_ptr->max_size(); 
+	}else{
+		max_size=0;
+	}
+	return max_size;
 };
+
 template<class ... Type>
 	bool 
 	dataframe<Type...>::empty()const
 {
+	typedef typename traits<Type...>::Return<0>::type_base type; 
+	bool empty;	
 
+	column<type>* col_ptr=static_cast<column<type>*>(_column_array[0]);
+	if(col_ptr){	
+		empty=col_ptr->empty(); 
+	}else{
+		empty=0;
+	}
+	return empty;
 };
+/*
 template<class ... Type>
 	void 
 	dataframe<Type...>::reserve(dataframe<Type...>::size_type)const

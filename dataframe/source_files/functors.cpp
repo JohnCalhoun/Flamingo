@@ -1,13 +1,11 @@
 //functors.cpp
-#include "traits.cpp"
-#include "dataframe.cpp"
 #include "columns.cpp"
 
 namespace dataframe_functors{
 
 	template<int n,class ... Type>
 	struct copy {
-		typedef typename dataframe<Type...>::ColumnArray ColumnArray;
+		typedef typename traits<Type...>::ColumnArray ColumnArray;
 
 		void operator()(	ColumnArray&		column_array_1, 
 						const ColumnArray& column_array_2){
@@ -33,7 +31,7 @@ namespace dataframe_functors{
 	};
 	template<class ... Type>
 	struct copy<0,Type...> {
-		typedef typename dataframe<Type...>::ColumnArray ColumnArray;
+		typedef typename traits<Type...>::ColumnArray ColumnArray;
 
 		void operator()(	ColumnArray&		column_array_1,
 						const ColumnArray&	column_array_2){
@@ -50,6 +48,47 @@ namespace dataframe_functors{
 				Column* ptr_1=NULL; 
 				column_array_1[0]=static_cast<columnbase*>(ptr_1); 
 			}			
+		}
+	};
+	template<int n,class ... Type>
+	struct fill {
+		typedef typename traits<Type...>::ColumnArray ColumnArray;
+
+		typedef typename traits<Type...>::size_type size;
+		typedef typename traits<Type...>::value_type value; 
+		
+		typedef typename traits<Type...>::Return<n-1>::type_base type; 
+		typedef column<type> Column; 
+
+		void operator()(	ColumnArray& column_array,
+						size s,
+						value v){
+			Column* ptr=new Column(s); 
+			ptr->fill(std::get<n-1>(v));
+			column_array[n]=static_cast<columnbase*>(ptr);		
+		
+			fill<n-1,Type...> fill_r;
+			fill_r(column_array,s,v); 
+		}
+	};
+	template<class ... Type>
+	struct fill<1,Type...> {
+		typedef typename traits<Type...>::ColumnArray ColumnArray;
+
+		typedef typename traits<Type...>::size_type size;
+		typedef typename traits<Type...>::value_type value; 
+
+		typedef typename traits<Type...>::Return<0>::type_base type; 
+		typedef column<type> Column; 
+
+
+		void operator()(	ColumnArray& column_array,
+						size s,
+						value v){
+			Column* ptr=new Column(s); 
+			ptr->fill(std::get<0>(v));
+			column_array[0]=static_cast<columnbase*>(ptr);		
+	
 		}
 	};
 }

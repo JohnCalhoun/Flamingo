@@ -1,5 +1,4 @@
 //functors.cpp
-#include "traits.cpp"
 #include "columns.cpp"
 
 namespace iterator_functors{

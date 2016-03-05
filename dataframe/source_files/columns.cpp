@@ -1,6 +1,6 @@
 //columns.cpp
-#ifndef columns
-#define columns
+#ifndef COLUMNS
+#define COLUMNS
 #include <allocator.cu>
 #include <location.cu> 
 #include <thrust/device_vector.h>
@@ -9,8 +9,6 @@
 #include <boost/mpl/pair.hpp>
 #include <type_traits>
 #include <boost/mpl/int.hpp>
-
-class columnbase {};
 
 template<Memory M>
 struct memory2type{
@@ -83,7 +81,23 @@ struct column : public columnbase {
 	bool empty()const;
 	void reserve(size_type)const;
 	size_type capacity()const;
+
+	void fill(T); 
 };
+
+template<int n,class ... Type>
+struct column_return{
+	typedef typename traits<Type...>::Return<n>::type base; 
+
+	typedef typename column<base>::type type;  
+};
+
+
+
+
+
+
+
 
 #include "columns.inl"
 #endif 

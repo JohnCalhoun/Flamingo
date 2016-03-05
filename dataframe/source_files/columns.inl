@@ -199,18 +199,76 @@ column<T>::size_type column<T>::size()const
 	}
 	return size; 
 }
-/*
+
 template<typename T>
 column<T>::size_type column<T>::max_size()const
 {
+	size_type max_size; 
+	switch(getlocation())
+	{
+		case host:
+		{
+			host_column* host_ptr= static_cast<host_column*>(_ptr); 
+			max_size=host_ptr->max_size(); 
+			break; 
+		}
+		case device:
+		{
+			device_column* device_ptr=static_cast<device_column*>(_ptr); 
+			max_size=device_ptr->max_size(); 
+			break; 
+		}
+		case pinned:
+		{
+			pinned_column* pinned_ptr=static_cast<pinned_column*>(_ptr); 
+			max_size=pinned_ptr->max_size(); 
+			break; 
+		}
+		case unified:
+		{
+			unified_column* unified_ptr=static_cast<unified_column*>(_ptr); 
+			max_size=unified_ptr->max_size(); 
+			break; 
+		}
 
+	}
+	return max_size; 
 }
 
 template<typename T>
 bool column<T>::empty()const{
+	bool empty; 
+	switch(getlocation())
+	{
+		case host:
+		{
+			host_column* host_ptr= static_cast<host_column*>(_ptr); 
+			empty=host_ptr->empty(); 
+			break; 
+		}
+		case device:
+		{
+			device_column* device_ptr=static_cast<device_column*>(_ptr); 
+			empty=device_ptr->empty(); 
+			break; 
+		}
+		case pinned:
+		{
+			pinned_column* pinned_ptr=static_cast<pinned_column*>(_ptr); 
+			empty=pinned_ptr->empty(); 
+			break; 
+		}
+		case unified:
+		{
+			unified_column* unified_ptr=static_cast<unified_column*>(_ptr); 
+			empty=unified_ptr->empty(); 
+			break; 
+		}
 
+	}
+	return empty;
 }
-
+/*
 template<typename T>
 void column<T>::reserve(size_type)const{
 
@@ -221,6 +279,40 @@ column<T>::size_type column<T>::capacity()const{
 
 }
 */
+template<typename T>
+void column<T>::fill(T t){ 
+	size_type s=size(); 
+	switch(getlocation())
+	{
+		case host:
+		{
+			host_column* host_ptr= static_cast<host_column*>(_ptr); 
+			host_ptr->assign(s,t); 			
+			break; 
+		}
+		case device:
+		{
+			device_column* device_ptr=static_cast<device_column*>(_ptr); 
+			device_ptr->assign(s,t); 				
+			break; 
+		}
+		case pinned:
+		{
+			pinned_column* pinned_ptr=static_cast<pinned_column*>(_ptr); 
+			pinned_ptr->assign(s,t); 				
+			break; 
+		}
+		case unified:
+		{
+			unified_column* unified_ptr=static_cast<unified_column*>(_ptr); 
+			unified_ptr->assign(s,t); 						
+			break; 
+		}
+
+	}
+}
+
+
 #undef DEFAULT
 
 

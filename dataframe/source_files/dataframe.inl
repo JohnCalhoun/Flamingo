@@ -33,7 +33,7 @@ template<class ... Type>
 	dataframe<Type...>::dataframe(
 		const dataframe<Type...>& other)
 {	
-	dataframe_functors::copy<traits<Type...>::_numCol,Type...> copier; 
+	dataframe_functors::copy<traits<Type...>::_numCol-1,Type...> copier; 
 	copier(_column_array,other._column_array); 
 };
 
@@ -44,7 +44,7 @@ template<class ... Type>
 		dataframe<Type...>::size_type s,
 		dataframe<Type...>::value_type v)
 {
-	dataframe_functors::fill<traits<Type...>::_numCol,Type...> filler;
+	dataframe_functors::fill<traits<Type...>::_numCol-1,Type...> filler;
 	filler(_column_array,s,v); 
 };
 
@@ -59,9 +59,14 @@ template<class ... Type>
 template<class ... Type>
 	dataframe<Type...>::~dataframe()
 {
-	
+	for(int i=0; i<_column_array.size();i++){
+		columnbase* ptr=_column_array[i];
+		if(ptr){
+			delete ptr;
+			_column_array[i]=NULL; 
+		}
+	}
 };
-
 /* 
 //-------------------container member functions-------------
 //-------------------consts

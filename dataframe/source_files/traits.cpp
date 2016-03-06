@@ -15,7 +15,11 @@
 #include <boost/mpl/range_c.hpp>
 #include <cstddef> 
 
-class columnbase {}; 
+class columnbase {
+	public:
+	columnbase(){}; 
+	virtual ~columnbase(){}; 
+}; 
 
 template<typename vector,int m>
 struct vector2tuple{

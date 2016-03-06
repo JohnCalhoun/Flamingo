@@ -1,14 +1,6 @@
 //dataframe.inl
 #include "dataframe.cpp"
 #include "functors.cpp"
-/*
-//-----------------private member functions
-template<class ... Type>
-	dataframe<Type...>::iterator 
-	dataframe<Type...>::row_access(dataframe<Type...>::size_type n){
-
-}; 		
-*/
 template<class ... Type>
 template<int n>
 	typename column_return<n,Type...>::type* 
@@ -73,28 +65,32 @@ template<class ... Type>
 		}
 	}
 };
-/* 
+
 //-------------------container member functions-------------
 //-------------------consts
+
 template<class ... Type>
 	dataframe<Type...>::reference 
-	dataframe<Type...>::at()const
+	dataframe<Type...>::at(size_type n)const
 {
+	iterator start=begin(); 
+	return *(start+n); 
+
 
 };
 template<class ... Type>
 	dataframe<Type...>::reference	
 	dataframe<Type...>::front()const
 {
-
+	return at(0); 
 };
 template<class ... Type>
 	dataframe<Type...>::reference 
 	dataframe<Type...>::back()const
 {
-
+	return at(size()-1)
 };
-*/
+
 template<class ... Type>
 	dataframe<Type...>::iterator 
 	dataframe<Type...>::begin()const

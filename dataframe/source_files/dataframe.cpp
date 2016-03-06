@@ -49,8 +49,6 @@ class dataframe : public dataframeBase{
 	~dataframe(); 
 
 	private:
-	iterator row_access(size_type n); 		
-
 	template<int n>
 	typename column_return<n,Type...>::type* column_access();
 

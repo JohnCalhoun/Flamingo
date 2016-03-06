@@ -86,7 +86,8 @@ struct column : public columnbase {
 
 	void fill(T);
 	template<typename iter>
-	void copy(iter,iter);  
+	void copy(iter,iter); 
+	void clear();  
 };
 
 template<int n,class ... Type>

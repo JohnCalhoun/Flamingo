@@ -202,12 +202,15 @@ template<class ... Type>
 {
 
 };
+*/
 template<class ... Type>
 	void 
 	dataframe<Type...>::clear()
 {
-
+	dataframe_functors::clear<traits<Type...>::_numCol-1,Type...> clearer;
+	clearer(_column_array); 
 };
+/*
 template<class ... Type>
 	dataframe<Type...>::iterator 
 	dataframe<Type...>::insert(
@@ -288,15 +291,16 @@ template<class ... Type>
 {
 
 }; 
-
+*/
 //-------------------------operators
 template<class ... Type>
 	dataframe<Type...>::reference 
 	dataframe<Type...>::operator[](
-		dataframe<Type...>::size_type)
+		dataframe<Type...>::size_type n)
 {
-
+	return at(n);
 };
+/*
 template<class ... Type>
 	dataframe<Type...>::reference 
 	dataframe<Type...>::operator=(
@@ -304,6 +308,7 @@ template<class ... Type>
 {
 
 };
+
 template<class ... Type>
 	bool 
 	dataframe<Type...>::operator==(
@@ -311,12 +316,14 @@ template<class ... Type>
 {
 
 };
+*/
+/*
 template<class ... Type>
 	bool 
 	dataframe<Type...>::operator!=(
-		const dataframe<Type...>&)const
+		const dataframe<Type...>& other)const
 {
-
+	return !(*this==other); 	
 };
 
 

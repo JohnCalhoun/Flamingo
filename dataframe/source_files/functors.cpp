@@ -151,5 +151,44 @@ namespace dataframe_functors{
 
 			columns[0]=static_cast<columnbase*>(ptr); 
 		}
+	};	
+	template<int n,class ... Type>
+	struct clear{
+		typedef typename traits<Type...>::ColumnArray ColumnArray;
+		typedef dataframe_iterator<Type...> iterator; 
+
+		typedef typename traits<Type...>::size_type size_type;
+		typedef typename traits<Type...>::value_type value; 
+
+		typedef typename traits<Type...>::Return<0>::type_base type; 
+		typedef column<type> Column; 
+
+		void operator()(ColumnArray& columns){
+			Column* ptr=static_cast<Column*>(columns[n]);
+			if(ptr){
+				ptr->clear(); 
+			}
+
+			clear<n-1,Type...> clear_r; 
+			clear_r(columns); 
+		}
+	};
+	template<class ... Type>
+	struct clear<0,Type...>{
+		typedef typename traits<Type...>::ColumnArray ColumnArray;
+		typedef typename dataframe<Type...>::iterator iterator; 
+
+		typedef typename traits<Type...>::size_type size_type;
+		typedef typename traits<Type...>::value_type value; 
+
+		typedef typename traits<Type...>::Return<0>::type_base type; 
+		typedef column<type> Column; 
+
+		void operator()(ColumnArray& columns){
+			Column* ptr=static_cast<Column*>(columns[0]);
+			if(ptr){
+				ptr->clear(); 	
+			}
+		}
 	};
 }

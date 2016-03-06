@@ -70,7 +70,7 @@ class dataframe : public dataframeBase{
 	size_type size()const;
 	size_type max_size()const;
 	bool empty()const;
-	void reserve(size_type)const;
+	void reserve(size_type);
 	size_type capacity()const;
 
 	void clear();
@@ -81,9 +81,7 @@ class dataframe : public dataframeBase{
 	iterator erase(iterator,iterator);
 
 	void push_back(value_type);
-	void push_front(value_type);
 	void pop_back();
-	void pop_front();
 	void resize(size_type);
 	void resize(size_type,value_type);	
 	void swap(dataframe<Type...>&); 

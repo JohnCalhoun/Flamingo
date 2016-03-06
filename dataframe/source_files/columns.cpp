@@ -33,7 +33,8 @@ struct column : public columnbase {
 	typedef thrust::device_vector<T,typename allocation_policy<T,pinned>::allocator>	pinned_column;
 	typedef thrust::device_vector<T,typename allocation_policy<T,unified>::allocator>	unified_column;
 	typedef thrust::host_vector<T>		host_column;
-	typedef T*	pointer; 
+	typedef T				value_type;
+	typedef value_type*		pointer; 
 	
 	typedef boost::mpl::map<	
 					boost::mpl::pair<typename memory2type<device>::type,device_column>,
@@ -81,13 +82,33 @@ struct column : public columnbase {
 	size_type size()const;
 	size_type max_size()const;
 	bool empty()const;
-	void reserve(size_type)const;
+	void reserve(size_type);
 	size_type capacity()const;
 
 	void fill(T);
 	template<typename iter>
 	void copy(iter,iter); 
-	void clear();  
+	void clear(); 
+
+	void assign(size_type, value_type);
+
+	template<typename iter>
+	void assign(iter,iter);
+
+	template<typename iter>
+	iter insert(iter,value_type);
+
+	template<typename iter_pos,typename iter>
+	void insert(iter_pos,iter,iter);
+
+	template<typename iter>
+	iter erase(iter); 
+
+	template<typename iter>
+	iter erase(iter,iter); 
+
+	void resize(size_type); 
+	void resize(size_type,value_type);
 };
 
 template<int n,class ... Type>

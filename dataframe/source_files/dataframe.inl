@@ -170,13 +170,14 @@ template<class ... Type>
 	}
 	return empty;
 };
-/*
+
 template<class ... Type>
 	void 
-	dataframe<Type...>::reserve(dataframe<Type...>::size_type)const
+	dataframe<Type...>::reserve(dataframe<Type...>::size_type)
 {
 
 };
+/*
 template<class ... Type>
 	dataframe<Type...>::size_type 
 	dataframe<Type...>::capacity()const
@@ -192,7 +193,7 @@ template<class ... Type>
 		dataframe<Type...>::iterator,
 		dataframe<Type...>::iterator)
 {
-
+	clear(); 
 };
 template<class ... Type>
 	void 
@@ -200,7 +201,7 @@ template<class ... Type>
 		dataframe<Type...>::size_type,
 		dataframe<Type...>::value_type)
 {
-
+	clear(); 
 };
 */
 template<class ... Type>
@@ -252,20 +253,7 @@ template<class ... Type>
 };
 template<class ... Type>
 	void 
-	dataframe<Type...>::push_front(
-		dataframe<Type...>::value_type)
-{
-
-};
-template<class ... Type>
-	void 
 	dataframe<Type...>::pop_back()
-{
-
-};
-template<class ... Type>
-	void 
-	dataframe<Type...>::pop_front()
 {
 
 };

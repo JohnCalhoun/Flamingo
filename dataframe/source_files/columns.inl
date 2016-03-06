@@ -378,6 +378,331 @@ void column<T>::clear(){
 	}
 }
 
+template<typename T>
+void column<T>::resize(column<T>::size_type n){
+	switch(getlocation())
+	{
+		case host:
+		{
+			host_column* host_ptr= static_cast<host_column*>(_ptr); 
+			host_ptr->resize(n);
+			break; 
+		}
+		case device:
+		{
+			device_column* device_ptr=static_cast<device_column*>(_ptr); 
+			device_ptr->resize(n);
+			break; 
+		}
+		case pinned:
+		{
+			pinned_column* pinned_ptr=static_cast<pinned_column*>(_ptr); 
+			pinned_ptr->resize(n);
+			break; 
+		}
+		case unified:
+		{
+			unified_column* unified_ptr=static_cast<unified_column*>(_ptr); 
+			unified_ptr->resize(n);
+			break; 
+		}
+	}
+}
+
+template<typename T>
+void column<T>::resize(column<T>::size_type n,column<T>::value_type v){
+	switch(getlocation())
+	{
+		case host:
+		{
+			host_column* host_ptr= static_cast<host_column*>(_ptr); 
+			host_ptr->resize(n,v);
+			break; 
+		}
+		case device:
+		{
+			device_column* device_ptr=static_cast<device_column*>(_ptr); 
+			device_ptr->resize(n,v);
+			break; 
+		}
+		case pinned:
+		{
+			pinned_column* pinned_ptr=static_cast<pinned_column*>(_ptr); 
+			pinned_ptr->resize(n,v);
+			break; 
+		}
+		case unified:
+		{
+			unified_column* unified_ptr=static_cast<unified_column*>(_ptr); 
+			unified_ptr->resize(n,v);
+			break; 
+		}
+	}
+}
+
+template<typename T>
+column<T>::size_type column<T>::capacity()const{
+	size_type output;
+	switch(getlocation())
+	{
+		case host:
+		{
+			host_column* host_ptr= static_cast<host_column*>(_ptr); 
+			output=host_ptr->capacity();
+			break; 
+		}
+		case device:
+		{
+			device_column* device_ptr=static_cast<device_column*>(_ptr); 
+			output=device_ptr->capacity();
+			break; 
+		}
+		case pinned:
+		{
+			pinned_column* pinned_ptr=static_cast<pinned_column*>(_ptr); 
+			output=pinned_ptr->capacity();
+			break; 
+		}
+		case unified:
+		{
+			unified_column* unified_ptr=static_cast<unified_column*>(_ptr); 
+			output=unified_ptr->capacity();
+			break; 
+		}
+	}
+	return output; 
+};
+
+
+template<typename T>
+void column<T>::reserve(column<T>::size_type n){
+	switch(getlocation())
+	{
+		case host:
+		{
+			host_column* host_ptr= static_cast<host_column*>(_ptr); 
+			host_ptr->reserve(n);
+			break; 
+		}
+		case device:
+		{
+			device_column* device_ptr=static_cast<device_column*>(_ptr); 
+			device_ptr->reserve(n);
+			break; 
+		}
+		case pinned:
+		{
+			pinned_column* pinned_ptr=static_cast<pinned_column*>(_ptr); 
+			pinned_ptr->reserve(n);
+			break; 
+		}
+		case unified:
+		{
+			unified_column* unified_ptr=static_cast<unified_column*>(_ptr); 
+			unified_ptr->reserve(n);
+			break; 
+		}
+	}
+};
+
+template<typename T>
+void column<T>::assign(
+	column<T>::size_type s,
+	column<T>::value_type v){
+	switch(getlocation())
+	{
+		case host:
+		{
+			host_column* host_ptr= static_cast<host_column*>(_ptr); 
+			host_ptr->assign(s,v);
+			break; 
+		}
+		case device:
+		{
+			device_column* device_ptr=static_cast<device_column*>(_ptr); 
+			device_ptr->assign(s,v);
+			break; 
+		}
+		case pinned:
+		{
+			pinned_column* pinned_ptr=static_cast<pinned_column*>(_ptr); 
+			pinned_ptr->assign(s,v);
+			break; 
+		}
+		case unified:
+		{
+			unified_column* unified_ptr=static_cast<unified_column*>(_ptr); 
+			unified_ptr->assign(s,v);
+			break; 
+		}
+	}
+};
+
+template<typename T>
+template<typename iter> 
+void column<T>::assign(iter it_1,iter it_2){
+	switch(getlocation())
+	{
+		case host:
+		{
+			host_column* host_ptr= static_cast<host_column*>(_ptr); 
+			host_ptr->assign(it_1,it_2);
+			break; 
+		}
+		case device:
+		{
+			device_column* device_ptr=static_cast<device_column*>(_ptr); 
+			device_ptr->assign(it_1,it_2);
+			break; 
+		}
+		case pinned:
+		{
+			pinned_column* pinned_ptr=static_cast<pinned_column*>(_ptr); 
+			pinned_ptr->assign(it_1,it_2);
+			break; 
+		}
+		case unified:
+		{
+			unified_column* unified_ptr=static_cast<unified_column*>(_ptr); 
+			unified_ptr->assign(it_1,it_2);
+			break; 
+		}
+	}
+};
+
+template<typename T>
+template<typename iter> 
+iter column<T>::insert(iter it, column<T>::value_type v){
+	switch(getlocation())
+	{
+		case host:
+		{
+			host_column* host_ptr= static_cast<host_column*>(_ptr); 
+			host_ptr->insert(it,v);
+			break; 
+		}
+		case device:
+		{
+			device_column* device_ptr=static_cast<device_column*>(_ptr); 
+			device_ptr->insert(it,v);
+			break; 
+		}
+		case pinned:
+		{
+			pinned_column* pinned_ptr=static_cast<pinned_column*>(_ptr); 
+			pinned_ptr->insert(it,v);
+			break; 
+		}
+		case unified:
+		{
+			unified_column* unified_ptr=static_cast<unified_column*>(_ptr); 
+			unified_ptr->insert(it,v);
+			break; 
+		}
+	}
+	return it; 
+};
+
+template<typename T>
+template<typename iter_pos,typename iter> 
+void column<T>::insert(iter_pos pos,iter start,iter stop){
+	switch(getlocation())
+	{
+		case host:
+		{
+			host_column* host_ptr= static_cast<host_column*>(_ptr); 
+			host_ptr->insert(pos,start,stop);
+			break; 
+		}
+		case device:
+		{
+			device_column* device_ptr=static_cast<device_column*>(_ptr); 
+			device_ptr->insert(pos,start,stop);
+			break; 
+		}
+		case pinned:
+		{
+			pinned_column* pinned_ptr=static_cast<pinned_column*>(_ptr); 
+			pinned_ptr->insert(pos,start,stop);
+			break; 
+		}
+		case unified:
+		{
+			unified_column* unified_ptr=static_cast<unified_column*>(_ptr); 
+			unified_ptr->insert(pos,start,stop);
+			break; 
+		}
+	}
+};
+
+template<typename T>
+template<typename iter> 
+iter column<T>::erase(iter pos){
+	switch(getlocation())
+	{
+		case host:
+		{
+			host_column* host_ptr= static_cast<host_column*>(_ptr); 
+			host_ptr->erase(pos);
+			break; 
+		}
+		case device:
+		{
+			device_column* device_ptr=static_cast<device_column*>(_ptr); 
+			device_ptr->erase(pos);
+			break; 
+		}
+		case pinned:
+		{
+			pinned_column* pinned_ptr=static_cast<pinned_column*>(_ptr); 
+			pinned_ptr->erase(pos);
+			break; 
+		}
+		case unified:
+		{
+			unified_column* unified_ptr=static_cast<unified_column*>(_ptr); 
+			unified_ptr->erase(pos);
+			break; 
+		}
+	}
+	return pos; 
+};
+
+template<typename T>
+template<typename iter> 
+iter column<T>::erase(iter start, iter stop){
+	switch(getlocation())
+	{
+		case host:
+		{
+			host_column* host_ptr= static_cast<host_column*>(_ptr); 
+			host_ptr->erase(start,stop);
+			break; 
+		}
+		case device:
+		{
+			device_column* device_ptr=static_cast<device_column*>(_ptr); 
+			device_ptr->erase(start,stop);
+			break; 
+		}
+		case pinned:
+		{
+			pinned_column* pinned_ptr=static_cast<pinned_column*>(_ptr); 
+			pinned_ptr->erase(start,stop);
+			break; 
+		}
+		case unified:
+		{
+			unified_column* unified_ptr=static_cast<unified_column*>(_ptr); 
+			unified_ptr->erase(start,stop);
+			break; 
+		}
+	}
+	return stop+1; 
+};
+
+
+
 #undef DEFAULT
 
 

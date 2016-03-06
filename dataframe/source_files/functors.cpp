@@ -94,22 +94,62 @@ namespace dataframe_functors{
 		}
 	};
 
+	template<int n,class ... Type>
+	struct it_copy{
+		typedef typename traits<Type...>::ColumnArray ColumnArray;
+		typedef dataframe_iterator<Type...> iterator; 
+
+		typedef typename traits<Type...>::size_type size_type;
+		typedef typename traits<Type...>::value_type value; 
+
+		typedef typename traits<Type...>::Return<0>::type_base type; 
+		typedef column<type> Column; 
+
+
+		void operator()(
+			ColumnArray& columns,
+			iterator start,
+			iterator stop	
+		){
+			size_type size=stop-start;
+			Column* ptr=new Column(size); 
+	
+			ptr->copy(
+				start.template get<n>(),
+				stop.template get<n>()); 	
+
+			columns[n]=static_cast<columnbase*>(ptr); 
+
+			it_copy<n-1,Type...> it_copy_r; 
+			it_copy_r(columns,start,stop); 
+		}
+	};
+	template<class ... Type>
+	struct it_copy<0,Type...>{
+		typedef typename traits<Type...>::ColumnArray ColumnArray;
+		typedef typename dataframe<Type...>::iterator iterator; 
+
+		typedef typename traits<Type...>::size_type size_type;
+		typedef typename traits<Type...>::value_type value; 
+
+		typedef typename traits<Type...>::Return<0>::type_base type; 
+		typedef column<type> Column; 
 
 
 
+		void operator()(
+			ColumnArray& columns,
+			iterator start,
+			iterator stop	
+		){
+			size_type size=stop-start;
+			Column* ptr=new Column(size); 
+	
+			ptr->copy(
+				start.template get<0>(),
+				stop.template get<0>()); 	
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+			columns[0]=static_cast<columnbase*>(ptr); 
+		}
+	};
 }

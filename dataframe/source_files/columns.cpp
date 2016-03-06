@@ -33,6 +33,7 @@ struct column : public columnbase {
 	typedef thrust::device_vector<T,typename allocation_policy<T,pinned>::allocator>	pinned_column;
 	typedef thrust::device_vector<T,typename allocation_policy<T,unified>::allocator>	unified_column;
 	typedef thrust::host_vector<T>		host_column;
+	typedef T*	pointer; 
 	
 	typedef boost::mpl::map<	
 					boost::mpl::pair<typename memory2type<device>::type,device_column>,
@@ -44,15 +45,16 @@ struct column : public columnbase {
 	struct Return{
 		typedef typename boost::mpl::at<map,typename memory2type<M>::type>::type raw;
 		typedef raw* type; 
-	
 	};
 	
+
 	Memory _location;
 	void* _ptr; 
 
 	column();
 	column(int);
 	column(const column<T>& );
+	column(pointer ,pointer);
 	~column(); 
 
 	template<typename Aloc>
@@ -82,7 +84,9 @@ struct column : public columnbase {
 	void reserve(size_type)const;
 	size_type capacity()const;
 
-	void fill(T); 
+	void fill(T);
+	template<typename iter>
+	void copy(iter,iter);  
 };
 
 template<int n,class ... Type>

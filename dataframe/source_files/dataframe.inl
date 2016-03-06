@@ -50,10 +50,16 @@ template<class ... Type>
 
 template<class ... Type>
 	dataframe<Type...>::dataframe(
-		dataframe<Type...>::iterator,
-		dataframe<Type...>::iterator)
+		dataframe<Type...>::iterator start,
+		dataframe<Type...>::iterator stop)
 {
 
+	dataframe_functors::it_copy<traits<Type...>::_numCol-1,Type...> it_copier;
+	it_copier(
+		_column_array,
+		start,
+		stop
+		); 
 };
 
 template<class ... Type>

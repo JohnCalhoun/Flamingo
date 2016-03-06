@@ -312,12 +312,43 @@ void column<T>::fill(T t){
 	}
 }
 
+template<typename T>
+template<typename iter>
+void column<T>::copy(iter start, iter stop){
+	switch(getlocation())
+	{
+		case host:
+		{
+			host_column* host_ptr= static_cast<host_column*>(_ptr); 
+			host_ptr->assign(start,stop);
+			break; 
+		}
+		case device:
+		{
+			device_column* device_ptr=static_cast<device_column*>(_ptr); 
+			device_ptr->assign(start,stop);
+			break; 
+		}
+		case pinned:
+		{
+			pinned_column* pinned_ptr=static_cast<pinned_column*>(_ptr); 
+			pinned_ptr->assign(start,stop);
+			break; 
+		}
+		case unified:
+		{
+			unified_column* unified_ptr=static_cast<unified_column*>(_ptr); 
+			unified_ptr->assign(start,stop);
+			break; 
+		}
 
+	}
+
+	
+
+
+}
 #undef DEFAULT
-
-
-
-
 
 
 

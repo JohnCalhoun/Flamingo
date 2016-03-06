@@ -245,7 +245,7 @@ dataframe_iterator<Type...> dataframe_iterator<Type...>::operator-(dataframe_ite
 
 template<class ... Type>
 dataframe_iterator<Type...>::difference_type dataframe_iterator<Type...>:: operator-(const dataframe_iterator<Type...>& other) const{
-	difference_type result=thrust::get<0>(_pointer)-thrust::get<0>(other.get_pointer());
+	difference_type result=std::get<0>(_pointer)-std::get<0>(other.get_pointer());
 	return result;
 } 
 
@@ -273,7 +273,7 @@ dataframe_iterator<Type...>::reference dataframe_iterator<Type...>::operator[](d
 template<class ... Type>
 template<int n>
 typename traits<Type...>::Return<n>::pointer_base dataframe_iterator<Type...>::get(){
-	return thrust::get<n>(_pointer); 
+	return  _pointer.template get<n>(); 
 }
 
 

@@ -57,7 +57,7 @@ class dataframe : public dataframeBase{
 	void assign(size_type,value_type);
 
 	reference operator=(const dataframe<Type...>&);
-	reference at()const;
+	reference at(size_type)const;
 	reference operator[](size_type);
 	reference front()const;
 	reference back()const;

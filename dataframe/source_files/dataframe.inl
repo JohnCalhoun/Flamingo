@@ -88,7 +88,7 @@ template<class ... Type>
 	dataframe<Type...>::reference 
 	dataframe<Type...>::back()const
 {
-	return at(size()-1)
+	return at(size()-1);
 };
 
 template<class ... Type>

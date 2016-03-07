@@ -16,9 +16,6 @@
 #include <cstddef> 
 
 class columnbase {
-	public:
-	columnbase(){}; 
-	virtual ~columnbase(){}; 
 }; 
 
 template<typename vector,int m>

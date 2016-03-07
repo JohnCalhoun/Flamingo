@@ -66,13 +66,8 @@ template<class ... Type>
 template<class ... Type>
 	dataframe<Type...>::~dataframe()
 {
-	for(int i=0; i<_column_array.size();i++){
-		columnbase* ptr=_column_array[i];
-		if(ptr){
-			delete ptr;
-			_column_array[i]=NULL; 
-		}
-	}
+	dataframe_functors::destructor<traits<Type...>::_numCol-1,Type...> recurs;
+	recurs(_column_array);
 };
 
 //-------------------container member functions-------------

@@ -64,7 +64,7 @@ template<class ... Type>
 void dataframeTest<Type...>::ConstructorTest()
 {
 
-	Container local;
+	Container local(10);
 	Container local_empty_copy(local);
 
 	value_type value(0,0,0,0);

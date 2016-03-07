@@ -8,7 +8,7 @@ namespace dataframe_functors{
 		typedef typename traits<Type...>::ColumnArray ColumnArray;
 
 		void operator()(	ColumnArray&		column_array_1, 
-						const ColumnArray& column_array_2){
+						const ColumnArray&  column_array_2){
 			typedef typename traits<Type...>::Return<n>::type_base	type;
 			typedef column<type>							Column; 
 
@@ -19,7 +19,7 @@ namespace dataframe_functors{
 			
 			if(ptr_2){
 				Column* ptr_1=new Column; 
-				*ptr_1=*ptr_2;
+				(*ptr_1)=(*ptr_2);
 				column_array_1[position]=static_cast<columnbase*>(ptr_1); 
 			}else{
 				Column* ptr_1=NULL; 
@@ -605,6 +605,39 @@ namespace dataframe_functors{
 			column_array[position]=static_cast<columnbase*>(ptr); 
 		}
 	};
+	template<int n,class ... Type>
+	struct destructor {
+		typedef typename traits<Type...>::ColumnArray ColumnArray;
+		typedef typename traits<Type...>::size_type size_type; 
+
+		void operator()(	ColumnArray&		column_array){
+			typedef typename traits<Type...>::Return<n>::type_base	type;
+			typedef column<type>							Column; 
 
 
+			Column* ptr=static_cast<Column*>(column_array[n]); 
+			if(ptr){
+				delete ptr; 
+			}
+
+			destructor<n-1,Type...> recurs;
+			recurs(column_array);	
+		}
+	};
+	template<class ... Type>
+	struct destructor<0,Type...> {
+		typedef typename traits<Type...>::ColumnArray ColumnArray;
+		typedef typename traits<Type...>::size_type size_type; 
+
+		void operator()(	ColumnArray&		column_array){
+			typedef typename traits<Type...>::Return<0>::type_base	type;
+			typedef column<type>			Column; 
+	
+			Column* ptr=static_cast<Column*>(column_array[0]); 
+			if(ptr){
+				delete ptr; 
+			}
+
+		}
+	};
 }

@@ -1,5 +1,6 @@
 //functors.cpp
 #include "columns.cpp"
+#include "traits.cpp"
 
 namespace iterator_functors{
 	template<int n, class ... Type>
@@ -10,7 +11,8 @@ namespace iterator_functors{
 		{
 		typedef typename traits<Type...>::Return<n>::type_base type; 
 		typedef typename traits<Type...>::Return<n>::pointer_base pointer; 
-		
+	
+
 		column<type>* col_ptr=static_cast<column<type>*>(col_array[n]);
 		if(col_ptr){
 			void* void_ptr=col_ptr->access_raw(); 

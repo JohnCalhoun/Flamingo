@@ -13,7 +13,7 @@ dataframe_iterator<Type...>::pointer dataframe_iterator<Type...>::get_pointer() 
 template<int n,typename pointer>
 struct nullify {
 	void operator()(pointer& p){
-		thrust::get<n>(p)=NULL;		
+		std::get<n>(p)=NULL;		
 		nullify<n-1,pointer> null_r;
 		null_r(p);	
 	}
@@ -21,7 +21,7 @@ struct nullify {
 template<typename pointer>
 struct nullify<0,pointer> {
 	void operator()(pointer& p){
-		thrust::get<0>(p)=NULL;	
+		std::get<0>(p)=NULL;	
 	}
 };
 //increment
@@ -29,9 +29,9 @@ template<int n,typename pointer>
 struct increment {
 	void operator()(pointer& p){
 
-		pointer tmp=thrust::get<n>(p);
+		pointer tmp=std::get<n>(p);
 		tmp++;		
-		thrust::get<n>(p)=tmp;					
+		std::get<n>(p)=tmp;					
 		
 		increment<n-1,pointer> inc_r;
 		inc_r(p);	
@@ -40,9 +40,9 @@ struct increment {
 template<typename pointer>
 struct increment<0,pointer> {
 	void operator()(pointer& p){	
-		pointer tmp=thrust::get<0>(p);
+		pointer tmp=std::get<0>(p);
 		tmp++;		
-		thrust::get<0>(p)=tmp;				
+		std::get<0>(p)=tmp;				
 	}
 };
 //decrement
@@ -50,9 +50,9 @@ template<int n,typename pointer>
 struct decrement {
 	void operator()(pointer& p){
 
-		pointer tmp=thrust::get<n>(p);
+		pointer tmp=std::get<n>(p);
 		tmp--;		
-		thrust::get<n>(p)=tmp;					
+		std::get<n>(p)=tmp;					
 		
 		decrement<n-1,pointer> inc_r;
 		inc_r(p);	
@@ -61,17 +61,17 @@ struct decrement {
 template<typename pointer>
 struct decrement<0,pointer> {
 	void operator()(pointer& p){	
-		pointer tmp=thrust::get<0>(p);
+		pointer tmp=std::get<0>(p);
 		tmp--;		
-		thrust::get<0>(p)=tmp;				
+		std::get<0>(p)=tmp;				
 	}
 };
 //arithmic-plus
 template<int n,typename pointer,typename T>
 struct arithmic_plus {
 	void operator()(pointer& lhs,const T& rhs){
-
-		thrust::get<n>(lhs)+=rhs;
+ 
+		std::get<n>(lhs)+=rhs;
 		
 		arithmic_plus<n-1,pointer,T> arith_r;
 		arith_r(lhs,rhs);	
@@ -80,7 +80,7 @@ struct arithmic_plus {
 template<typename pointer,typename T>
 struct arithmic_plus<0,pointer,T> {
 	void operator()(pointer& lhs,const T& rhs){
-		thrust::get<0>(lhs)+=rhs;
+		std::get<0>(lhs)+=rhs;
 	}
 };
 //arithmic-minus
@@ -88,7 +88,7 @@ template<int n,typename pointer, typename T>
 struct arithmic_minus {
 	void operator()(pointer& lhs,const T& rhs){
 
-		thrust::get<n>(lhs)-=rhs;
+		std::get<n>(lhs)-=rhs;
 		
 		arithmic_minus<n-1,pointer,T> arith_r;
 		arith_r(lhs,rhs);	
@@ -97,7 +97,7 @@ struct arithmic_minus {
 template<typename pointer,typename T>
 struct arithmic_minus<0,pointer,T> {
 	void operator()(pointer& lhs,const T& rhs){
-		thrust::get<0>(lhs)-=rhs;
+		std::get<0>(lhs)-=rhs;
 	}
 };
 
@@ -106,7 +106,7 @@ template<int n,typename pointer, typename value>
 struct dereference {
 	void operator()(pointer& lhs, value& rhs){
 
-		thrust::get<n>(rhs)=*thrust::get<n>(lhs);
+		std::get<n>(rhs)=*std::get<n>(lhs);
 		
 		dereference<n-1,pointer,value> deref_r;
 		deref_r(lhs,rhs);	
@@ -115,14 +115,14 @@ struct dereference {
 template<typename pointer,typename value>
 struct dereference <0,pointer,value> {
 	void operator()(pointer& lhs,const value& rhs){
-		thrust::get<0>(rhs)=*thrust::get<0>(lhs);
+		std::get<0>(rhs)=*std::get<0>(lhs);
 	}
 };
 
 //public functions
 template<class ... Type>
 dataframe_iterator<Type...>::dataframe_iterator(){
-	nullify<sizeof...(Type),pointer> _null;
+	nullify<sizeof...(Type)-1,pointer> _null;
 	_null(_pointer);
 }
 
@@ -135,9 +135,8 @@ template<class ... Type>
 dataframe_iterator<Type...>::dataframe_iterator(
 	const dataframe_iterator<Type...>::ColumnArray& array)
 {
-	typename iterator_functors::assign<traits<Type...>::_numCol,Type...> assigner; 
+	typename iterator_functors::assign<traits<Type...>::_numCol-1,Type...> assigner; 
 	assigner(array,_pointer); 
-//std::array<columnbase*,_colnum
 }
 
 
@@ -185,7 +184,7 @@ bool dataframe_iterator<Type...>::operator>=(const dataframe_iterator<Type...>& 
 
 template<class ... Type>
 dataframe_iterator<Type...>& dataframe_iterator<Type...>::operator++(){
-	increment<sizeof...(Type),pointer> _inc;
+	increment<sizeof...(Type)-1,pointer> _inc;
 	_inc(_pointer);
 
 	return *this;
@@ -200,7 +199,7 @@ dataframe_iterator<Type...> dataframe_iterator<Type...>::operator++(int){
 
 template<class ... Type>
 dataframe_iterator<Type...>& dataframe_iterator<Type...>::operator--(){
-	decrement<sizeof...(Type),pointer> _dec;
+	decrement<sizeof...(Type)-1,pointer> _dec;
 	_dec(_pointer);
 
 	return *this;
@@ -215,7 +214,7 @@ dataframe_iterator<Type...> dataframe_iterator<Type...>::operator--(int){
 
 template<class ... Type>
 dataframe_iterator<Type...>& dataframe_iterator<Type...>::operator+=(dataframe_iterator<Type...>::size_type n){
-	arithmic_plus<sizeof...(Type),pointer,size_type> _arith;
+	arithmic_plus<sizeof...(Type)-1,pointer,size_type> _arith;
 	_arith(_pointer,n);
 
 	return *this;
@@ -230,7 +229,7 @@ dataframe_iterator<Type...> dataframe_iterator<Type...>::operator+(dataframe_ite
 
 template<class ... Type>
 dataframe_iterator<Type...>& dataframe_iterator<Type...>::operator-=(dataframe_iterator<Type...>::size_type n){
-	arithmic_minus<sizeof...(Type),pointer,size_type> _arith;
+	arithmic_minus<sizeof...(Type)-1,pointer,size_type> _arith;
 	_arith(_pointer,n);
 
 	return *this;
@@ -255,7 +254,7 @@ dataframe_iterator<Type...>::reference dataframe_iterator<Type...>::operator*(){
 	typedef typename traits<Type...>::value_type value_type;
 	
 	value_type tmp; 
-	dereference <sizeof...(Type),pointer,value_type> _null;
+	dereference <sizeof...(Type)-1,pointer,value_type> _null;
 	_null(_pointer,tmp);
 	return tmp; 
 
@@ -273,7 +272,7 @@ dataframe_iterator<Type...>::reference dataframe_iterator<Type...>::operator[](d
 template<class ... Type>
 template<int n>
 typename traits<Type...>::Return<n>::pointer_base dataframe_iterator<Type...>::get(){
-	return  _pointer.template get<n>(); 
+	return  std::get<n>(_pointer); 
 }
 
 

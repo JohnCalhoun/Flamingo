@@ -16,6 +16,7 @@ class dataframeTest : public ::testing::Test{
 	typedef dataframe<Type... >				Container;
 	typedef typename Container::iterator		iterator;
 	typedef typename Container::value_type		element; 
+	typedef typename Container::value_type value_type;
 	
 	Container global_container; 	
 	
@@ -62,7 +63,6 @@ void dataframeTest<Type...>::ModifyTest()
 template<class ... Type>
 void dataframeTest<Type...>::ConstructorTest()
 {
-	typedef typename Container::value_type value_type;
 
 	Container local;
 	Container local_empty_copy(local);
@@ -74,12 +74,16 @@ void dataframeTest<Type...>::ConstructorTest()
 template<class ... Type>
 void dataframeTest<Type...>::AssignmentTest()
 {
-/*
-	Container local;
-	container other;
-	
+
+	Container local(10);
+	Container other;
+	value_type value(0,0,0,0);
+
+	iterator it=local.begin(); 
+
+	local.insert(it,value);
 	//
-	
+/*	
 	other=local;	
 	EXPECT_TRUE(other==local); 
 */
@@ -92,14 +96,12 @@ void dataframeTest<Type...>::EqualityTest()
 template<class ... Type>
 void dataframeTest<Type...>::BeginEndTest()
 {
-/*
-	typedef typename Container::iterator iterator; 
+
+	Container local;
 	
-	iterator b=vector.begin();
-	iterator e=vector.end();
-	iterator cb=vector.cbegin();
-	iterator ce=vector.cbegin();
-*/
+	iterator b=local.begin();
+	iterator e=local.end();
+
 };
 template<class ... Type>
 void dataframeTest<Type...>::LockTest()

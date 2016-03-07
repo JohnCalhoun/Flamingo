@@ -17,7 +17,8 @@ template<int n>
 template<class ... Type>
 	dataframe<Type...>::dataframe()
 {
-	_column_array.fill(NULL);	
+	dataframe_functors::construct_empty<traits<Type...>::_numCol-1,Type...> recurs;
+	recurs(_column_array); 
 };
 
 
@@ -38,6 +39,14 @@ template<class ... Type>
 {
 	dataframe_functors::fill<traits<Type...>::_numCol-1,Type...> filler;
 	filler(_column_array,s,v); 
+};
+
+template<class ... Type>
+	dataframe<Type...>::dataframe(
+		dataframe<Type...>::size_type s)
+{
+	dataframe_functors::construct<traits<Type...>::_numCol-1,Type...> recurs;
+	recurs(_column_array,s); 
 };
 
 template<class ... Type>
@@ -177,33 +186,46 @@ template<class ... Type>
 {
 
 };
-/*
+
 template<class ... Type>
 	dataframe<Type...>::size_type 
 	dataframe<Type...>::capacity()const
 {
+	typedef typename traits<Type...>::Return<0>::type_base type; 
+	size_type cap;	
 
+	column<type>* col_ptr=static_cast<column<type>*>(_column_array[0]);
+	if(col_ptr){	
+		cap=col_ptr->capacity(); 
+	}else{
+		cap=0;
+	}
+	return cap;
 };
-*/
-/*
+
+
 //-------------------non consts
 template<class ... Type>
 	void 
 	dataframe<Type...>::assign(
-		dataframe<Type...>::iterator,
-		dataframe<Type...>::iterator)
+		dataframe<Type...>::iterator start,
+		dataframe<Type...>::iterator stop)
 {
 	clear(); 
+	dataframe_functors::assign_range<traits<Type...>::_numCol-1,Type...> recurs;
+	recurs(_column_array,start,stop); 
 };
 template<class ... Type>
 	void 
 	dataframe<Type...>::assign(
-		dataframe<Type...>::size_type,
-		dataframe<Type...>::value_type)
+		dataframe<Type...>::size_type s,
+		dataframe<Type...>::value_type v)
 {
 	clear(); 
+	dataframe_functors::assign_value<traits<Type...>::_numCol-1,Type...> recurs;
+	recurs(_column_array,s,v); 
 };
-*/
+
 template<class ... Type>
 	void 
 	dataframe<Type...>::clear()
@@ -211,67 +233,84 @@ template<class ... Type>
 	dataframe_functors::clear<traits<Type...>::_numCol-1,Type...> clearer;
 	clearer(_column_array); 
 };
-/*
+
 template<class ... Type>
 	dataframe<Type...>::iterator 
 	dataframe<Type...>::insert(
-		dataframe<Type...>::iterator,
-		dataframe<Type...>::value_type)
+		dataframe<Type...>::iterator pos,
+		dataframe<Type...>::value_type v)
 {
+	size_type index=end()-pos; 
+	if(index >= size() ){
+		resize(index);
+	}
+	dataframe_functors::insert_value<traits<Type...>::_numCol-1,Type...> recurs;
+	recurs(_column_array,pos,v); 
+	return pos; 
+
 
 };
 template<class ... Type>
 	dataframe<Type...>::iterator 
 	dataframe<Type...>::insert(
-		dataframe<Type...>::iterator,
-		dataframe<Type...>::iterator,
-		dataframe<Type...>::iterator)
+		dataframe<Type...>::iterator pos,
+		dataframe<Type...>::iterator start,
+		dataframe<Type...>::iterator stop)
 {
-
+	dataframe_functors::insert_range<traits<Type...>::_numCol-1,Type...> recurs;
+	recurs(_column_array,pos,start,stop); 
+	return pos; 
 };
 template<class ... Type>
 	dataframe<Type...>::iterator 
 	dataframe<Type...>::erase(
-		dataframe<Type...>::iterator)
+		dataframe<Type...>::iterator pos)
 {
-
+	dataframe_functors::erase_value<traits<Type...>::_numCol-1,Type...> recurs;
+	recurs(_column_array,pos);
+	return pos;  
 };
 template<class ... Type>
 	dataframe<Type...>::iterator 
 	dataframe<Type...>::erase(
-		dataframe<Type...>::iterator,
-		dataframe<Type...>::iterator)
+		dataframe<Type...>::iterator start,
+		dataframe<Type...>::iterator stop)
 {
-
+	dataframe_functors::erase_range<traits<Type...>::_numCol-1,Type...> recurs;
+	recurs(_column_array,start,stop); 
+	return start; 
 };
 template<class ... Type>
 	void 
 	dataframe<Type...>::push_back(
-		dataframe<Type...>::value_type)
+		dataframe<Type...>::value_type value)
 {
-
+	insert(end()-1,value); 
 };
 template<class ... Type>
 	void 
 	dataframe<Type...>::pop_back()
 {
-
+	erase(end()-1); 
 };
 template<class ... Type>
 	void 
 	dataframe<Type...>::resize(
-		dataframe<Type...>::size_type)
+		dataframe<Type...>::size_type n)
 {
-
+	dataframe_functors::resize<traits<Type...>::_numCol-1,Type...> recurs;
+	recurs(_column_array,n); 
 };
 template<class ... Type>
 	void 
 	dataframe<Type...>::resize(
-		dataframe<Type...>::size_type,
-		dataframe<Type...>::value_type)
+		dataframe<Type...>::size_type n,
+		dataframe<Type...>::value_type v)
 {
-
-};	
+	dataframe_functors::resize_value<traits<Type...>::_numCol-1,Type...> recurs;
+	recurs(_column_array,n,v); 
+};
+/*	
 template<class ... Type>
 	void 
 	dataframe<Type...>::swap(

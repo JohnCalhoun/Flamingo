@@ -21,22 +21,23 @@ template<class ... Type>
 class dataframe : public dataframeBase{	
 
 	//typedefs
-	typedef dataframeBase					base;
+	typedef dataframeBase		base;
 
 	public:
-	typedef typename traits<Type...>::size_type		size_type;
-		
+	typedef traits<Type...>						Traits; 
+	
+	typedef typename Traits::size_type		size_type;
 	typedef dataframe_iterator<Type...>			iterator;
-	typedef typename traits<Type...>::difference_type	difference_type;
-	typedef typename traits<Type...>::reference		reference;
-	typedef typename traits<Type...>::value_type		value_type;
-	typedef typename traits<Type...>::pointer		pointer;
-	typedef typename traits<Type...>::type_vector	type_vector;
-	typedef typename traits<Type...>::pointer_zip	zip_it;
-	typedef typename traits<Type...>::ColumnArray	ColumnArray;
+	typedef typename Traits::difference_type	difference_type;
+	typedef typename Traits::reference		reference;
+	typedef typename Traits::value_type		value_type;
+	typedef typename Traits::pointer		pointer;
+	typedef typename Traits::type_vector	type_vector;
+	typedef typename Traits::pointer_zip	zip_it;
+	typedef typename column_tuple<Type...>::type		ColumnTuple;
 
 	private:
-	ColumnArray		_column_array;
+	ColumnTuple		_column_tuple;
 
 	public:
 	dataframe();
@@ -50,21 +51,23 @@ class dataframe : public dataframeBase{
 
 	private:
 	template<int n>
-	typename column_return<n,Type...>::type* column_access();
+	typename column_tuple<Type...>::element<n>::type& column_access();
 
+	ColumnTuple& tuple(); 
+	const ColumnTuple& tuple_const()const;
 	public:
 	void assign(iterator,iterator);
 	void assign(size_type,value_type);
 
-	reference operator=(const dataframe<Type...>&);
-	reference at(size_type)const;
+	dataframe<Type...>& operator=(const dataframe<Type...>&);
+	reference at(size_type);
 	reference operator[](size_type);
-	reference front()const;
-	reference back()const;
+	reference front();
+	reference back();
 
-	iterator begin()const;
+	iterator begin();
 	zip_it  begin_zip()const;
-	iterator end()const; 
+	iterator end(); 
 	zip_it end_zip()const;
 
 	size_type size()const;

@@ -9,6 +9,7 @@
 #include <boost/mpl/pair.hpp>
 #include <type_traits>
 #include <boost/mpl/int.hpp>
+#include"columnbase.cpp"
 
 template<Memory M>
 struct memory2type{
@@ -113,17 +114,29 @@ struct column : public columnbase {
 
 template<int n,class ... Type>
 struct column_return{
-	typedef typename traits<Type...>::Return<n>::type base; 
-
-	typedef typename column<base>::type type;  
+	typedef typename traits<Type...>::Return<n>::type		base; 
+	typedef typename column<base>::type				type;  
 };
 
+template<typename T>
+struct type2column {
+	typedef column<T> type; 
+};
 
+template<class ... Type>
+struct column_tuple {
+	typedef traits<Type...> Traits; 
 
+	typedef typename Traits::type_vector vec; 
+	typedef typename transform<vec,type2column<_1> >::type col_vec;
+	typedef typename vec2tuple<Traits::_numCol,col_vec>::type type; 
 
-
-
-
+	template<int n>
+	struct element {
+		typedef boost::mpl::int_<n> position;
+		typedef typename boost::mpl::at<col_vec,position>::type type; 
+	};
+};
 
 #include "columns.inl"
 #endif 

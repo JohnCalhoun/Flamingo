@@ -6,40 +6,34 @@ namespace iterator_functors{
 	template<int n, class ... Type>
 	struct assign{
 		void operator()( 
-				const typename traits<Type...>::ColumnArray& col_array,
+				typename column_tuple<Type...>::type& columnTuple,
 				typename traits<Type...>::pointer& it_pointer)
 		{
-		typedef typename traits<Type...>::Return<n>::type_base type; 
-		typedef typename traits<Type...>::Return<n>::pointer_base pointer; 
-	
+		typedef typename column_tuple<Type...>::type			col_tup; 
+		typedef typename column_tuple<Type...>::element<n>::type	type; 
+		typedef typename traits<Type...>::Return<n>::pointer_base	pointer;
 
-		column<type>* col_ptr=static_cast<column<type>*>(col_array[n]);
-		if(col_ptr){
-			void* void_ptr=col_ptr->access_raw(); 
-			std::get<n>(it_pointer)=static_cast<pointer>(void_ptr);
-		}else{
-			std::get<n>(it_pointer)=NULL;
-		}
+		type& column=std::get<n>(columnTuple);
+		void* void_ptr=column.access_raw(); 
+		std::get<n>(it_pointer)=static_cast<pointer>(void_ptr);
+
 		assign<n-1,Type...> assigner;
-		assigner(col_array,it_pointer); 	
+		assigner(columnTuple,it_pointer); 	
 		}
 	};
 	template<class ... Type>
 	struct assign<0,Type...>{
 		void operator()(
-				const typename traits<Type...>::ColumnArray& col_array,
+				typename column_tuple<Type...>::type& columnTuple,
 				typename traits<Type...>::pointer& it_pointer)
 		{
-		typedef typename traits<Type...>::Return<0>::type_base type; 
-		typedef typename traits<Type...>::Return<0>::pointer_base pointer; 
-		
-		column<type>* col_ptr=static_cast<column<type>*>(col_array[0]);
-		if(col_ptr){
-			void* void_ptr=col_ptr->access_raw(); 
-			std::get<0>(it_pointer)=static_cast<pointer>(void_ptr);
-		}else{
-			std::get<0>(it_pointer)=NULL;
-		}
+		typedef typename column_tuple<Type...>::type			col_tup; 
+		typedef typename column_tuple<Type...>::element<0>::type			type; 
+		typedef typename traits<Type...>::Return<0>::pointer_base	pointer;
+
+		type& column=std::get<0>(columnTuple);
+		void* void_ptr=column.access_raw(); 
+		std::get<0>(it_pointer)=static_cast<pointer>(void_ptr);	
 		}
 	};
 }

@@ -18,7 +18,7 @@ class dataframeTest : public ::testing::Test{
 	typedef typename Container::value_type		element; 
 	typedef typename Container::value_type value_type;
 	
-	Container global_container; 	
+//	Container global_container; 	
 	
 	DEFINE(ConstructorTest,	DATAFRAME_THREADS)
 	DEFINE(AssignmentTest,	DATAFRAME_THREADS)	
@@ -75,13 +75,13 @@ template<class ... Type>
 void dataframeTest<Type...>::AssignmentTest()
 {
 
-	Container local(10);
-	Container other;
-	value_type value(0,0,0,0);
+//	Container local(10);
+//	Container other;
+//	value_type value(0,0,0,0);
 
-	iterator it=local.begin(); 
+//	iterator it=local.begin(); 
 
-	local.insert(it,value);
+//	local.insert(it,value);
 	//
 /*	
 	other=local;	
@@ -97,11 +97,10 @@ template<class ... Type>
 void dataframeTest<Type...>::BeginEndTest()
 {
 
-	Container local;
-	
+	Container local(10);	
 	iterator b=local.begin();
 	iterator e=local.end();
-
+	EXPECT_TRUE(b<e);
 };
 template<class ... Type>
 void dataframeTest<Type...>::LockTest()
@@ -120,18 +119,38 @@ template<class ... Type>
 void dataframeTest<Type...>::QuerryTest()
 {
 
-	typedef typename Container::size_type size;	
+	typedef typename Container::size_type size_type;	
 	Container local;
+	
+	size_type a=local.size();
+	EXPECT_EQ(a,0);
+	size_type b=local.max_size();
+	size_type c=local.capacity();
+	EXPECT_LT(c,b); 
+	EXPECT_LE(a,c); 
 
-	size a=local.size();
-	size b=global_container.max_size();
-//	size c=global_container.capacity();
-	bool d=global_container.empty();
+	bool d=local.empty();
+	EXPECT_TRUE(d); 
 
+	size_type size=10;
+	for(int i=1; i<10;i++){
+		size+=10*i; 	
+	
+		local.resize(size);	
+		a=local.size();
+		EXPECT_EQ(a,size);
+		b=local.max_size();
+		c=local.capacity();
+		EXPECT_LT(c,b); 
+		EXPECT_LE(a,c); 
+
+		d=local.empty();
+		EXPECT_FALSE(d); 
+	}
 }
 
 
-//python:key:tests=EmptyTest InsertTest AccessTest ModifyTest QuerryTest LockTest EqualityTest ConstructorTest AssignmentTest
+//python:key:tests=EmptyTest BeginEndTest InsertTest AccessTest ModifyTest QuerryTest LockTest EqualityTest ConstructorTest AssignmentTest
 //python:template=TEST_F($dataframeTest<int,float,double,long>$,|tests|){this->|tests|();}
 
 //python:start

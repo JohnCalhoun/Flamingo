@@ -133,10 +133,10 @@ dataframe_iterator<Type...>::dataframe_iterator(const dataframe_iterator<Type...
 
 template<class ... Type>
 dataframe_iterator<Type...>::dataframe_iterator(
-	const dataframe_iterator<Type...>::ColumnArray& array)
+	dataframe_iterator<Type...>::ColumnTuple& tuple)
 {
 	typename iterator_functors::assign<traits<Type...>::_numCol-1,Type...> assigner; 
-	assigner(array,_pointer); 
+	assigner(tuple,_pointer); 
 }
 
 

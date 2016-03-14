@@ -26,14 +26,13 @@ class dataframe : public dataframeBase{
 	public:
 	typedef traits<Type...>						Traits; 
 	
-	typedef typename Traits::size_type		size_type;
-	typedef dataframe_iterator<Type...>			iterator;
+	typedef typename Traits::size_type			size_type;
+	typedef dataframe_iterator<Type...>		iterator;
 	typedef typename Traits::difference_type	difference_type;
-	typedef typename Traits::reference		reference;
+	typedef typename Traits::reference			reference;
 	typedef typename Traits::value_type		value_type;
-	typedef typename Traits::pointer		pointer;
-	typedef typename Traits::type_vector	type_vector;
-	typedef typename Traits::pointer_zip	zip_it;
+	typedef typename Traits::pointer			pointer;
+	typedef typename Traits::type_vector		type_vector;
 	typedef typename column_tuple<Type...>::type		ColumnTuple;
 
 	private:
@@ -66,9 +65,7 @@ class dataframe : public dataframeBase{
 	reference back();
 
 	iterator begin();
-	zip_it  begin_zip()const;
 	iterator end(); 
-	zip_it end_zip()const;
 
 	size_type size()const;
 	size_type max_size()const;

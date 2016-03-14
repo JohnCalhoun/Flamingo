@@ -102,14 +102,6 @@ template<class ... Type>
 	iterator it(_column_tuple); 
 	return it; 
 };
-/*
-template<class ... Type>
-	dataframe<Type...>::zip_it  
-	dataframe<Type...>::begin_zip()const
-{
-
-};
-*/
 template<class ... Type>
 	dataframe<Type...>::iterator 
 	dataframe<Type...>::end()
@@ -118,14 +110,6 @@ template<class ... Type>
 	it+=size()+1; 	
 	return it;
 }; 
-/*
-template<class ... Type>
-	dataframe<Type...>::zip_it 
-	dataframe<Type...>::end_zip()const
-{
-
-};
-*/
 
 template<class ... Type>
 	dataframe<Type...>::size_type 

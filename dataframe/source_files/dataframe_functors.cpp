@@ -227,8 +227,9 @@ namespace dataframe_functors{
 		{
 			Column& column=std::get<n>(columnTuple); 	
 			column.insert(
-						pos.template get<n>() ,
-						std::get<n>(v)); 			
+						pos.template get<n>(),
+						std::get<n>(v)
+			); 			
 
 			insert_value<n-1,Type...> recursive;
 			recursive(columnTuple,pos,v); 

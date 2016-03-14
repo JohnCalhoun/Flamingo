@@ -4,7 +4,7 @@ FOLDERS=-I ../source_files -I ../../allocator/source_files -isystem /usr/include
 LINKS=-lgtest -lpthread -lboost_thread 
 SOURCE_DIR=../source_files
 COVERAGE=$(UTIL)/coverage.py
-CFLAGS=--std=c++11 -g -G -pg -O0
+CFLAGS=--std=c++11 -g -G -O0 -pg 
 
 #********************************tests*********************************
 

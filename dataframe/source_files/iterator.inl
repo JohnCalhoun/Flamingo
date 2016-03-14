@@ -1,7 +1,7 @@
 //iterator.inl
 #include "iterator.cpp"
 #include "iterator_functors.cpp"
-
+#include "functional"
 //private functions
 template<class ... Type>
 dataframe_iterator<Type...>::pointer dataframe_iterator<Type...>::get_pointer() const{
@@ -101,24 +101,6 @@ struct arithmic_minus<0,pointer,T> {
 	}
 };
 
-//derefence 
-template<int n,typename pointer, typename value>
-struct dereference {
-	void operator()(pointer& lhs, value& rhs){
-
-		std::get<n>(rhs)=*std::get<n>(lhs);
-		
-		dereference<n-1,pointer,value> deref_r;
-		deref_r(lhs,rhs);	
-	}
-};
-template<typename pointer,typename value>
-struct dereference <0,pointer,value> {
-	void operator()(pointer& lhs,const value& rhs){
-		std::get<0>(rhs)=*std::get<0>(lhs);
-	}
-};
-
 //public functions
 template<class ... Type>
 dataframe_iterator<Type...>::dataframe_iterator(){
@@ -138,7 +120,6 @@ dataframe_iterator<Type...>::dataframe_iterator(
 	typename iterator_functors::assign<traits<Type...>::_numCol-1,Type...> assigner; 
 	assigner(tuple,_pointer); 
 }
-
 
 template<class ... Type>
 dataframe_iterator<Type...>::~dataframe_iterator(){}
@@ -251,13 +232,10 @@ dataframe_iterator<Type...>::difference_type dataframe_iterator<Type...>:: opera
 
 template<class ... Type>
 dataframe_iterator<Type...>::reference dataframe_iterator<Type...>::operator*(){
-	typedef typename traits<Type...>::value_type value_type;
 	
-	value_type tmp; 
-	dereference <sizeof...(Type)-1,pointer,value_type> _null;
-	_null(_pointer,tmp);
-	return tmp; 
-
+	iterator_functors::
+		dereference<sizeof...(Type)-1,Type...> rec;
+	return rec(_pointer);
 }
 
 template<class ... Type>

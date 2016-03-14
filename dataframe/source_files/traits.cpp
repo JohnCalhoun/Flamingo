@@ -30,10 +30,16 @@ struct vec2tuple<0,vec,T...> {
 	typedef std::tuple<element,T...>	type;
 };
 
+
 template<typename vec, typename op>
 struct transform{
 	typedef typename boost::mpl::transform<vec,op>::type type; 
 };	
+
+template<typename T>
+struct add_ref_wrap{
+	typedef std::reference_wrapper<T> type; 
+};
 
 using boost::mpl::placeholders::_1;
 template<class ... Type>
@@ -46,19 +52,14 @@ struct traits {
 	typedef typename transform<type_vector,std::add_lvalue_reference<_1> >::type reference_vector;
 
 	typedef typename vec2tuple<_numCol-1,type_vector>::type		value_tuple;
-	typedef thrust::zip_iterator<value_tuple>				value_zip;
-
-	typedef typename vec2tuple<_numCol-1,pointer_vector>::type	pointer_tuple;
-	typedef thrust::zip_iterator<pointer_tuple>				pointer_zip;
-
-	typedef typename vec2tuple<_numCol-1,reference_vector>::type		reference_tuple;
-	typedef thrust::zip_iterator<reference_tuple>					reference_zip;
+	typedef typename vec2tuple<_numCol-1,pointer_vector>::type		pointer_tuple;
+	typedef typename vec2tuple<_numCol-1,reference_vector>::type	reference_tuple;
 
 	typedef boost::mpl::range_c<int,0,_numCol> range;
 
 	typedef value_tuple			value_type;
 	typedef pointer_tuple		pointer; 
-	typedef reference_zip		reference;
+	typedef reference_tuple		reference;
 	typedef std::ptrdiff_t		difference_type; 
 	template<int n>
 	struct Return{

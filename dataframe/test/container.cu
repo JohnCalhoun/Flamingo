@@ -74,19 +74,15 @@ void dataframeTest<Type...>::ConstructorTest()
 template<class ... Type>
 void dataframeTest<Type...>::AssignmentTest()
 {
+	Container local(10);
+	value_type value(0,0,0,0);
 
-//	Container local(10);
-//	Container other;
-//	value_type value(0,0,0,0);
+	iterator it=local.begin(); 
 
-//	iterator it=local.begin(); 
-
-//	local.insert(it,value);
-	//
-/*	
-	other=local;	
-	EXPECT_TRUE(other==local); 
-*/
+	value_type value2=local[0]; 	
+	value=*it;
+	value=local[0];
+	*it=value; 
 };
 template<class ... Type>
 void dataframeTest<Type...>::EqualityTest()

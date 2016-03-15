@@ -43,7 +43,7 @@ template<class ... Type>
 		dataframe<Type...>::value_type v)
 {
 	dataframe_functors::fill<traits<Type...>::_numCol-1,Type...> filler;
-	filler(_column_tuple,s,v); 
+	filler(std::forward<ColumnTuple>(_column_tuple),s,v); 
 };
 
 template<class ... Type>
@@ -51,7 +51,7 @@ template<class ... Type>
 		dataframe<Type...>::size_type s)
 {
 	dataframe_functors::construct<traits<Type...>::_numCol-1,Type...> recurs;
-	recurs(_column_tuple,s); 
+	recurs(std::forward<ColumnTuple>(_column_tuple),s); 
 };
 
 template<class ... Type>

@@ -9,49 +9,60 @@
 #include <boost/mpl/pair.hpp>
 #include <type_traits>
 #include <boost/mpl/int.hpp>
-#include"columnbase.cpp"
+#include "columnbase.cpp"
+#include <tuple>
 
 template<Memory M>
 struct memory2type{
-	typedef boost::mpl::int_<1> type; 
+	typedef boost::mpl::int_<0> type; 
 };
 template<>
 struct memory2type<device>{
-	typedef boost::mpl::int_<2> type; 
+	typedef boost::mpl::int_<1> type; 
 };
 template<>
 struct memory2type<pinned>{
-	typedef boost::mpl::int_<3> type; 
+	typedef boost::mpl::int_<2> type; 
 };
 template<>
 struct memory2type<unified>{
-	typedef boost::mpl::int_<4> type; 
+	typedef boost::mpl::int_<3> type; 
 };
 
 template<typename T>
-struct column : public columnbase {
-	typedef thrust::device_vector<T,typename allocation_policy<T,device>::allocator>	device_column;
-	typedef thrust::device_vector<T,typename allocation_policy<T,pinned>::allocator>	pinned_column;
-	typedef thrust::device_vector<T,typename allocation_policy<T,unified>::allocator>	unified_column;
-	typedef thrust::host_vector<T>		host_column;
+struct column  {
+	typedef typename allocation_policy<T,device>::allocator device_allocator; 
+	typedef typename allocation_policy<T,pinned>::allocator pinned_allocator; 
+	typedef typename allocation_policy<T,unified>::allocator unified_allocator; 
+
+	typedef thrust::device_vector<T,device_allocator>		device_column;
+	typedef thrust::device_vector<T,pinned_allocator>		pinned_column;
+	typedef thrust::device_vector<T,unified_allocator>	unified_column;
+	typedef thrust::host_vector<T>					host_column;
+	
+	typedef boost::mpl::map<	
+		boost::mpl::pair<typename memory2type<device>::type,device_column>,
+		boost::mpl::pair<typename memory2type<host>::type,host_column>,
+		boost::mpl::pair<typename memory2type<pinned>::type,pinned_column>,
+		boost::mpl::pair<typename memory2type<unified>::type,unified_column>
+	> map; 
+	typedef std::tuple<	
+					host_column,
+					device_column,
+					pinned_column,
+					unified_column
+				> MemoryTuple; 
+
 	typedef T				value_type;
 	typedef value_type*		pointer; 
 	
-	typedef boost::mpl::map<	
-					boost::mpl::pair<typename memory2type<device>::type,device_column>,
-					boost::mpl::pair<typename memory2type<host>::type,host_column>,
-					boost::mpl::pair<typename memory2type<pinned>::type,pinned_column>,
-					boost::mpl::pair<typename memory2type<unified>::type,unified_column>
-				> map; 
 	template<Memory M>
 	struct Return{
-		typedef typename boost::mpl::at<map,typename memory2type<M>::type>::type raw;
-		typedef raw* type; 
+		typedef typename boost::mpl::at<map,typename memory2type<M>::type>::type column;
 	};
-	
 
-	Memory _location;
-	void* _ptr; 
+	Memory		_location;
+	MemoryTuple	_tuple; 
 
 	column();
 	column(int);
@@ -71,9 +82,9 @@ struct column : public columnbase {
 	Memory getlocation()const; 
 
 	template<Memory M>
-	typename Return<M>::type access(); 	
-	
-	void* access_raw(); 
+	typename Return<M>::column& access(); 	
+
+	pointer access_raw(); 
 
 	void swap(column<T>& );
 	column<T>& operator=(const column<T>& );

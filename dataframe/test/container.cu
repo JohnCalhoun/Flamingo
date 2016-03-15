@@ -16,7 +16,7 @@ class dataframeTest : public ::testing::Test{
 	typedef dataframe<Type... >				Container;
 	typedef typename Container::iterator		iterator;
 	typedef typename Container::value_type		element; 
-	typedef typename Container::value_type value_type;
+	typedef typename Container::value_type		value_type;
 	
 //	Container global_container; 	
 	
@@ -69,20 +69,17 @@ void dataframeTest<Type...>::ConstructorTest()
 
 	value_type value(0,0,0,0);
 	Container local2(10,value); 
-		
 };
 template<class ... Type>
 void dataframeTest<Type...>::AssignmentTest()
 {
-	Container local(10);
-	value_type value(0,0,0,0);
-
-	iterator it=local.begin(); 
-
-	value_type value2=local[0]; 	
-	value=*it;
-	value=local[0];
-	*it=value; 
+	const int size=10;
+	Container local(size);
+	for(int i=0;i<size;i++){
+		value_type value(i,i,i,i);	
+		local[i]=value;
+		EXPECT_EQ(local[i],value);
+	}
 };
 template<class ... Type>
 void dataframeTest<Type...>::EqualityTest()

@@ -1,106 +1,42 @@
 //columns.inl
 #include"columns.cpp"
+#include <tuple>
 #define DEFAULT_LOCATION host
 #define DEFAULT_COLUMN host_column
 
 template<typename T>
 column<T>::column(){
-	DEFAULT_COLUMN* tmp=new DEFAULT_COLUMN();	
-	_ptr=static_cast<void*>(tmp); 
 	_location=DEFAULT_LOCATION;
 }
 
 template<typename T>
 column<T>::column(int n){
-	DEFAULT_COLUMN* tmp=new DEFAULT_COLUMN(n);	
-	_ptr=static_cast<void*>(tmp); 
-	_location=DEFAULT_LOCATION;
+	_location=DEFAULT_LOCATION; 
+	(std::get<DEFAULT_COLUMN>(_tuple)).resize(n);  
 }
 
 template<typename T>
 column<T>::column(const column<T>& other){
 	_location=other.getlocation(); 
-	switch(_location)
-	{
-		case host:
-		{
-			host_column* host_it=new host_column();
-			(*host_it)=*static_cast<host_column*>(other._ptr);	
-			_ptr=static_cast<void*>(host_it); 
-			break; 
-		}
-		case device:
-		{
-			device_column* device_it=new device_column();
-			(*device_it)=*static_cast<device_column*>(other._ptr);	
-			_ptr=static_cast<void*>(device_it); 
-			break; 
-		}
-		case pinned:
-		{
-			pinned_column* pinned_it=new pinned_column();
-			(*pinned_it)=*static_cast<pinned_column*>(other._ptr);	
-			_ptr=static_cast<void*>(pinned_it); 
-
-			break; 
-		}
-		case unified:
-		{
-			unified_column* unified_it=new unified_column();
-			(*unified_it)=*static_cast<unified_column*>(other._ptr);	
-			_ptr=static_cast<void*>(unified_it); 
-
-			break; 
-		}
-	}
+	_tuple=other._tuple; 
 }
 
 template<typename T>
-column<T>::~column(){
-	switch(getlocation())
-	{
-		case host:
-		{
-			if(_ptr){
-				host_column* host_it=static_cast<host_column*>(_ptr);
-				delete host_it;  
-			}
-			break; 
-		}
-		case device:
-		{
-			delete static_cast<device_column*>(_ptr); 
-			break; 
-		}
-		case pinned:
-		{
-			delete static_cast<pinned_column*>(_ptr); 
-			break; 
-		}
-		case unified:
-		{
-			delete static_cast<unified_column*>(_ptr); 
-			break; 
-		}
-
-	}
-} 
+column<T>::~column(){} 
 
 template<typename T>
 template<typename Aloc>
 column<T>::column(const thrust::device_vector<T,Aloc>& other){
-	device_column* tmp=new device_column();
-	*tmp=other;
-	_ptr=static_cast<void*>(tmp); 
+	const int destination=memory2type<device>::type::value;
+	std::get<destination>(_tuple)=other; 
 	_location=device;
 } 
 
 template<typename T>
 template<typename Aloc>
 column<T>::column(const thrust::host_vector<T,Aloc>& other){
-	host_column* tmp=new host_column();
-	*tmp=other;
-	_ptr=static_cast<void*>(tmp); 
+	const int destination=memory2type<host>::type::value;
+	std::get<destination>(_tuple)=other; 
 	_location=host;
 } 
 
@@ -108,45 +44,44 @@ template<typename T>
 template<Memory M>
 void column<T>::move(){
 	if( M != _location){
-		typedef typename Return<M>::raw new_col;
-		new_col* tmp=new new_col(); 
-		
 		switch(getlocation())
 		{
 			case host:
 			{
-				host_column* base=static_cast<host_column*>(_ptr); 
-				*tmp=*base;
-				delete base;
-				_ptr=static_cast<void*>(tmp);				
+				const int source=memory2type<host>::type::value;
+				const int destination=memory2type<M>::type::value;
+
+				std::get<destination>(_tuple)=std::get<source>(_tuple); 
+				std::get<source>(_tuple).clear(); 
 				break;
 			}
 			case device:
 			{
-				host_column* base=static_cast<device_column*>(_ptr); 
-				*tmp=*base;
-				delete base;
-				_ptr=static_cast<void*>(tmp);				
+				const int source=memory2type<device>::type::value;
+				const int destination=memory2type<M>::type::value;
+
+				std::get<destination>(_tuple)=std::get<source>(_tuple); 
+				std::get<source>(_tuple).clear(); 
 				break;
 			}
 			case pinned:
 			{
-				host_column* base=static_cast<pinned_column*>(_ptr); 
-				*tmp=*base;
-				delete base;
-				_ptr=static_cast<void*>(tmp);				
+				const int source=memory2type<pinned>::type::value;
+				const int destination=memory2type<M>::type::value;
+
+				std::get<destination>(_tuple)=std::get<source>(_tuple); 
+				std::get<source>(_tuple).clear(); 
 				break;
 			}
-
 			case unified:
 			{
-				host_column* base=static_cast<unified_column*>(_ptr); 
-				*tmp=*base;
-				delete base;
-				_ptr=static_cast<void*>(tmp);				
+				const int source=memory2type<unified>::type::value;
+				const int destination=memory2type<M>::type::value;
+
+				std::get<destination>(_tuple)=std::get<source>(_tuple); 
+				std::get<source>(_tuple).clear(); 
 				break;
 			}
-
 		}
 	}
 }
@@ -157,19 +92,50 @@ Memory column<T>::getlocation()const{
 
 template<typename T>
 template<Memory M>
-typename column<T>::Return<M>::type column<T>::access(){
-	return static_cast<typename Return<M>::type>(access_raw()); 
+typename column<T>::Return<M>::column& column<T>::access(){
+	const int position=memory2type<M>::type::value;
+	return std::get<position>(_tuple); 
+} 
+template<typename T>
+column<T>::pointer column<T>::access_raw(){
+	pointer ptr;	
+	switch(getlocation())
+	{
+			case host:
+			{
+				const int position=memory2type<host>::type::value;
+				ptr=std::get<position>(_tuple).data();
+				break;
+			}
+			case device:
+			{
+				const int position=memory2type<device>::type::value;
+				ptr=std::get<position>(_tuple).data();
+				break;
+			}
+			case pinned:
+			{
+				const int position=memory2type<pinned>::type::value;
+				ptr=std::get<position>(_tuple).data();
+				break;
+			}
+			case unified:
+			{
+				const int position=memory2type<unified>::type::value;
+				ptr=std::get<position>(_tuple).data();
+				break;
+			}
+	}
+	return ptr; 
 } 
 
-template<typename T>
-void* column<T>::access_raw(){
-	return _ptr; 
-} 
+
+
 
 template<typename T>
 void column<T>::swap(column<T>& other ){
 	std::swap(_location,other._location);
-	std::swap(_ptr,other._ptr);
+	std::swap(_tuple,other._tuple);
 } 
 
 template<typename T>
@@ -186,29 +152,28 @@ column<T>::size_type column<T>::size()const
 	{
 		case host:
 		{
-			host_column* host_ptr= static_cast<host_column*>(_ptr); 
-			size=host_ptr->size(); 
+			const int position=memory2type<host>::type::value;
+			size=std::get<position>(_tuple).size();
 			break; 
 		}
 		case device:
 		{
-			device_column* device_ptr=static_cast<device_column*>(_ptr); 
-			size=device_ptr->size(); 
+			const int position=memory2type<device>::type::value;
+			size=std::get<position>(_tuple).size();
 			break; 
 		}
 		case pinned:
 		{
-			pinned_column* pinned_ptr=static_cast<pinned_column*>(_ptr); 
-			size=pinned_ptr->size(); 
+			const int position=memory2type<pinned>::type::value;
+			size=std::get<position>(_tuple).size();
 			break; 
 		}
 		case unified:
 		{
-			unified_column* unified_ptr=static_cast<unified_column*>(_ptr); 
-			size=unified_ptr->size(); 
+			const int position=memory2type<unified>::type::value;
+			size=std::get<position>(_tuple).size();
 			break; 
 		}
-
 	}
 	return size; 
 }
@@ -221,29 +186,28 @@ column<T>::size_type column<T>::max_size()const
 	{
 		case host:
 		{
-			host_column* host_ptr= static_cast<host_column*>(_ptr); 
-			max_size=host_ptr->max_size(); 
+			const int position=memory2type<host>::type::value;
+			max_size=std::get<position>(_tuple).max_size();
 			break; 
 		}
 		case device:
 		{
-			device_column* device_ptr=static_cast<device_column*>(_ptr); 
-			max_size=device_ptr->max_size(); 
+			const int position=memory2type<device>::type::value;
+			max_size=std::get<position>(_tuple).max_size();
 			break; 
 		}
 		case pinned:
 		{
-			pinned_column* pinned_ptr=static_cast<pinned_column*>(_ptr); 
-			max_size=pinned_ptr->max_size(); 
+			const int position=memory2type<pinned>::type::value;
+			max_size=std::get<position>(_tuple).max_size();
 			break; 
 		}
 		case unified:
 		{
-			unified_column* unified_ptr=static_cast<unified_column*>(_ptr); 
-			max_size=unified_ptr->max_size(); 
+			const int position=memory2type<unified>::type::value;
+			max_size=std::get<position>(_tuple).max_size();
 			break; 
 		}
-
 	}
 	return max_size; 
 }
@@ -255,43 +219,96 @@ bool column<T>::empty()const{
 	{
 		case host:
 		{
-			host_column* host_ptr= static_cast<host_column*>(_ptr); 
-			empty=host_ptr->empty(); 
+			const int position=memory2type<host>::type::value;
+			empty=std::get<position>(_tuple).empty();
 			break; 
 		}
 		case device:
 		{
-			device_column* device_ptr=static_cast<device_column*>(_ptr); 
-			empty=device_ptr->empty(); 
+			const int position=memory2type<device>::type::value;
+			empty=std::get<position>(_tuple).empty();
 			break; 
 		}
 		case pinned:
 		{
-			pinned_column* pinned_ptr=static_cast<pinned_column*>(_ptr); 
-			empty=pinned_ptr->empty(); 
+			const int position=memory2type<pinned>::type::value;
+			empty=std::get<position>(_tuple).empty();
 			break; 
 		}
 		case unified:
 		{
-			unified_column* unified_ptr=static_cast<unified_column*>(_ptr); 
-			empty=unified_ptr->empty(); 
+			const int position=memory2type<unified>::type::value;
+			empty=std::get<position>(_tuple).empty();
 			break; 
 		}
-
 	}
 	return empty;
 }
-/*
-template<typename T>
-void column<T>::reserve(size_type)const{
 
+template<typename T>
+void column<T>::reserve(size_type size){
+	switch(getlocation())
+	{
+		case host:
+		{
+			const int position=memory2type<host>::type::value;
+			std::get<position>(_tuple).reserve(size);
+			break; 
+		}
+		case device:
+		{
+			const int position=memory2type<device>::type::value;
+			std::get<position>(_tuple).reserve(size);
+			break; 
+		}
+		case pinned:
+		{
+			const int position=memory2type<pinned>::type::value;
+			std::get<position>(_tuple).reserve(size);
+			break; 
+		}
+		case unified:
+		{
+			const int position=memory2type<unified>::type::value;
+			std::get<position>(_tuple).reserve(size);
+			break; 
+		}
+	}
 }
 
 template<typename T>
 column<T>::size_type column<T>::capacity()const{
-
+	size_type size; 
+	switch(getlocation())
+	{
+		case host:
+		{
+			const int position=memory2type<host>::type::value;
+			size=std::get<position>(_tuple).capacity();
+			break; 
+		}
+		case device:
+		{
+			const int position=memory2type<device>::type::value;
+			size=std::get<position>(_tuple).capacity();
+			break; 
+		}
+		case pinned:
+		{
+			const int position=memory2type<pinned>::type::value;
+			size=std::get<position>(_tuple).capacity();
+			break; 
+		}
+		case unified:
+		{
+			const int position=memory2type<unified>::type::value;
+			size=std::get<position>(_tuple).capacity();
+			break; 
+		}
+	}
+	return size;
 }
-*/
+
 template<typename T>
 void column<T>::fill(T t){ 
 	size_type s=size(); 
@@ -299,29 +316,28 @@ void column<T>::fill(T t){
 	{
 		case host:
 		{
-			host_column* host_ptr= static_cast<host_column*>(_ptr); 
-			host_ptr->assign(s,t); 			
+			const int position=memory2type<host>::type::value;
+			std::get<position>(_tuple).assign(s,t);
 			break; 
 		}
 		case device:
 		{
-			device_column* device_ptr=static_cast<device_column*>(_ptr); 
-			device_ptr->assign(s,t); 				
+			const int position=memory2type<device>::type::value;
+			std::get<position>(_tuple).assign(s,t);
 			break; 
 		}
 		case pinned:
 		{
-			pinned_column* pinned_ptr=static_cast<pinned_column*>(_ptr); 
-			pinned_ptr->assign(s,t); 				
+			const int position=memory2type<pinned>::type::value;
+			std::get<position>(_tuple).assign(s,t);
 			break; 
 		}
 		case unified:
 		{
-			unified_column* unified_ptr=static_cast<unified_column*>(_ptr); 
-			unified_ptr->assign(s,t); 						
+			const int position=memory2type<unified>::type::value;
+			std::get<position>(_tuple).assign(s,t);
 			break; 
 		}
-
 	}
 }
 
@@ -332,32 +348,30 @@ void column<T>::copy(iter start, iter stop){
 	{
 		case host:
 		{
-			host_column* host_ptr= static_cast<host_column*>(_ptr); 
-			host_ptr->assign(start,stop);
+			const int position=memory2type<host>::type::value;
+			std::get<position>(_tuple).assign(start,stop);
 			break; 
 		}
 		case device:
 		{
-			device_column* device_ptr=static_cast<device_column*>(_ptr); 
-			device_ptr->assign(start,stop);
+			const int position=memory2type<device>::type::value;
+			std::get<position>(_tuple).assign(start,stop);
 			break; 
 		}
 		case pinned:
 		{
-			pinned_column* pinned_ptr=static_cast<pinned_column*>(_ptr); 
-			pinned_ptr->assign(start,stop);
+			const int position=memory2type<pinned>::type::value;
+			std::get<position>(_tuple).assign(start,stop);
 			break; 
 		}
 		case unified:
 		{
-			unified_column* unified_ptr=static_cast<unified_column*>(_ptr); 
-			unified_ptr->assign(start,stop);
+			const int position=memory2type<unified>::type::value;
+			std::get<position>(_tuple).assign(start,stop);
 			break; 
 		}
-
 	}
 }
-
 
 template<typename T>
 void column<T>::clear(){
@@ -365,29 +379,28 @@ void column<T>::clear(){
 	{
 		case host:
 		{
-			host_column* host_ptr= static_cast<host_column*>(_ptr); 
-			host_ptr->clear();
+			const int position=memory2type<host>::type::value;
+			std::get<position>(_tuple).clear();
 			break; 
 		}
 		case device:
 		{
-			device_column* device_ptr=static_cast<device_column*>(_ptr); 
-			device_ptr->clear();
+			const int position=memory2type<device>::type::value;
+			std::get<position>(_tuple).clear();
 			break; 
 		}
 		case pinned:
 		{
-			pinned_column* pinned_ptr=static_cast<pinned_column*>(_ptr); 
-			pinned_ptr->clear();
+			const int position=memory2type<pinned>::type::value;
+			std::get<position>(_tuple).clear();
 			break; 
 		}
 		case unified:
 		{
-			unified_column* unified_ptr=static_cast<unified_column*>(_ptr); 
-			unified_ptr->clear();
+			const int position=memory2type<unified>::type::value;
+			std::get<position>(_tuple).clear();
 			break; 
 		}
-
 	}
 }
 
@@ -397,26 +410,26 @@ void column<T>::resize(column<T>::size_type n){
 	{
 		case host:
 		{
-			host_column* host_ptr= static_cast<host_column*>(_ptr); 
-			host_ptr->resize(n);
+			const int position=memory2type<host>::type::value;
+			std::get<position>(_tuple).resize(n);
 			break; 
 		}
 		case device:
 		{
-			device_column* device_ptr=static_cast<device_column*>(_ptr); 
-			device_ptr->resize(n);
+			const int position=memory2type<device>::type::value;
+			std::get<position>(_tuple).resize(n);
 			break; 
 		}
 		case pinned:
 		{
-			pinned_column* pinned_ptr=static_cast<pinned_column*>(_ptr); 
-			pinned_ptr->resize(n);
+			const int position=memory2type<pinned>::type::value;
+			std::get<position>(_tuple).resize(n);
 			break; 
 		}
 		case unified:
 		{
-			unified_column* unified_ptr=static_cast<unified_column*>(_ptr); 
-			unified_ptr->resize(n);
+			const int position=memory2type<unified>::type::value;
+			std::get<position>(_tuple).resize(n);
 			break; 
 		}
 	}
@@ -428,95 +441,30 @@ void column<T>::resize(column<T>::size_type n,column<T>::value_type v){
 	{
 		case host:
 		{
-			host_column* host_ptr= static_cast<host_column*>(_ptr); 
-			host_ptr->resize(n,v);
+			const int position=memory2type<host>::type::value;
+			std::get<position>(_tuple).resize(n,v);
 			break; 
 		}
 		case device:
 		{
-			device_column* device_ptr=static_cast<device_column*>(_ptr); 
-			device_ptr->resize(n,v);
+			const int position=memory2type<device>::type::value;
+			std::get<position>(_tuple).resize(n,v);
 			break; 
 		}
 		case pinned:
 		{
-			pinned_column* pinned_ptr=static_cast<pinned_column*>(_ptr); 
-			pinned_ptr->resize(n,v);
+			const int position=memory2type<pinned>::type::value;
+			std::get<position>(_tuple).resize(n,v);
 			break; 
 		}
 		case unified:
 		{
-			unified_column* unified_ptr=static_cast<unified_column*>(_ptr); 
-			unified_ptr->resize(n,v);
+			const int position=memory2type<unified>::type::value;
+			std::get<position>(_tuple).resize(n,v);
 			break; 
 		}
 	}
 }
-
-template<typename T>
-column<T>::size_type column<T>::capacity()const{
-	size_type output;
-	switch(getlocation())
-	{
-		case host:
-		{
-			host_column* host_ptr= static_cast<host_column*>(_ptr); 
-			output=host_ptr->capacity();
-			break; 
-		}
-		case device:
-		{
-			device_column* device_ptr=static_cast<device_column*>(_ptr); 
-			output=device_ptr->capacity();
-			break; 
-		}
-		case pinned:
-		{
-			pinned_column* pinned_ptr=static_cast<pinned_column*>(_ptr); 
-			output=pinned_ptr->capacity();
-			break; 
-		}
-		case unified:
-		{
-			unified_column* unified_ptr=static_cast<unified_column*>(_ptr); 
-			output=unified_ptr->capacity();
-			break; 
-		}
-	}
-	return output; 
-};
-
-
-template<typename T>
-void column<T>::reserve(column<T>::size_type n){
-	switch(getlocation())
-	{
-		case host:
-		{
-			host_column* host_ptr= static_cast<host_column*>(_ptr); 
-			host_ptr->reserve(n);
-			break; 
-		}
-		case device:
-		{
-			device_column* device_ptr=static_cast<device_column*>(_ptr); 
-			device_ptr->reserve(n);
-			break; 
-		}
-		case pinned:
-		{
-			pinned_column* pinned_ptr=static_cast<pinned_column*>(_ptr); 
-			pinned_ptr->reserve(n);
-			break; 
-		}
-		case unified:
-		{
-			unified_column* unified_ptr=static_cast<unified_column*>(_ptr); 
-			unified_ptr->reserve(n);
-			break; 
-		}
-	}
-};
 
 template<typename T>
 void column<T>::assign(
@@ -526,26 +474,26 @@ void column<T>::assign(
 	{
 		case host:
 		{
-			host_column* host_ptr= static_cast<host_column*>(_ptr); 
-			host_ptr->assign(s,v);
+			const int position=memory2type<host>::type::value;
+			std::get<position>(_tuple).assign(s,v);
 			break; 
 		}
 		case device:
 		{
-			device_column* device_ptr=static_cast<device_column*>(_ptr); 
-			device_ptr->assign(s,v);
+			const int position=memory2type<device>::type::value;
+			std::get<position>(_tuple).assign(s,v);
 			break; 
 		}
 		case pinned:
 		{
-			pinned_column* pinned_ptr=static_cast<pinned_column*>(_ptr); 
-			pinned_ptr->assign(s,v);
+			const int position=memory2type<pinned>::type::value;
+			std::get<position>(_tuple).assign(s,v);
 			break; 
 		}
 		case unified:
 		{
-			unified_column* unified_ptr=static_cast<unified_column*>(_ptr); 
-			unified_ptr->assign(s,v);
+			const int position=memory2type<unified>::type::value;
+			std::get<position>(_tuple).assign(s,v);
 			break; 
 		}
 	}
@@ -558,26 +506,26 @@ void column<T>::assign(iter it_1,iter it_2){
 	{
 		case host:
 		{
-			host_column* host_ptr= static_cast<host_column*>(_ptr); 
-			host_ptr->assign(it_1,it_2);
+			const int position=memory2type<host>::type::value;
+			std::get<position>(_tuple).assign(it_1,it_2);
 			break; 
 		}
 		case device:
 		{
-			device_column* device_ptr=static_cast<device_column*>(_ptr); 
-			device_ptr->assign(it_1,it_2);
+			const int position=memory2type<device>::type::value;
+			std::get<position>(_tuple).assign(it_1,it_2);
 			break; 
 		}
 		case pinned:
 		{
-			pinned_column* pinned_ptr=static_cast<pinned_column*>(_ptr); 
-			pinned_ptr->assign(it_1,it_2);
+			const int position=memory2type<pinned>::type::value;
+			std::get<position>(_tuple).assign(it_1,it_2);
 			break; 
 		}
 		case unified:
 		{
-			unified_column* unified_ptr=static_cast<unified_column*>(_ptr); 
-			unified_ptr->assign(it_1,it_2);
+			const int position=memory2type<unified>::type::value;
+			std::get<position>(_tuple).assign(it_1,it_2);
 			break; 
 		}
 	}
@@ -585,35 +533,31 @@ void column<T>::assign(iter it_1,iter it_2){
 
 template<typename T>
 template<typename iter> 
-iter column<T>::insert(iter it, column<T>::value_type v){
+iter column<T>::insert(iter it, column<T>::value_type v){	
 	switch(getlocation())
 	{
 		case host:
 		{
-			host_column* host_ptr= static_cast<host_column*>(_ptr); 
-			typename host_column::iterator it_thrust(it); 
-			host_ptr->insert(it_thrust,v);
+			const int position=memory2type<host>::type::value;
+			std::get<position>(_tuple).insert(it,v);
 			break; 
 		}
 		case device:
 		{
-			device_column* device_ptr=static_cast<device_column*>(_ptr); 
-			typename device_column::iterator it_thrust(it); 
-			device_ptr->insert(it_thrust,v);
+			const int position=memory2type<device>::type::value;
+			std::get<position>(_tuple).insert(it,v);
 			break; 
 		}
 		case pinned:
 		{
-			pinned_column* pinned_ptr=static_cast<pinned_column*>(_ptr); 
-			typename pinned_column::iterator it_thrust(it); 
-			pinned_ptr->insert(it_thrust,v);
+			const int position=memory2type<pinned>::type::value;
+			std::get<position>(_tuple).insert(it,v);
 			break; 
 		}
 		case unified:
 		{
-			unified_column* unified_ptr=static_cast<unified_column*>(_ptr); 
-			typename unified_column::iterator it_thrust(it); 
-			unified_ptr->insert(it_thrust,v);
+			const int position=memory2type<unified>::type::value;
+			std::get<position>(_tuple).insert(it,v);
 			break; 
 		}
 	}
@@ -627,26 +571,26 @@ void column<T>::insert(iter_pos pos,iter start,iter stop){
 	{
 		case host:
 		{
-			host_column* host_ptr= static_cast<host_column*>(_ptr); 
-			host_ptr->insert(pos,start,stop);
+			const int position=memory2type<host>::type::value;
+			std::get<position>(_tuple).insert(pos,start,stop);
 			break; 
 		}
 		case device:
 		{
-			device_column* device_ptr=static_cast<device_column*>(_ptr); 
-			device_ptr->insert(pos,start,stop);
+			const int position=memory2type<device>::type::value;
+			std::get<position>(_tuple).insert(pos,start,stop);
 			break; 
 		}
 		case pinned:
 		{
-			pinned_column* pinned_ptr=static_cast<pinned_column*>(_ptr); 
-			pinned_ptr->insert(pos,start,stop);
+			const int position=memory2type<pinned>::type::value;
+			std::get<position>(_tuple).insert(pos,start,stop);
 			break; 
 		}
 		case unified:
 		{
-			unified_column* unified_ptr=static_cast<unified_column*>(_ptr); 
-			unified_ptr->insert(pos,start,stop);
+			const int position=memory2type<unified>::type::value;
+			std::get<position>(_tuple).insert(pos,start,stop);
 			break; 
 		}
 	}
@@ -659,26 +603,26 @@ iter column<T>::erase(iter pos){
 	{
 		case host:
 		{
-			host_column* host_ptr= static_cast<host_column*>(_ptr); 
-			host_ptr->erase(pos);
+			const int position=memory2type<host>::type::value;
+			std::get<position>(_tuple).erase(pos);
 			break; 
 		}
 		case device:
 		{
-			device_column* device_ptr=static_cast<device_column*>(_ptr); 
-			device_ptr->erase(pos);
+			const int position=memory2type<device>::type::value;
+			std::get<position>(_tuple).erase(pos);
 			break; 
 		}
 		case pinned:
 		{
-			pinned_column* pinned_ptr=static_cast<pinned_column*>(_ptr); 
-			pinned_ptr->erase(pos);
+			const int position=memory2type<pinned>::type::value;
+			std::get<position>(_tuple).erase(pos);
 			break; 
 		}
 		case unified:
 		{
-			unified_column* unified_ptr=static_cast<unified_column*>(_ptr); 
-			unified_ptr->erase(pos);
+			const int position=memory2type<unified>::type::value;
+			std::get<position>(_tuple).erase(pos);
 			break; 
 		}
 	}
@@ -692,41 +636,32 @@ iter column<T>::erase(iter start, iter stop){
 	{
 		case host:
 		{
-			host_column* host_ptr= static_cast<host_column*>(_ptr); 
-			host_ptr->erase(start,stop);
+			const int position=memory2type<host>::type::value;
+			std::get<position>(_tuple).erase(start,stop);
 			break; 
 		}
 		case device:
 		{
-			device_column* device_ptr=static_cast<device_column*>(_ptr); 
-			device_ptr->erase(start,stop);
+			const int position=memory2type<device>::type::value;
+			std::get<position>(_tuple).erase(start,stop);
 			break; 
 		}
 		case pinned:
 		{
-			pinned_column* pinned_ptr=static_cast<pinned_column*>(_ptr); 
-			pinned_ptr->erase(start,stop);
+			const int position=memory2type<pinned>::type::value;
+			std::get<position>(_tuple).erase(start,stop);
 			break; 
 		}
 		case unified:
 		{
-			unified_column* unified_ptr=static_cast<unified_column*>(_ptr); 
-			unified_ptr->erase(start,stop);
+			const int position=memory2type<unified>::type::value;
+			std::get<position>(_tuple).erase(start,stop);
 			break; 
 		}
 	}
-	return stop+1; 
+	return start; 
 };
 
 
 
 #undef DEFAULT
-
-
-
-
-
-
-
-
-

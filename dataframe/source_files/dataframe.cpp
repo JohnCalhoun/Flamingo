@@ -41,7 +41,6 @@ class dataframe : public dataframeBase{
 	public:
 	dataframe();
 	dataframe(const dataframe<Type...>&);
-	dataframe(dataframe<Type...>&&);	
 	dataframe(size_type,value_type);
 	dataframe(size_type);
 	dataframe(iterator,iterator);

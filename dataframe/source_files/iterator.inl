@@ -2,6 +2,7 @@
 #include "iterator.cpp"
 #include "iterator_functors.cpp"
 #include "functional"
+#include <iostream>
 //private functions
 template<class ... Type>
 dataframe_iterator<Type...>::pointer dataframe_iterator<Type...>::get_pointer() const{
@@ -34,7 +35,7 @@ struct increment {
 		std::get<n>(p)=tmp;					
 		
 		increment<n-1,pointer> inc_r;
-		inc_r(p);	
+		inc_r(std::forward<pointer>(p));	
 	}
 };
 template<typename pointer>
@@ -69,17 +70,16 @@ struct decrement<0,pointer> {
 //arithmic-plus
 template<int n,typename pointer,typename T>
 struct arithmic_plus {
-	void operator()(pointer& lhs,const T& rhs){
- 
+	void operator()(pointer&& lhs,T rhs){ 
 		std::get<n>(lhs)+=rhs;
 		
 		arithmic_plus<n-1,pointer,T> arith_r;
-		arith_r(lhs,rhs);	
+		arith_r(std::forward<pointer>(lhs),rhs);	
 	}
 };
 template<typename pointer,typename T>
 struct arithmic_plus<0,pointer,T> {
-	void operator()(pointer& lhs,const T& rhs){
+	void operator()(pointer&& lhs,T rhs){
 		std::get<0>(lhs)+=rhs;
 	}
 };
@@ -118,7 +118,10 @@ dataframe_iterator<Type...>::dataframe_iterator(
 	dataframe_iterator<Type...>::ColumnTuple& tuple)
 {
 	typename iterator_functors::assign<traits<Type...>::_numCol-1,Type...> assigner; 
-	assigner(tuple,_pointer); 
+	assigner(
+		std::forward<ColumnTuple>(tuple),
+		std::forward<pointer>(_pointer)
+	); 
 }
 
 template<class ... Type>
@@ -196,8 +199,8 @@ dataframe_iterator<Type...> dataframe_iterator<Type...>::operator--(int){
 template<class ... Type>
 dataframe_iterator<Type...>& dataframe_iterator<Type...>::operator+=(dataframe_iterator<Type...>::size_type n){
 	arithmic_plus<sizeof...(Type)-1,pointer,size_type> _arith;
-	_arith(_pointer,n);
 
+	_arith(std::forward<pointer>(_pointer),n);
 	return *this;
 } 
 
@@ -235,7 +238,7 @@ dataframe_iterator<Type...>::reference dataframe_iterator<Type...>::operator*(){
 	
 	iterator_functors::
 		dereference<sizeof...(Type)-1,Type...> rec;
-	return rec(_pointer);
+	return rec(std::forward<pointer>(_pointer));
 }
 
 template<class ... Type>

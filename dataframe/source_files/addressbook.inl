@@ -59,7 +59,6 @@ void addressbook<Object>::change(
 					addressbook<Object>::Key Old,
 					addressbook<Object>::Key New)
 {
-	lock_guard guard(_mutex); 
 	Value value=find(Old); 
 	remove(Old); 
 	insert(New,value);  

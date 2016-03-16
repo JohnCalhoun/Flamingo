@@ -19,7 +19,7 @@ class dataframeTest : public ::testing::Test{
 	typedef typename Container::value_type		value_type;
 	
 //	Container global_container; 	
-	
+	DEFINE(AddressTest,		DATAFRAME_THREADS)
 	DEFINE(ConstructorTest,	DATAFRAME_THREADS)
 	DEFINE(AssignmentTest,	DATAFRAME_THREADS)	
 	DEFINE(EqualityTest,	DATAFRAME_THREADS)
@@ -31,6 +31,16 @@ class dataframeTest : public ::testing::Test{
 	DEFINE(ModifyTest,		DATAFRAME_THREADS)
 	DEFINE(EmptyTest,		DATAFRAME_THREADS)
 };
+
+template<class ... Type>
+void dataframeTest<Type...>::AddressTest()
+{
+	Container local(100); 
+	local.id(0);
+	Container* ptr=static_cast<Container*>(dataframeBase::find(0));
+
+	EXPECT_EQ(local,*ptr); 
+}
 
 template<class ... Type>
 void dataframeTest<Type...>::EmptyTest()
@@ -176,7 +186,7 @@ void dataframeTest<Type...>::QuerryTest()
 }
 
 
-//python:key:tests=EmptyTest BeginEndTest InsertTest AccessTest ModifyTest QuerryTest LockTest EqualityTest ConstructorTest AssignmentTest
+//python:key:tests=EmptyTest BeginEndTest InsertTest AccessTest ModifyTest QuerryTest LockTest EqualityTest ConstructorTest AssignmentTest AddressTest
 //python:template=TEST_F($dataframeTest<int,float,double,long>$,|tests|){this->|tests|();}
 
 //python:start

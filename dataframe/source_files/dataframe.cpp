@@ -24,7 +24,7 @@ class dataframe : public dataframeBase{
 	typedef dataframeBase		base;
 
 	public:
-	typedef traits<Type...>						Traits; 
+	typedef traits<Type...>					Traits; 
 	
 	typedef typename Traits::size_type			size_type;
 	typedef dataframe_iterator<Type...>		iterator;

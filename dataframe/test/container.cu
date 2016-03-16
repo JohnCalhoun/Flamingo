@@ -51,24 +51,43 @@ void dataframeTest<Type...>::InsertTest()
 template<class ... Type>
 void dataframeTest<Type...>::AccessTest()
 {
-/*
-*/
+
+
 }
 template<class ... Type>
 void dataframeTest<Type...>::ModifyTest()
 {
-/*	
-*/
+	value_type value(1,2,3,4);
+	value_type start(0,0,0,0);
+	Container local(10,start); 
+
+	local[5]=value;
+	EXPECT_EQ(local[5],value); 
+
+	iterator it=local.begin();
+	*it=value; 
+	EXPECT_EQ(*it,value); 	
+	
+	iterator it2=it+1;	
+	local.insert(it2,value); 	
+	EXPECT_EQ(*(local.begin()+1),value); 	
 }
 template<class ... Type>
 void dataframeTest<Type...>::ConstructorTest()
 {
+	const int size=10;
 
-	Container local(10);
+	Container local(size);
+	EXPECT_EQ(local.size(),size); 
+
 	Container local_empty_copy(local);
+	EXPECT_EQ(local,local_empty_copy); 
 
 	value_type value(0,0,0,0);
-	Container local2(10,value); 
+	Container local2(size,value); 
+	for(int i=0;i<size;i++){
+		EXPECT_EQ(local2[i],value); 
+	}
 };
 template<class ... Type>
 void dataframeTest<Type...>::AssignmentTest()
@@ -84,7 +103,14 @@ void dataframeTest<Type...>::AssignmentTest()
 template<class ... Type>
 void dataframeTest<Type...>::EqualityTest()
 {
-//	EXPECT_TRUE(vector==vector);
+	Container local1(10);
+	Container local2(10);
+	local1=local2; 
+	EXPECT_EQ(local1,local2);
+	local2.resize(1); 
+	EXPECT_NE(local1,local2);
+	local1=local2;
+	EXPECT_EQ(local1,local2);
 };
 template<class ... Type>
 void dataframeTest<Type...>::BeginEndTest()

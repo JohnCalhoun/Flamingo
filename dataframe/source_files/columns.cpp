@@ -88,6 +88,8 @@ struct column  {
 
 	void swap(column<T>& );
 	column<T>& operator=(const column<T>& );
+	bool operator==(const column<T>&)const;
+	bool operator!=(const column<T>&)const; 
 	//--------vector functions
 	typedef typename host_column::size_type size_type; 
 	
@@ -140,7 +142,7 @@ struct column_tuple {
 
 	typedef typename Traits::type_vector vec; 
 	typedef typename transform<vec,type2column<_1> >::type col_vec;
-	typedef typename vec2tuple<Traits::_numCol,col_vec>::type type; 
+	typedef typename vec2tuple<Traits::_numCol-1,col_vec>::type type; 
 
 	template<int n>
 	struct element {

@@ -2,6 +2,25 @@
 #include "dataframe.cpp"
 #include "dataframe_functors.cpp"
 
+//--------------------base------------
+dataframeBase::dataframeBase(){
+	_key=_addressbook.insert(this); 
+}
+dataframeBase::~dataframeBase(){
+	_addressbook.remove(id()); 
+}
+dataframeBase::Value dataframeBase::find(dataframeBase::Key key){
+	return _addressbook.find(key); 
+}
+dataframeBase::Key dataframeBase::id(){
+	return _key; 
+}
+void dataframeBase::id(int x){
+	_addressbook.change(id(),x); 
+	_key=x; 
+}
+
+//-----------------dataframe
 template<class ... Type>
 template<int n>
 	typename column_tuple<Type...>::element<n>::type& 

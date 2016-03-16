@@ -2,17 +2,18 @@
 #ifndef DATAFRAME_BOOK
 #define DATAFRAME_BOOK
 
-#include <map>
+#include <unordered_map>
 #include <boost/thread.hpp>
 #include <mutex>
 #include <threading/shared_mutex.cpp>
+#include "traits.cpp"
 
 template<typename Object>
 class addressbook {
 	public:
-	typedef unsigned int			Key;
-	typedef Object*				Value;
-	typedef std::map<Key,Value>		Map;
+	typedef typename traits<int>::size_type		Key;
+	typedef Object*						Value;
+	typedef std::unordered_map<Key,Value>		Map;
 	typedef typename Map::iterator	iterator; 
 
 	private:
@@ -32,16 +33,14 @@ class addressbook {
 
 	//member functions
 	private:
-	Key objectToKey(const Object&)const; 
+	Key objectToKey(Object*); 
 
 	public:
-	template<typename T>
-	void insert(const T&); 
-
+	Key insert(Object*);
+	void insert(Key,Value);  
 	void remove(Key); 
-
-	template<typename T>
-	T* find(Key)const; 
+	Value find(Key);
+	void change(Key,Key); 
 };
 
 #include "addressbook.inl"

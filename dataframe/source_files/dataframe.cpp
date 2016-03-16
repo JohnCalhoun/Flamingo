@@ -13,9 +13,18 @@
 class dataframeBase {
 	public:
 	typedef addressbook<dataframeBase>			AddressBook;
+	typedef typename AddressBook::Key			Key;
+	typedef typename AddressBook::Value		Value; 
 	static AddressBook						_addressbook;
-	static AddressBook& book(){return _addressbook;}; 	
+	Key _key; 	
+
+	dataframeBase();  	
+	~dataframeBase(); 
+	static Value find(Key);
+	Key id();
+	void id(int);  
 }; 
+dataframeBase::AddressBook dataframeBase::_addressbook; 
 
 template<class ... Type>
 class dataframe : public dataframeBase{	

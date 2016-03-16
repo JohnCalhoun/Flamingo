@@ -7,13 +7,13 @@ namespace dataframe_functors{
 	struct fill {
 		typedef typename dataframe<Type...>::ColumnTuple ColumnTuple;
 
-		typedef typename traits<Type...>::size_type size;
+		typedef typename traits<Type...>::size_type size_type;
 		typedef typename traits<Type...>::value_type value_type; 
 		
 		typedef typename column_tuple<Type...>::element<n>::type Column; 
 
 		void operator()(	ColumnTuple&& column_tuple,
-						size s,
+						size_type s,
 						value_type v){
 
 			Column& column=std::get<n>(column_tuple);
@@ -28,13 +28,13 @@ namespace dataframe_functors{
 	struct fill<0,Type...> {
 			typedef typename dataframe<Type...>::ColumnTuple ColumnTuple;
 
-		typedef typename traits<Type...>::size_type size;
+		typedef typename traits<Type...>::size_type size_type;
 		typedef typename traits<Type...>::value_type value_type; 
 		
 		typedef typename column_tuple<Type...>::element<0>::type Column; 
 
 		void operator()(	ColumnTuple&& column_tuple,
-						size s,
+						size_type s,
 						value_type v){
 
 			Column& column=std::get<0>(column_tuple);
@@ -52,7 +52,7 @@ namespace dataframe_functors{
 		typedef typename traits<Type...>::value_type	value_type; 
 
 		void operator()(
-			ColumnTuple& column_tuple,
+			ColumnTuple&& column_tuple,
 			iterator start,
 			iterator stop	
 		){
@@ -63,7 +63,7 @@ namespace dataframe_functors{
 				stop.template get<n>()); 	
 
 			it_copy<n-1,Type...> recusive; 
-			recusive(column_tuple,start,stop); 
+			recusive(std::forward<ColumnTuple>(column_tuple),start,stop); 
 		}
 	};
 	template<class ... Type>
@@ -75,7 +75,7 @@ namespace dataframe_functors{
 		typedef typename traits<Type...>::value_type	value_type; 
 
 		void operator()(
-			ColumnTuple& column_tuple,
+			ColumnTuple&& column_tuple,
 			iterator start,
 			iterator stop	
 		){
@@ -92,12 +92,12 @@ namespace dataframe_functors{
 		typedef typename dataframe<Type...>::ColumnTuple ColumnTuple;
 		typedef typename column_tuple<Type...>::element<n>::type Column;
 
-		void operator()(ColumnTuple& columnTuple){
+		void operator()(ColumnTuple&& columnTuple){
 			Column& column=std::get<n>(columnTuple); 
 			column.clear(); 
 
 			clear<n-1,Type...> clear_r; 
-			clear_r(columnTuple); 
+			clear_r(std::forward<ColumnTuple>(columnTuple)); 
 		}
 	};
 	template<class ... Type>
@@ -105,7 +105,7 @@ namespace dataframe_functors{
 		typedef typename dataframe<Type...>::ColumnTuple ColumnTuple;
 		typedef typename column_tuple<Type...>::element<0>::type Column;
 
-		void operator()(ColumnTuple& columnTuple){
+		void operator()(ColumnTuple&& columnTuple){
 			Column& column=std::get<0>(columnTuple); 
 			column.clear(); 
 		}
@@ -118,15 +118,18 @@ namespace dataframe_functors{
 		typedef typename column_tuple<Type...>::element<n>::type Column;
 
 		void operator()(
-				ColumnTuple& columnTuple,
+				ColumnTuple&& columnTuple,
 				iterator& start,
 				iterator& stop)
 		{
 			Column& column=std::get<n>(columnTuple); 
-			column.assign(start,stop);
+			column.assign(	start.template get<n>(),
+						stop.template get<n>());
 
 			assign_range<n-1,Type...> recursive;
-			recursive(columnTuple,start,stop); 
+			recursive(	std::forward<ColumnTuple>(columnTuple),
+						start,
+						stop); 
 		}
 
 	};
@@ -137,12 +140,13 @@ namespace dataframe_functors{
 		typedef typename column_tuple<Type...>::element<0>::type Column;
 
 		void operator()(
-				ColumnTuple& columnTuple,
+				ColumnTuple&& columnTuple,
 				iterator& start,
 				iterator& stop)
 		{
 			Column& column=std::get<0>(columnTuple); 
-			column.assign(start,stop);
+			column.assign(	start.template get<0>(),
+						stop.template get<0>());
 		}
 
 	};
@@ -153,15 +157,15 @@ namespace dataframe_functors{
 		typedef typename traits<Type...>::size_type size_type;
 		typedef typename traits<Type...>::value_type value_type; 
 
-		void operator()(	ColumnTuple& columnTuple,
+		void operator()(	ColumnTuple&& columnTuple,
 						size_type s,
 						value_type v)
 		{
 			Column& column=std::get<n>(columnTuple); 
-			column.assign(s,v); 
+			column.assign(s,std::get<n>(v)); 
 
 			assign_value<n-1,Type...> recursive;
-			recursive(columnTuple,s,v); 
+			recursive(std::forward<ColumnTuple>(columnTuple),s,v); 
 		}
 	};
 	template<class ... Type>
@@ -171,12 +175,12 @@ namespace dataframe_functors{
 		typedef typename traits<Type...>::size_type size_type;
 		typedef typename traits<Type...>::value_type value_type; 
 
-		void operator()(	ColumnTuple& columnTuple,
+		void operator()(	ColumnTuple&& columnTuple,
 						size_type s,
 						value_type v)
 		{
 			Column& column=std::get<0>(columnTuple); 
-			column.assign(s,v); 
+			column.assign(s,std::get<0>(v)); 
 		}
 	};
 	template<int n,class ... Type>
@@ -185,15 +189,21 @@ namespace dataframe_functors{
 		typedef typename dataframe<Type...>::iterator iterator; 
 		typedef typename column_tuple<Type...>::element<n>::type Column;
 
-		void operator()(	ColumnTuple& columnTuple,
+		void operator()(	ColumnTuple&& columnTuple,
 						iterator& pos,
 						iterator& start, 
 						iterator& stop){
 			Column& column=std::get<n>(columnTuple); 	
-			column.insert(pos,start,stop);
+			column.insert(	pos.template get<n>(),
+						start.template get<n>(),
+						stop.template get<n>()
+			);
 
 			insert_range<n-1,Type...> recursive;
-			recursive(columnTuple,pos,start); 
+			recursive(	std::forward<ColumnTuple>(columnTuple),
+						pos,
+						start,
+						stop); 
 		}
 
 	};
@@ -203,12 +213,15 @@ namespace dataframe_functors{
 		typedef typename dataframe<Type...>::iterator iterator; 
 		typedef typename column_tuple<Type...>::element<0>::type Column;
 
-		void operator()(	ColumnTuple& columnTuple,
+		void operator()(	ColumnTuple&& columnTuple,
 						iterator& pos,
 						iterator& start, 
 						iterator& stop){
 			Column& column=std::get<0>(columnTuple); 	
-			column.insert(pos,start,stop);
+			column.insert(	pos.template get<0>(),
+						start.template get<0>(),
+						stop.template get<0>()
+			);
 		}
 	};
 
@@ -220,7 +233,7 @@ namespace dataframe_functors{
 		typedef typename column_tuple<Type...>::element<n>::type Column;
 		typedef typename traits<Type...>::value_type value_type; 
 
-		void operator()(	ColumnTuple& columnTuple,
+		void operator()(	ColumnTuple&& columnTuple,
 						iterator& pos, 
 						value_type& v)
 		{
@@ -231,7 +244,7 @@ namespace dataframe_functors{
 			); 			
 
 			insert_value<n-1,Type...> recursive;
-			recursive(columnTuple,pos,v); 
+			recursive(std::forward<ColumnTuple>(columnTuple),pos,v); 
 		}
 
 	};
@@ -243,7 +256,7 @@ namespace dataframe_functors{
 		typedef typename column_tuple<Type...>::element<0>::type Column;
 		typedef typename traits<Type...>::value_type value_type; 
 
-		void operator()(	ColumnTuple& columnTuple,
+		void operator()(	ColumnTuple&& columnTuple,
 						iterator& pos, 
 						value_type& v)
 		{
@@ -261,15 +274,16 @@ namespace dataframe_functors{
 		typedef typename dataframe<Type...>::iterator iterator; 
 		typedef typename column_tuple<Type...>::element<n>::type Column;
 
-		void operator()(	ColumnTuple& columnTuple,
+		void operator()(	ColumnTuple&& columnTuple,
 						iterator& start, 
 						iterator& stop)	
 		{
 			Column& column=std::get<n>(columnTuple); 	
-			column.erase(start,stop); 
+			column.erase(	start.template get<n>(),
+						stop.template get<n>()); 
 	
 			erase_range<n-1,Type...> recursive;
-			recursive(columnTuple,start,stop); 
+			recursive(std::forward<ColumnTuple>(columnTuple),start,stop); 
 		}
 	};
 	template<class ... Type>
@@ -278,12 +292,13 @@ namespace dataframe_functors{
 		typedef typename dataframe<Type...>::iterator iterator; 
 		typedef typename column_tuple<Type...>::element<0>::type Column;
 
-		void operator()(	ColumnTuple& columnTuple,
+		void operator()(	ColumnTuple&& columnTuple,
 						iterator& start, 
 						iterator& stop)	
 		{
 			Column& column=std::get<0>(columnTuple); 	
-			column.erase(start,stop); 
+			column.erase(	start.template get<0>(),
+						stop.template get<0>()); 
 		}
 	};
 
@@ -293,14 +308,14 @@ namespace dataframe_functors{
 		typedef typename dataframe<Type...>::iterator iterator; 
 		typedef typename column_tuple<Type...>::element<n>::type Column;
 
-		void operator()(	ColumnTuple& columnTuple,
+		void operator()(	ColumnTuple&& columnTuple,
 						iterator& pos)
 		{
 			Column& column=std::get<n>(columnTuple); 	
-			column.erase(pos);
+			column.erase(pos.template get<n>());
 
 			erase_value<n-1,Type...> recursive;
-			recursive(columnTuple,pos); 
+			recursive(std::forward<ColumnTuple>(columnTuple),pos); 
 		}
 	};
 	template<class ... Type>
@@ -309,11 +324,11 @@ namespace dataframe_functors{
 		typedef typename dataframe<Type...>::iterator iterator; 
 		typedef typename column_tuple<Type...>::element<0>::type Column;
 
-		void operator()(	ColumnTuple& columnTuple,
+		void operator()(	ColumnTuple&& columnTuple,
 						iterator& pos)
 		{
 			Column& column=std::get<0>(columnTuple); 		
-			column.erase(pos);
+			column.erase(pos.template get<0>());
 		}
 
 	};
@@ -323,14 +338,14 @@ namespace dataframe_functors{
 		typedef typename column_tuple<Type...>::element<n>::type Column;
 		typedef typename traits<Type...>::size_type size_type;
 
-		void operator()(	ColumnTuple& columnTuple,
+		void operator()(	ColumnTuple&& columnTuple,
 						size_type x)
 		{
 			Column& column=std::get<n>(columnTuple); 		
 			column.resize(x); 
 
 			resize<n-1,Type...> recursive;
-			recursive(columnTuple,x); 
+			recursive(std::forward<ColumnTuple>(columnTuple),x); 
 		}
 	};
 	template<class ... Type>
@@ -339,7 +354,7 @@ namespace dataframe_functors{
 		typedef typename column_tuple<Type...>::element<0>::type Column;
 		typedef typename traits<Type...>::size_type size_type;
 
-		void operator()(	ColumnTuple& columnTuple,
+		void operator()(	ColumnTuple&& columnTuple,
 						size_type x)
 		{
 			Column& column=std::get<0>(columnTuple); 		
@@ -354,7 +369,7 @@ namespace dataframe_functors{
 		typedef typename traits<Type...>::size_type size_type;
 		typedef typename traits<Type...>::value_type value_type; 
 
-		void operator()(	ColumnTuple& columnTuple,
+		void operator()(	ColumnTuple&& columnTuple,
 						size_type x,
 						value_type v)
 		{
@@ -362,7 +377,7 @@ namespace dataframe_functors{
 			column.resize(x,v);
 
 			resize_value<n-1,Type...> recursive;
-			recursive(columnTuple,x,v); 
+			recursive(std::forward<ColumnTuple>(columnTuple),x,v); 
 		}
 	};
 	template<class ... Type>
@@ -372,7 +387,7 @@ namespace dataframe_functors{
 		typedef typename traits<Type...>::size_type size_type;
 		typedef typename traits<Type...>::value_type value_type; 
 
-		void operator()(	ColumnTuple& columnTuple,
+		void operator()(	ColumnTuple&& columnTuple,
 						size_type x,
 						value_type v)
 		{
@@ -417,14 +432,14 @@ namespace dataframe_functors{
 		typedef typename traits<Type...>::size_type size_type;	
 		typedef typename column_tuple<Type...>::element<n>::type Column; 
 
-		void operator()(	ColumnTuple& column_tuple,
+		void operator()(	ColumnTuple&& column_tuple,
 						size_type s)
 		{
 			Column& column=std::get<n>(column_tuple);
 			column.reserve(s);
 
 			construct<n-1,Type...> recursive;
-			recursive(column_tuple,s); 
+			recursive(std::forward<ColumnTuple>(column_tuple),s); 
 		}
 	};
 	template<class ... Type>
@@ -433,7 +448,7 @@ namespace dataframe_functors{
 		typedef typename traits<Type...>::size_type size_type;	
 		typedef typename column_tuple<Type...>::element<0>::type Column; 
 
-		void operator()(	ColumnTuple& column_tuple,
+		void operator()(	ColumnTuple&& column_tuple,
 						size_type s)
 		{
 			Column& column=std::get<0>(column_tuple);

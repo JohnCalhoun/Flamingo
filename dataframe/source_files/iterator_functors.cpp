@@ -1,6 +1,7 @@
 //functors.cpp
 #include "columns.cpp"
 #include "traits.cpp"
+#include "functional"
 
 namespace iterator_functors{
 	template<int n, class ... Type>
@@ -88,6 +89,95 @@ namespace iterator_functors{
 			return std::tie(	std::forward<Element>(element),
 							std::forward<ptr_types>(args)...
 			); 
+		}
+	};
+	template<int n,typename pointer>
+	struct nullify {
+		void operator()(pointer&& p){
+			std::get<n>(p)=NULL;		
+			nullify<n-1,pointer> null_r;
+			null_r(std::forward<pointer>(p));	
+		}
+	};
+	template<typename pointer>
+	struct nullify<0,pointer> {
+		void operator()(pointer&& p){
+			std::get<0>(p)=NULL;	
+		}
+	};
+	//increment
+	template<int n,typename pointer>
+	struct increment {
+		void operator()(pointer&& p){
+
+			pointer tmp=std::get<n>(p);
+			tmp++;		
+			std::get<n>(p)=tmp;					
+			
+			increment<n-1,pointer> inc_r;
+			inc_r(std::forward<pointer>(p));	
+		}
+	};
+	template<typename pointer>
+	struct increment<0,pointer> {
+		void operator()(pointer&& p){	
+			pointer tmp=std::get<0>(p);
+			tmp++;		
+			std::get<0>(p)=tmp;				
+		}
+	};
+	//decrement
+	template<int n,typename pointer>
+	struct decrement {
+		void operator()(pointer&& p){
+
+			pointer tmp=std::get<n>(p);
+			tmp--;		
+			std::get<n>(p)=tmp;					
+			
+			decrement<n-1,pointer> inc_r;
+			inc_r(std::forward<pointer>(p));	
+		}
+	};
+	template<typename pointer>
+	struct decrement<0,pointer> {
+		void operator()(pointer&& p){	
+			pointer tmp=std::get<0>(p);
+			tmp--;		
+			std::get<0>(p)=tmp;				
+		}
+	};
+	//arithmic-plus
+	template<int n,typename pointer,typename T>
+	struct arithmic_plus {
+		void operator()(pointer&& lhs,T rhs){ 
+			std::get<n>(lhs)+=rhs;
+			
+			arithmic_plus<n-1,pointer,T> arith_r;
+			arith_r(std::forward<pointer>(lhs),rhs);	
+		}
+	};
+	template<typename pointer,typename T>
+	struct arithmic_plus<0,pointer,T> {
+		void operator()(pointer&& lhs,T rhs){
+			std::get<0>(lhs)+=rhs;
+		}
+	};
+	//arithmic-minus
+	template<int n,typename pointer, typename T>
+	struct arithmic_minus {
+		void operator()(pointer&& lhs,const T& rhs){
+
+			std::get<n>(lhs)-=rhs;
+			
+			arithmic_minus<n-1,pointer,T> arith_r;
+			arith_r(std::forward<pointer>(lhs),rhs);	
+		}
+	};
+	template<typename pointer,typename T>
+	struct arithmic_minus<0,pointer,T> {
+		void operator()(pointer&& lhs,const T& rhs){
+			std::get<0>(lhs)-=rhs;
 		}
 	};
 }

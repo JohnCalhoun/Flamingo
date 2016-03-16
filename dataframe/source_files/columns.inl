@@ -620,7 +620,10 @@ void column<T>::insert(iter_pos pos,iter start,iter stop){
 		case host:
 		{
 			const int position=memory2type<host>::type::value;
-			std::get<position>(_tuple).insert(pos,start,stop);
+			host_it ptr_pos(pos); 
+			host_it ptr_start(start); 
+			host_it ptr_stop(stop); 		
+			std::get<position>(_tuple).insert(ptr_pos,ptr_start,ptr_stop);
 			break; 
 		}
 		case device:

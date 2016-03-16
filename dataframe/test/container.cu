@@ -71,6 +71,13 @@ void dataframeTest<Type...>::ModifyTest()
 	iterator it2=it+1;	
 	local.insert(it2,value); 	
 	EXPECT_EQ(*(local.begin()+1),value); 	
+
+	Container local2(10,value); 
+	local.insert(local.begin(),local2.begin(),local2.end()); 
+	for(int i=0;i<10;i++){
+		EXPECT_EQ(local[i],value); 
+	}
+
 }
 template<class ... Type>
 void dataframeTest<Type...>::ConstructorTest()

@@ -81,7 +81,7 @@ template<class ... Type>
 
 	dataframe_functors::it_copy<traits<Type...>::_numCol-1,Type...> it_copier;
 	it_copier(
-		_column_tuple,
+		std::forward<ColumnTuple>(_column_tuple),
 		start,
 		stop
 		); 
@@ -168,7 +168,7 @@ template<class ... Type>
 {
 	dataframe_functors::	
 				reserve<traits<Type...>::_numCol-1,Type...> recursive;
-	recursive(_column_tuple,s); 
+	recursive(std::forward<ColumnTuple>(_column_tuple),s); 
 };
 
 template<class ... Type>
@@ -191,7 +191,7 @@ template<class ... Type>
 	clear(); 
 	dataframe_functors::	
 				assign_range<traits<Type...>::_numCol-1,Type...> recursive;
-	recursive(_column_tuple,start,stop); 
+	recursive(std::forward<ColumnTuple>(_column_tuple),start,stop); 
 };
 template<class ... Type>
 	void 
@@ -201,14 +201,14 @@ template<class ... Type>
 {
 	clear(); 
 	dataframe_functors::assign_value<traits<Type...>::_numCol-1,Type...> recurs;
-	recurs(_column_tuple,s,v); 
+	recurs(std::forward<ColumnTuple>(_column_tuple),s,v); 
 };
 template<class ... Type>
 	void 
 	dataframe<Type...>::clear()
 {
 	dataframe_functors::clear<traits<Type...>::_numCol-1,Type...> recursive;
-	recursive(_column_tuple); 
+	recursive(std::forward<ColumnTuple>(_column_tuple)); 
 };
 
 template<class ... Type>
@@ -222,7 +222,7 @@ template<class ... Type>
 		resize(index);
 	}
 	dataframe_functors::insert_value<traits<Type...>::_numCol-1,Type...> recurs;
-	recurs(_column_tuple,pos,v); 
+	recurs(std::forward<ColumnTuple>(_column_tuple),pos,v); 
 	return pos; 
 };
 
@@ -234,7 +234,10 @@ template<class ... Type>
 		dataframe<Type...>::iterator stop)
 {
 	dataframe_functors::insert_range<traits<Type...>::_numCol-1,Type...> recurs;
-	recurs(_column_tuple,pos,start,stop); 
+	recurs(	std::forward<ColumnTuple>(_column_tuple),
+			pos,
+			start,
+			stop); 
 	return pos; 
 };
 
@@ -244,7 +247,7 @@ template<class ... Type>
 		dataframe<Type...>::iterator pos)
 {
 	dataframe_functors::erase_value<traits<Type...>::_numCol-1,Type...> recurs;
-	recurs(_column_tuple,pos);
+	recurs(std::forward<ColumnTuple>(_column_tuple),pos);
 	return pos;  
 };
 
@@ -255,7 +258,7 @@ template<class ... Type>
 		dataframe<Type...>::iterator stop)
 {
 	dataframe_functors::erase_range<traits<Type...>::_numCol-1,Type...> recurs;
-	recurs(_column_tuple,start,stop); 
+	recurs(std::forward<ColumnTuple>(_column_tuple),start,stop); 
 	return start; 
 };
 
@@ -278,7 +281,7 @@ template<class ... Type>
 		dataframe<Type...>::size_type n)
 {
 	dataframe_functors::resize<traits<Type...>::_numCol-1,Type...> recurs;
-	recurs(_column_tuple,n); 
+	recurs(std::forward<ColumnTuple>(_column_tuple),n); 
 };
 
 template<class ... Type>
@@ -288,7 +291,7 @@ template<class ... Type>
 		dataframe<Type...>::value_type v)
 {
 	dataframe_functors::resize_value<traits<Type...>::_numCol-1,Type...> recurs;
-	recurs(_column_tuple,n,v); 
+	recurs(std::forward<ColumnTuple>(_column_tuple),n,v); 
 };
 
 template<class ... Type>

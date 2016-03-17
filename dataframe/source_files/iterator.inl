@@ -36,7 +36,7 @@ template<class ... Type>
 dataframe_iterator<Type...>::~dataframe_iterator(){}
 
 template<class ... Type>
-dataframe_iterator<Type...>& dataframe_iterator<Type...>::operator=(const dataframe_iterator<Type...>& other){
+dataframe_iterator<Type...>& dataframe_iterator<Type...>::operator=( dataframe_iterator<Type...> other){
 	swap(other);
 	return *this;
 }
@@ -164,6 +164,10 @@ typename traits<Type...>::Return<n>::pointer_base dataframe_iterator<Type...>::g
 	return  std::get<n>(_pointer); 
 }
 
+template<class ... Type>
+void dataframe_iterator<Type...>::swap(dataframe_iterator<Type...>& other){
+	std::swap(_pointer,other._pointer);
+}
 
 
 

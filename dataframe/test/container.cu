@@ -35,7 +35,7 @@ class dataframeTest : public ::testing::Test{
 template<class ... Type>
 void dataframeTest<Type...>::AddressTest()
 {
-	Container local(100); 
+	Container local(10); 
 	local.id(0);
 	Container* ptr=static_cast<Container*>(dataframeBase::find(0));
 
@@ -51,11 +51,19 @@ void dataframeTest<Type...>::EmptyTest()
 template<class ... Type>
 void dataframeTest<Type...>::InsertTest()
 {
-/*	Container local;
-	int s=local.size();
-	local.insert(local.begin(),element);
-	EXPECT_TRUE(s<local.size());
-*/
+	value_type value(1,2,3,4);
+	value_type start(0,0,0,0);
+	Container local(10,start); 
+
+	iterator it=local.begin()+1;
+	local.insert(it,value); 	
+	EXPECT_EQ(*(local.begin()+1),value); 	
+
+	Container local2(10,value); 
+	local.insert(local.begin(),local2.begin(),local2.end()); 
+	for(int i=0;i<10;i++){
+		EXPECT_EQ(local[i],value); 
+	}
 }
 
 template<class ... Type>
@@ -77,16 +85,9 @@ void dataframeTest<Type...>::ModifyTest()
 	iterator it=local.begin();
 	*it=value; 
 	EXPECT_EQ(*it,value); 	
-	
-	iterator it2=it+1;	
-	local.insert(it2,value); 	
-	EXPECT_EQ(*(local.begin()+1),value); 	
-
-	Container local2(10,value); 
-	local.insert(local.begin(),local2.begin(),local2.end()); 
-	for(int i=0;i<10;i++){
-		EXPECT_EQ(local[i],value); 
-	}
+	it=local.begin()+1; 
+	*it=value;
+	EXPECT_EQ(*it,value); 
 
 }
 template<class ... Type>

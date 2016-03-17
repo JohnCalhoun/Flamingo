@@ -14,13 +14,11 @@ class dataframe_iterator: public traits<Type...> {
 	typedef typename traits<Type...>::pointer			pointer;
 	typedef typename traits<Type...>::range				range; 
 	typedef typename column_tuple<Type...>::type			ColumnTuple;
-
- 
 	typedef std::random_access_iterator_tag			iterator_category;
 	
 	pointer _pointer; 
-	pointer get_pointer()const;
 
+	pointer get_pointer()const;
 	public:
 	dataframe_iterator();
 	dataframe_iterator(const dataframe_iterator<Type...>&);
@@ -28,7 +26,7 @@ class dataframe_iterator: public traits<Type...> {
 	dataframe_iterator(pointer p):_pointer(p){}; 
 	~dataframe_iterator();
 
-	dataframe_iterator<Type...>& operator=(const dataframe_iterator<Type...>&);
+	dataframe_iterator<Type...>& operator=(dataframe_iterator<Type...>);
 	bool operator==(const dataframe_iterator<Type...>&) const;
 	bool operator!=(const dataframe_iterator<Type...>&) const;
 	bool operator<(const dataframe_iterator<Type...>&) const; 
@@ -49,6 +47,8 @@ class dataframe_iterator: public traits<Type...> {
 
 	reference operator*();
 	reference operator[](size_type); //optional
+
+	void swap(dataframe_iterator<Type...>&); 
 
 	template<int n>
 	typename traits<Type...>::Return<n>::pointer_base get();

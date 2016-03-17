@@ -51,17 +51,21 @@ void dataframeTest<Type...>::EmptyTest()
 template<class ... Type>
 void dataframeTest<Type...>::InsertTest()
 {
+	const int size=10; 
+
 	value_type value(1,2,3,4);
 	value_type start(0,0,0,0);
-	Container local(10,start); 
+	Container local(size,start); 
 
-	iterator it=local.begin()+1;
-	local.insert(it,value); 	
-	EXPECT_EQ(*(local.begin()+1),value); 	
+	for(int off=0;off<size;off++){
+		iterator it=local.begin()+off;
+		local.insert(it,value); 	
+		EXPECT_EQ(*(local.begin()+off),value); 	
+	}
 
-	Container local2(10,value); 
+	Container local2(size,value); 
 	local.insert(local.begin(),local2.begin(),local2.end()); 
-	for(int i=0;i<10;i++){
+	for(int i=0;i<size;i++){
 		EXPECT_EQ(local[i],value); 
 	}
 }
@@ -188,7 +192,7 @@ void dataframeTest<Type...>::QuerryTest()
 
 
 //python:key:tests=EmptyTest BeginEndTest InsertTest AccessTest ModifyTest QuerryTest LockTest EqualityTest ConstructorTest AssignmentTest AddressTest
-//python:template=TEST_F($dataframeTest<int,float,double,long>$,|tests|){this->|tests|();}
+//python:template=TEST_F($dataframeTest<int,int,int,int>$,|tests|){this->|tests|();}
 
 //python:start
 //python:include=container.test

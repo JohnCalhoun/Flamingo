@@ -126,7 +126,7 @@ template<class ... Type>
 	dataframe<Type...>::end()
 {
 	iterator it=begin(); 
-	it+=size()+1; 	
+	it+=size(); 	
 	return it;
 }; 
 

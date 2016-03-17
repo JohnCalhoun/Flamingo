@@ -568,7 +568,7 @@ template<typename iter>
 iter column<T>::insert(iter it, column<T>::value_type v){	
 	typedef typename device_column::iterator device_it; 
 	typedef typename host_column::iterator host_it;
-	iter out=it; 
+	iter out=it;
 	switch(getlocation())
 	{
 		case host:

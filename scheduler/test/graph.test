@@ -1,0 +1,6 @@
+//typedefs 
+typedef graphTest<int,double,long,float> graphTest_int_double_long_float_; 
+typedef graphTest<int,double,long,float> graphTest_int_double_long_float_; 
+//Tests/benchmarks 
+TEST_F(graphTest_int_double_long_float_,EmptyTest){this->EmptyTest();}
+TEST_F(graphTest_int_double_long_float_,){this->();}

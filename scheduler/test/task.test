@@ -1,0 +1,6 @@
+//typedefs 
+typedef taskTest<int,double,long,float> taskTest_int_double_long_float_; 
+typedef taskTest<int,double,long,float> taskTest_int_double_long_float_; 
+//Tests/benchmarks 
+TEST_F(taskTest_int_double_long_float_,EmptyTest){this->EmptyTest();}
+TEST_F(taskTest_int_double_long_float_,){this->();}

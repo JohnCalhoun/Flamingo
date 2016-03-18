@@ -48,7 +48,7 @@ namespace dataframe_functors{
 		typedef typename dataframe<Type...>::ColumnTuple ColumnTuple;
 		typedef typename traits<Type...>::size_type size;	
 		typedef typename column_tuple<Type...>::element<n>::type Column; 
-		typedef dataframe_iterator<Type...> iterator; 
+		typedef typename dataframe<Type...>::iterator iterator; 
 		typedef typename traits<Type...>::value_type	value_type; 
 
 		void operator()(
@@ -71,7 +71,7 @@ namespace dataframe_functors{
 		typedef typename dataframe<Type...>::ColumnTuple ColumnTuple;
 		typedef typename traits<Type...>::size_type size;	
 		typedef typename column_tuple<Type...>::element<0>::type Column; 
-		typedef dataframe_iterator<Type...> iterator; 
+		typedef typename dataframe<Type...>::iterator iterator; 
 		typedef typename traits<Type...>::value_type	value_type; 
 
 		void operator()(

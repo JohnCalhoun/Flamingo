@@ -25,7 +25,7 @@ addressbook<Object>::Key addressbook<Object>::insert(Object* ob){
 	Key key=objectToKey(ob); 
 	Value value=ob;
  
-	_map.insert({key,value});
+	_map.insert(std::make_pair(key,value));
 	return key; 
 } 
 template<typename Object>

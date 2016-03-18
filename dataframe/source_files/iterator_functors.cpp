@@ -110,7 +110,7 @@ namespace iterator_functors{
 	struct increment {
 		void operator()(pointer&& p){
 
-			pointer tmp=std::get<n>(p);
+			auto tmp=std::get<n>(p);
 			tmp++;		
 			std::get<n>(p)=tmp;					
 			
@@ -121,7 +121,7 @@ namespace iterator_functors{
 	template<typename pointer>
 	struct increment<0,pointer> {
 		void operator()(pointer&& p){	
-			pointer tmp=std::get<0>(p);
+			auto tmp=std::get<0>(p);
 			tmp++;		
 			std::get<0>(p)=tmp;				
 		}

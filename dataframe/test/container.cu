@@ -24,11 +24,12 @@ class dataframeTest : public ::testing::Test{
 	DEFINE(AssignmentTest,	DATAFRAME_THREADS)	
 	DEFINE(EqualityTest,	DATAFRAME_THREADS)
 	DEFINE(BeginEndTest,	DATAFRAME_THREADS)
-	DEFINE(LockTest,		DATAFRAME_THREADS)
 	DEFINE(QuerryTest,		DATAFRAME_THREADS)
 	DEFINE(InsertTest,		DATAFRAME_THREADS)
 	DEFINE(AccessTest,		DATAFRAME_THREADS)
 	DEFINE(ModifyTest,		DATAFRAME_THREADS)
+	DEFINE(EraseTest,		DATAFRAME_THREADS)
+	DEFINE(SwapTest,		DATAFRAME_THREADS)
 	DEFINE(EmptyTest,		DATAFRAME_THREADS)
 };
 
@@ -41,11 +42,48 @@ void dataframeTest<Type...>::AddressTest()
 
 	EXPECT_EQ(local,*ptr); 
 }
+template<class ... Type>
+void dataframeTest<Type...>::EraseTest()
+{
+	int size=10; 
+	value_type one(1,1,1,1);
+	value_type two(2,2,2,2);
+	Container local(size,one);
+	Container local2(size,one);
+	Container local3(size,one);
+
+	local.erase(local.begin());
+	EXPECT_EQ(local.size(),size-1); 
+
+	local.erase(local.begin(),local.begin()+1);
+	EXPECT_EQ(local2.size(),size-2); 
+
+	local3.push_back(two);
+	EXPECT_EQ(local3.back(),two); 
+	local3.pop_back(); 	
+	EXPECT_EQ(local3.back(),one);
+}
 
 template<class ... Type>
 void dataframeTest<Type...>::EmptyTest()
 {
 
+}
+template<class ... Type>
+void dataframeTest<Type...>::SwapTest()
+{
+	value_type one(1,1,1,1);
+	value_type two(2,2,2,2);
+	int size=10;
+
+	Container ones(size,one);
+	Container twos(size,two);
+
+	ones.swap(twos); 
+	for(int i=0;i<size;i++){
+		EXPECT_EQ(ones[i],two); 
+		EXPECT_EQ(twos[i],one);
+	}
 }
 
 template<class ... Type>
@@ -73,8 +111,23 @@ void dataframeTest<Type...>::InsertTest()
 template<class ... Type>
 void dataframeTest<Type...>::AccessTest()
 {
+	value_type value(1,2,3,4);
+	value_type other(5,6,7,8);
+	Container local(10,value); 
 
+	EXPECT_EQ(local.front(),value);
+	EXPECT_EQ(local.back(),value); 
+	EXPECT_EQ(local.at(4),value); 
+	EXPECT_EQ(local[4],value); 
 
+	local.front()=other;
+	EXPECT_EQ(local.front(),other);
+	local.back()=other;
+	EXPECT_EQ(local.back(),other); 
+	local.at(4)=other;
+	EXPECT_EQ(local.at(4),other); 
+	local[5]=other;
+	EXPECT_EQ(local[5],other); 
 }
 template<class ... Type>
 void dataframeTest<Type...>::ModifyTest()
@@ -92,8 +145,8 @@ void dataframeTest<Type...>::ModifyTest()
 	it=local.begin()+1; 
 	*it=value;
 	EXPECT_EQ(*it,value); 
-
 }
+
 template<class ... Type>
 void dataframeTest<Type...>::ConstructorTest()
 {
@@ -110,16 +163,33 @@ void dataframeTest<Type...>::ConstructorTest()
 	for(int i=0;i<size;i++){
 		EXPECT_EQ(local2[i],value); 
 	}
+
+	Container local3(local2.begin(),local2.end()); 
 };
 template<class ... Type>
 void dataframeTest<Type...>::AssignmentTest()
 {
+	value_type value(1,2,3,4);
+	value_type start(0,0,0,0);
+	Container local(10,start); 
+
 	const int size=10;
-	Container local(size);
+	Container local2(size);
 	for(int i=0;i<size;i++){
 		value_type value(i,i,i,i);	
 		local[i]=value;
 		EXPECT_EQ(local[i],value);
+	}
+
+	int count=4; 
+	local2.assign(count,value);
+	for(int i=0;i<count;i++){
+		local2[i]=value; 
+	}
+
+	local2.assign(local.begin(),local.end());
+	for(int i=0;i<10;i++){
+		local2[i]=start; 
 	}
 };
 template<class ... Type>
@@ -131,8 +201,11 @@ void dataframeTest<Type...>::EqualityTest()
 	EXPECT_EQ(local1,local2);
 	local2.resize(1); 
 	EXPECT_NE(local1,local2);
+	EXPECT_TRUE(local1!=local2); 
+
 	local1=local2;
 	EXPECT_EQ(local1,local2);
+	EXPECT_TRUE(local1==local2);
 };
 template<class ... Type>
 void dataframeTest<Type...>::BeginEndTest()
@@ -143,19 +216,6 @@ void dataframeTest<Type...>::BeginEndTest()
 	iterator e=local.end();
 	EXPECT_TRUE(b<e);
 };
-template<class ... Type>
-void dataframeTest<Type...>::LockTest()
-{
-/*
-	vector.lock();
-	global_host[0]++;
-	vector.unlock();
-
-	bool p=vector.try_lock();
-	if(p)
-		vector.unlock();
-*/
-}
 template<class ... Type>
 void dataframeTest<Type...>::QuerryTest()
 {
@@ -191,8 +251,8 @@ void dataframeTest<Type...>::QuerryTest()
 }
 
 
-//python:key:tests=EmptyTest BeginEndTest InsertTest AccessTest ModifyTest QuerryTest LockTest EqualityTest ConstructorTest AssignmentTest AddressTest
-//python:template=TEST_F($dataframeTest<int,int,int,int>$,|tests|){this->|tests|();}
+//python:key:tests=SwapTest EmptyTest BeginEndTest InsertTest AccessTest ModifyTest QuerryTest EqualityTest ConstructorTest AssignmentTest AddressTest
+//python:template=TEST_F($dataframeTest<int,double,long,float>$,|tests|){this->|tests|();}
 
 //python:start
 //python:include=container.test

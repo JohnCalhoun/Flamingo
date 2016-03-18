@@ -48,19 +48,35 @@ struct traits {
 	static const size_type _numCol=sizeof...(Type);
 
 	typedef boost::mpl::vector<Type...>	type_vector;	
-	typedef typename transform<type_vector,std::add_pointer<_1> >::type pointer_vector;
-	typedef typename transform<type_vector,std::add_lvalue_reference<_1> >::type reference_vector;
+	typedef typename 
+		transform<type_vector,std::add_pointer<_1> >::type		pointer_vector;
+	typedef typename 
+		transform<type_vector,std::add_lvalue_reference<_1> >::type reference_vector;
+	typedef typename 
+		transform<pointer_vector,std::add_const<_1> >::type		const_pointer_vector;
+	typedef typename 
+		transform<reference_vector,std::add_const<_1> >::type		const_reference_vector;
 
-	typedef typename vec2tuple<_numCol-1,type_vector>::type		value_tuple;
-	typedef typename vec2tuple<_numCol-1,pointer_vector>::type		pointer_tuple;
-	typedef typename vec2tuple<_numCol-1,reference_vector>::type	reference_tuple;
+	typedef typename 
+		vec2tuple<_numCol-1,type_vector>::type			value_tuple;
+	typedef typename 
+		vec2tuple<_numCol-1,pointer_vector>::type		pointer_tuple;
+	typedef typename 
+		vec2tuple<_numCol-1,reference_vector>::type		reference_tuple;
+	typedef typename 
+		vec2tuple<_numCol-1,const_pointer_vector>::type	const_pointer_tuple;
+	typedef typename 
+		vec2tuple<_numCol-1,const_reference_vector>::type	const_reference_tuple;
 
 	typedef boost::mpl::range_c<int,0,_numCol> range;
 
 	typedef value_tuple			value_type;
 	typedef pointer_tuple		pointer; 
+	typedef const_pointer_tuple	const_pointer;
 	typedef reference_tuple		reference;
-	typedef std::ptrdiff_t		difference_type; 
+	typedef const_reference_tuple	const_reference; 
+	typedef std::ptrdiff_t		difference_type;
+ 
 	template<int n>
 	struct Return{
 		typedef boost::mpl::int_<n> value;

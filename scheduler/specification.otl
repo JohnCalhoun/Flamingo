@@ -5,25 +5,16 @@ Scheduler
 		task
 			function object 
 				run when scheduled 
-				input/output columns 
-			dependencies
-				other tasks 
-			resources
-				dataframe columns 
-				processor(cpu or gpu or other)
-			fencing operations accross nodes
-		task-graph
-			task objects with dependencies
-		thread-pool
-			threads 
-				computation
-				memory
-		scheduler
-			schedule a task graph 
-			distributes tasks to thread pool 
-			move dataframe rows to requested location 
+				input/output dataframe
+			data
+		resources
+			abstract class
+		Tasks
+			fence 
+			general 
 	libraries
 		stl,openmp,TBB
 		mpi-fencing 
 	interactions
 	implementation 
+		use tbb task graph library

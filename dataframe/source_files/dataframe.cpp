@@ -36,11 +36,15 @@ class dataframe : public dataframeBase{
 	typedef traits<Type...>					Traits; 
 	
 	typedef typename Traits::size_type			size_type;
-	typedef dataframe_iterator<Type...>		iterator;
 	typedef typename Traits::difference_type	difference_type;
-	typedef typename Traits::reference			reference;
 	typedef typename Traits::value_type		value_type;
+	typedef dataframe_iterator<Type...>		iterator;
+//	typedef const iterator					const_iterator;
+	typedef typename Traits::reference			reference;
+//	typedef const reference					const_reference;
 	typedef typename Traits::pointer			pointer;
+//	typedef const pointer					const_pointer;
+
 	typedef typename Traits::type_vector		type_vector;
 	typedef typename column_tuple<Type...>::type		ColumnTuple;
 
@@ -66,14 +70,19 @@ class dataframe : public dataframeBase{
 	void assign(iterator,iterator);
 	void assign(size_type,value_type);
 
-	dataframe<Type...>& operator=(const dataframe<Type...>&);
 	reference at(size_type);
-	reference operator[](size_type);
+//	const_reference at(size_type)const; 
 	reference front();
+//	const_reference front()const;
 	reference back();
+//	const_reference back()const;
 
 	iterator begin();
+//	const_iterator begin()const; 
+//	const_iterator cbegin()const;
 	iterator end(); 
+//	const_iterator end()const; 
+//	const_iterator cend()const;
 
 	size_type size()const;
 	size_type max_size()const;
@@ -96,6 +105,9 @@ class dataframe : public dataframeBase{
 	
 	bool operator==(const dataframe<Type...>&)const;
 	bool operator!=(const dataframe<Type...>&)const;
+	reference operator[](size_type);
+//	const_reference operator[](size_type)const;
+	dataframe<Type...>& operator=(const dataframe<Type...>&);
 };
 
 #include"dataframe.inl"

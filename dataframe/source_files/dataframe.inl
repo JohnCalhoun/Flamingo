@@ -121,6 +121,7 @@ template<class ... Type>
 	iterator it(_column_tuple); 
 	return it; 
 };
+
 template<class ... Type>
 	dataframe<Type...>::iterator 
 	dataframe<Type...>::end()

@@ -34,7 +34,8 @@ class dataframe : public dataframeBase{
 
 	public:
 	typedef traits<Type...>					Traits; 
-	
+
+	typedef typename dataframeBase::Key		ID; 	
 	typedef typename Traits::size_type			size_type;
 	typedef typename Traits::difference_type	difference_type;
 	typedef typename Traits::value_type		value_type;

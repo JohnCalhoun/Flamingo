@@ -1,21 +1,26 @@
 //task.cpp
-#include "data.cpp"
+#include "traits.cpp"
+#include <tuple>
+#include <functional>
+#include <tbb/flow_graph>
 
-class task {	
-	typedef std::pair<Input,Output> argument;
+namespace scheduler {
 
-	task(); 
+template<class ... DataFrames> 
+struct task_body {	
+	typedef typename traits<DataFrames...>	traits; 
+	typedef typename traits::Args			Args;
+	typedef typename traits::Function		Function; 
+	typedef typename traits::Msg			Msg; 
+	
+	task(Function funct,Args& arg): args(arg),function(funct); 
 	~task(); 
-
-
-	Input input;
-	Output output; 	
 	
-	std::function<void(argument)> function; 
-	
-	void in();
-	void out();
-	void run();
+	Args& args; 
+	Function function; 
 
-	void add(task);  
+	void operator()(Msg); 
 }
+
+#include "task.inl"
+}//scheduler

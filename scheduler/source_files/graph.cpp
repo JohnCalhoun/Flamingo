@@ -6,26 +6,25 @@ namespace scheduler {
 
 class task_graph {
 	typedef tbb::flow::graph				Graph;
-	typedef tbb::flow::continue_msg		msg; 
-	typedef tbb::flow::continue_node<msg>	node; 
-	typedef tbb::flow:broadcast_ndoe<msg>	Start;
+	typedef tbb::flow::continue_msg		Msg; 
+	typedef tbb::flow::continue_node<Msg>	Node; 
+	typedef tbb::flow::broadcast_node<Msg>	Start;
 
-	task_graph(); 
-	~task_graph(); 
+	task_graph():graph(),source(graph){}; 
+	~task_graph(){}; 
 
 	Graph graph; 
-	Start start; 
+	Start source; 
 	
 	template<class ... DataFrames>
-	node& register_task(task_body<DataFrames...>);
+	Node* register_task(task_body<DataFrames...>);
 	
-	void start(node&);
-	void dependency(node&,node&); 	
-	void remove(); 
+	void start(Node&);
+	void dependency(Node&,Node&); 	
 
 	void run();
 	void run(int);  
-}
+};
 
 #include "graph.inl"
 }//scheduler

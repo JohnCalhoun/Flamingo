@@ -18,8 +18,8 @@ task:task.cu task.test
 #graph tests
 graph.test:graph.cu $(COVERAGE) ../source_files/*
 	python $(COVERAGE) -i ./graph.cu
-graph_test:graph.cu graph.test
-	clear && $(CC) -o graph_test main_test.cu $(FOLDERS) $(LINKS) $(CFLAGS) -D ITERATOR_TEST
+graph:graph.cu graph.test
+	clear && $(CC) -o graph main_test.cu $(FOLDERS) $(LINKS) $(CFLAGS) -ltbb -D GRAPH_TEST
 
 .PHONY:run
 run:all

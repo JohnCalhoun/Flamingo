@@ -1,4 +1,6 @@
 //traits.cpp
+#ifndef TRAITS_SCHEDULER_CPP
+#define TRATIS_SCHEDULER_CPP
 #include <tuple>
 #include <tbb/flow_graph.h>
 #include <boost/mpl/vector.hpp>
@@ -44,4 +46,4 @@ struct traits {
 };
 
 }//scheduler
-
+#endif

@@ -1,4 +1,6 @@
 //task.cpp
+#ifndef TASK_SCHEDULER_CPP
+#define TASK_SCHEDULER_CPP
 #include "traits.cpp"
 #include <tuple>
 #include <functional>
@@ -24,3 +26,4 @@ struct task_body {
 
 #include "task.inl"
 }//scheduler
+#endif

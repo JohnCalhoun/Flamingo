@@ -6,12 +6,12 @@ task_graph::Node* task_graph::register_task(task_body<DataFrames...> task){
 	return new_task;
 }
 
-void task_graph::start(task_graph::Node& A){
-	tbb::flow::make_edge(source,A); 
+void task_graph::start(task_graph::Node* A){
+	tbb::flow::make_edge(source,*A); 
 }
 
-void task_graph::dependency(task_graph::Node& A,task_graph::Node& B){
-	tbb::flow::make_edge(A,B); 
+void task_graph::dependency(task_graph::Node* A,task_graph::Node* B){
+	tbb::flow::make_edge(*A,*B); 
 }
 void task_graph::run(){
 	source.try_put(Msg()); 

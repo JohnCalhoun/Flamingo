@@ -1,6 +1,7 @@
 CC=nvcc
 UTIL=../../utilities
-FOLDERS=-I ../source_files -I ../../allocator/source_files -isystem /usr/include -L/usr/lib64 -I $(UTIL) 
+DATAFRAME=../../dataframe/source_files
+FOLDERS=-I ../source_files -I ../../allocator/source_files -isystem /usr/include -L/usr/lib64 -I $(UTIL) -I $(DATAFRAME)
 LINKS=-lgtest -lpthread -lboost_thread 
 SOURCE_DIR=../source_files
 COVERAGE=$(UTIL)/coverage.py
@@ -11,8 +12,8 @@ CFLAGS=--std=c++11 -g -G -O0 -pg
 #task tests
 task.test:task.cu $(COVERAGE) ../source_files/*
 	python $(COVERAGE) -i ./task.cu
-task_test:task.cu task.test
-	clear && $(CC) -o task_test main_test.cu $(FOLDERS) $(LINKS) $(CFLAGS) -D TASK_TEST
+task:task.cu task.test
+	clear && $(CC) -o task main_test.cu $(FOLDERS) $(LINKS) $(CFLAGS) -D TASK_TEST
 
 #graph tests
 graph.test:graph.cu $(COVERAGE) ../source_files/*

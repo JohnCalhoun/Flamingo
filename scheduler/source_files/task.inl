@@ -2,7 +2,7 @@
 
 template<class ... DataFrames>
 void task_body<DataFrames...>::operator()(
-		task_body<dataFrames...>::msg message)
+		typename task_body<DataFrames...>::Msg message)
 {
-	function(args); 
+	function(*args); 
 }

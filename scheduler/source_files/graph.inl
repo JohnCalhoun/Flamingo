@@ -1,7 +1,7 @@
 //graph.inl
 
-template<class ... DataFrames>
-task_graph::node task_graph::register_task(task_body<DataFrames...> task){
+template<typename T>
+task_graph::node task_graph::register_task(T task){
 	node_raw* new_ptr=new node_raw(graph,task);
 	node new_task(new_ptr); 
 	return new_task;

@@ -15,7 +15,7 @@ template<class ... Type>
 class graphTest : public ::testing::Test{
 	typedef dataframe<int,int>				frame_int; 
 	typedef dataframe<float,float>			frame_float; 
-	typedef scheduler::task_body<frame_int,frame_float>	Task;
+	typedef scheduler::task_adapter<frame_int,frame_float>	Task;
 	typedef typename Task::Args				Args;  
 	typedef typename Task::Msg				Msg; 
 

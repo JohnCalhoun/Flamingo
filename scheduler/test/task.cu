@@ -15,7 +15,7 @@ class taskTest : public ::testing::Test{
 	public:
 	
 //	Container global_container; 	
-	DEFINE(EmptyTest,		TASK_THREADS)
+	DEFINE(EmptyTest,	TASK_THREADS)
 	DEFINE(MainTest,	TASK_THREADS)
 };
 
@@ -29,7 +29,7 @@ void taskTest<Type...>::MainTest()
 {
 	typedef dataframe<int,int>				frame_int; 
 	typedef dataframe<float,float>			frame_float; 
-	typedef scheduler::task_body<frame_int,frame_float>	Task;
+	typedef scheduler::task_adapter<frame_int,frame_float>	Task;
 	typedef typename Task::Args				Args;  
 	typedef typename Task::Msg				Msg; 
 

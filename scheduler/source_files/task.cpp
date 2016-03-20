@@ -9,19 +9,29 @@
 namespace scheduler {
 
 template<class ... DataFrames> 
-struct task_body {	
-	typedef traits<DataFrames...>			traits; 
-	typedef typename traits::Args			Args;
-	typedef typename traits::Function		Function; 
-	typedef typename traits::Msg			Msg; 
+struct taskBase {	
+	typedef traits<DataFrames...>			Traits; 
+	typedef typename Traits::Args			Args;
+	typedef typename Traits::Function		Function; 
+	typedef typename Traits::Msg			Msg; 
 	
-	task_body(Function funct,Args* arg): args(arg),function(funct){}; 
-	~task_body(){}; 
+	virtual void operator()(Msg)=0; 
+};
+
+template<class ... DataFrames> 
+struct task_adapter : public taskBase<DataFrames...> {	
+	typedef typename taskBase<DataFrames...>::Traits		Traits; 
+	typedef typename taskBase<DataFrames...>::Args		Args; 
+	typedef typename taskBase<DataFrames...>::Function	Function; 
+	typedef typename taskBase<DataFrames...>::Msg		Msg; 
+	
+	task_adapter(Function funct,Args* arg): args(arg),function(funct){}; 
+	~task_adapter(){}; 
 	
 	Args* args; 
 	Function function; 
 
-	virtual void operator()(Msg); 
+	void operator()(Msg); 
 };
 
 #include "task.inl"

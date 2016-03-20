@@ -22,8 +22,8 @@ class task_graph {
 	Graph graph; 
 	Start source; 
 	
-	template<class ... DataFrames>
-	node register_task(task_body<DataFrames...>);
+	template<typename T>
+	node register_task(T);
 	
 	void start(node);
 	void dependency(node,node); 	

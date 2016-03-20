@@ -1,8 +1,8 @@
 //task.inl
 
 template<class ... DataFrames>
-void task_body<DataFrames...>::operator()(
-		typename task_body<DataFrames...>::Msg message)
+void task_adapter<DataFrames...>::operator()(
+		typename task_adapter<DataFrames...>::Msg message)
 {
 	function(*args); 
 }

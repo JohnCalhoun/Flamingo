@@ -43,6 +43,7 @@ class dataframe : public dataframeBase{
 	typedef typename Traits::const_reference	const_reference;
 	typedef typename Traits::pointer			pointer;
 	typedef typename Traits::const_pointer		const_pointer;
+	typedef typename Traits::zip_iterator		zip_iterator; 
 	typedef dataframe_iterator<	reference,
 							pointer,
 							Type...>		iterator;
@@ -77,7 +78,9 @@ class dataframe : public dataframeBase{
 	reference back();
 
 	iterator begin();
+	zip_iterator begin_zip();
 	iterator end(); 
+	zip_iterator end_zip(); 
 
 	size_type size()const;
 	size_type max_size()const;

@@ -121,6 +121,13 @@ template<class ... Type>
 	iterator it(_column_tuple); 
 	return it; 
 };
+template<class ... Type>
+	dataframe<Type...>::zip_iterator 
+	dataframe<Type...>::begin_zip()
+{
+	zip_iterator it(begin()); 
+	return it; 
+};
 
 template<class ... Type>
 	dataframe<Type...>::iterator 
@@ -130,6 +137,13 @@ template<class ... Type>
 	it+=size(); 	
 	return it;
 }; 
+template<class ... Type>
+	dataframe<Type...>::zip_iterator 
+	dataframe<Type...>::end_zip()
+{
+	zip_iterator it(end()); 
+	return it; 
+};
 
 template<class ... Type>
 	dataframe<Type...>::size_type 

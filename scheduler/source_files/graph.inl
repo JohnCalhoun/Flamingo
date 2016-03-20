@@ -1,16 +1,17 @@
 //graph.inl
 
 template<class ... DataFrames>
-task_graph::Node* task_graph::register_task(task_body<DataFrames...> task){
-	Node* new_task=new Node(graph,task);
+task_graph::node task_graph::register_task(task_body<DataFrames...> task){
+	node_raw* new_ptr=new node_raw(graph,task);
+	node new_task(new_ptr); 
 	return new_task;
 }
 
-void task_graph::start(task_graph::Node* A){
+void task_graph::start(task_graph::node A){
 	tbb::flow::make_edge(source,*A); 
 }
 
-void task_graph::dependency(task_graph::Node* A,task_graph::Node* B){
+void task_graph::dependency(task_graph::node A,task_graph::node B){
 	tbb::flow::make_edge(*A,*B); 
 }
 void task_graph::run(){

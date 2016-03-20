@@ -1,0 +1,6 @@
+//typedefs 
+typedef agentTest<int,double,long,float> agentTest_int_double_long_float_; 
+typedef agentTest<int,double,long,float> agentTest_int_double_long_float_; 
+//Tests/benchmarks 
+TEST_F(agentTest_int_double_long_float_,EmptyTest){this->EmptyTest();}
+TEST_F(agentTest_int_double_long_float_,MainTest){this->MainTest();}

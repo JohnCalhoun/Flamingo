@@ -21,7 +21,7 @@ struct task_body {
 	Args* args; 
 	Function function; 
 
-	void operator()(Msg); 
+	virtual void operator()(Msg); 
 };
 
 #include "task.inl"

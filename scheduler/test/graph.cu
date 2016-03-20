@@ -76,12 +76,12 @@ template<class ... Type>
 void graphTest<Type...>::MainTest()
 {
 	typedef scheduler::task_graph  Graph; 
-	typedef typename Graph::Node	 Node; 
+	typedef typename Graph::node	 Node; 
 
 	Graph graph; 
 
-	Node* t1_ptr=graph.register_task(task1);
-	Node* t2_ptr=graph.register_task(task2); 
+	Node t1_ptr=graph.register_task(task1);
+	Node t2_ptr=graph.register_task(task2); 
 
 	graph.start(t1_ptr); 
 	graph.dependency(t1_ptr,t2_ptr); 

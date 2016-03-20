@@ -3,7 +3,7 @@
 #define GRAPH_SCHEDULER_CPP
 #include <tbb/flow_graph.h> 
 #include "task.cpp"
-
+#include <memory>
 namespace scheduler {
 
 class task_graph {
@@ -11,9 +11,10 @@ class task_graph {
 	typedef tbb::flow::continue_msg		Msg; 
 	typedef tbb::flow::broadcast_node<Msg>	Start;
 	typedef tbb::flow::graph				Graph;
-	
+	typedef tbb::flow::continue_node<Msg>	node_raw; 
+
 	public:
-	typedef tbb::flow::continue_node<Msg>	Node; 
+	typedef std::shared_ptr<node_raw>		node;
 
 	task_graph():graph(),source(graph){}; 
 	~task_graph(){}; 
@@ -22,10 +23,10 @@ class task_graph {
 	Start source; 
 	
 	template<class ... DataFrames>
-	Node* register_task(task_body<DataFrames...>);
+	node register_task(task_body<DataFrames...>);
 	
-	void start(Node*);
-	void dependency(Node*,Node*); 	
+	void start(node);
+	void dependency(node,node); 	
 
 	void run();
 	void run(int);  

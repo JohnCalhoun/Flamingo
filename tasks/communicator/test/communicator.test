@@ -1,0 +1,6 @@
+//typedefs 
+typedef communicatorTest<int,double,long,float> communicatorTest_int_double_long_float_; 
+typedef communicatorTest<int,double,long,float> communicatorTest_int_double_long_float_; 
+//Tests/benchmarks 
+TEST_F(communicatorTest_int_double_long_float_,EmptyTest){this->EmptyTest();}
+TEST_F(communicatorTest_int_double_long_float_,MainTest){this->MainTest();}

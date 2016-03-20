@@ -1,0 +1,23 @@
+task-communicator 
+	data
+		message-dataframe 
+	function
+		translate vaddress to haddress
+		update messageCount-dataframe
+		send/recieve through transporter
+		erase sent
+		sort by addresss
+		reduce by address with f_i 
+task-inport
+	data 
+		message-dataframe=M
+		agent-dataframe(s)=A
+	function
+		MxA->M
+task-outport
+	data 
+		message-dataframe=M
+		agent-dataframe(s)=A
+	function
+		M->A
+

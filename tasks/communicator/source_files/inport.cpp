@@ -1,7 +1,7 @@
 //communicator.cpp
 #include <task.cpp>
 
-template<class ... DataFrames>
-class inport : public taskBase<DataFrames...>{
+template<typename Messages,typename Agents,typename Counts>
+class inport : public taskBase<Messages,Agents,Counts>{
 
 }

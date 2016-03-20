@@ -1,7 +1,7 @@
 //communicator.cpp
 #include <task.cpp>
 
-template<class ... DataFrames>
-class communicator : public taskBase<DataFrames...>{
+template<typename Messages>
+class communicator : public taskBase<DataFrame>{
 
 }

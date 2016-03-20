@@ -14,7 +14,7 @@
 #include <boost/mpl/placeholders.hpp>
 #include <boost/mpl/range_c.hpp>
 #include <cstddef> 
-
+#include <type_traits>
 
 template<int n,typename vec, typename ... T>
 struct vec2tuple {
@@ -30,7 +30,6 @@ struct vec2tuple<0,vec,T...> {
 	typedef std::tuple<element,T...>	type;
 };
 
-
 template<typename vec, typename op>
 struct transform{
 	typedef typename boost::mpl::transform<vec,op>::type type; 
@@ -41,6 +40,29 @@ struct add_ref_wrap{
 	typedef std::reference_wrapper<T> type; 
 };
 
+template<int n,typename vec>
+struct assert_pod {
+	typedef typename boost::mpl::int_<n>				position;
+	typedef typename boost::mpl::at<vec,position>::type	element;
+	
+	typedef typename std::conditional<	
+		std::is_pod<element>::value,
+		typename assert_pod<n-1,vec>::type,
+		typename std::false_type::type
+						>::type type; 
+};
+template<typename vec>
+struct assert_pod<0,vec> {
+	typedef typename boost::mpl::int_<0>				position;
+	typedef typename boost::mpl::at<vec,position>::type	element;
+	
+	typedef typename std::conditional<	
+		std::is_pod<element>::value,
+		typename std::true_type,
+		typename std::false_type
+						>::type type; 
+};
+
 using boost::mpl::placeholders::_1;
 template<class ... Type>
 struct traits {
@@ -48,6 +70,8 @@ struct traits {
 	static const size_type _numCol=sizeof...(Type);
 
 	typedef boost::mpl::vector<Type...>	type_vector;	
+	static_assert(assert_pod<_numCol-1,type_vector>::type::value,"DataFrame Types must be POD"); 
+
 	typedef typename 
 		transform<type_vector,std::add_pointer<_1> >::type		pointer_vector;
 	typedef typename 

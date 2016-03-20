@@ -1,7 +1,7 @@
 //loadbalancer.cpp
 #include <task.cpp>
 
-template<class ... DataFrames>
-class loadbalancer : public taskBase<DataFrames...>{
+template<typename Agents,typename Counts>
+class loadbalancer : public taskBase<Agents,Counts>{
 
 }

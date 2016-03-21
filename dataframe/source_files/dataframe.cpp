@@ -47,6 +47,10 @@ class dataframe : public dataframeBase{
 	typedef dataframe_iterator<	reference,
 							pointer,
 							Type...>		iterator;
+	typedef dataframe_iterator<	const_reference,
+							const_pointer,
+							Type...>		const_iterator;
+
 
 	typedef typename Traits::type_vector		type_vector;
 	typedef typename column_tuple<Type...>::type		ColumnTuple;
@@ -77,10 +81,15 @@ class dataframe : public dataframeBase{
 	reference front();
 	reference back();
 
-	iterator begin();
-	zip_iterator begin_zip();
-	iterator end(); 
-	zip_iterator end_zip(); 
+	iterator			begin();
+	const_iterator		begin()const;
+	const_iterator		cbegin()const;
+	zip_iterator		begin_zip();
+
+	iterator			end(); 
+	const_iterator		end()const; 
+	const_iterator		cend()const; 
+	zip_iterator		end_zip(); 
 
 	size_type size()const;
 	size_type max_size()const;

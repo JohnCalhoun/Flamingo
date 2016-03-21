@@ -131,35 +131,34 @@ column<T>::pointer column<T>::data(){
 } 
 template<typename T>
 column<T>::const_pointer column<T>::data()const{
-	const_pointer ptr;	
 	switch(getlocation())
 	{
 			case host:
 			{
 				const int position=memory2type<host>::type::value;
-				ptr=std::get<position>(_tuple).data();
-				break;
+				return std::get<position>(_tuple).data();
 			}
 			case device:
 			{
 				const int position=memory2type<device>::type::value;
-				ptr=std::get<position>(_tuple).data();
-				break;
+				return std::get<position>(_tuple).data();
 			}
 			case pinned:
 			{
 				const int position=memory2type<pinned>::type::value;
-				ptr=std::get<position>(_tuple).data();
-				break;
+				return std::get<position>(_tuple).data();
 			}
 			case unified:
 			{
 				const int position=memory2type<unified>::type::value;
-				ptr=std::get<position>(_tuple).data();
-				break;
+				return std::get<position>(_tuple).data();
 			}
+			default:
+			{
+				return NULL; 
+			}
+			
 	}
-	return ptr; 
 } 
 
 template<typename T>

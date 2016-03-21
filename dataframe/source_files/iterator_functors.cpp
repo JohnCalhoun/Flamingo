@@ -2,8 +2,41 @@
 #include "columns.cpp"
 #include "traits.cpp"
 #include "functional"
+#include "iterator.cpp"
 
 namespace iterator_functors{
+	template<int n, class ... Type>
+	struct assign_const{
+		typedef typename column_tuple<Type...>::type				ColumnTuple; 
+		typedef typename traits<Type...>::const_pointer			pointerTuple;
+		typedef typename column_tuple<Type...>::element<n>::type	Column; 
+
+		void operator()( 
+				const ColumnTuple&&		columnTuple,
+				pointerTuple&&			it_pointer)
+		{
+			const Column& column=std::get<n>(columnTuple);
+			std::get<n>(it_pointer)=column.data();
+
+			assign_const<n-1,Type...> assigner;
+			assigner(	std::forward<const ColumnTuple>(columnTuple),
+					std::forward<pointerTuple>(it_pointer)); 	
+		}
+	};
+	template<class ... Type>
+	struct assign_const<0,Type...>{
+		typedef typename column_tuple<Type...>::type				ColumnTuple; 
+		typedef typename traits<Type...>::const_pointer			pointerTuple;
+		typedef typename column_tuple<Type...>::element<0>::type	Column; 
+
+		void operator()( 
+				const ColumnTuple&&		columnTuple,
+				pointerTuple&&			it_pointer)
+		{
+			const Column& column=std::get<0>(columnTuple);
+			std::get<0>(it_pointer)=column.data();
+		}
+	};
 	template<int n, class ... Type>
 	struct assign{
 		typedef typename column_tuple<Type...>::type				ColumnTuple; 
@@ -38,20 +71,18 @@ namespace iterator_functors{
 			std::get<0>(it_pointer)=static_cast<pointer>(column.data());
 		}
 	};
-	template<int n, class ... Type> 
+	template<int n ,typename Ref,typename Ptr, class ... Type> 
 	struct dereference{
-		typedef typename traits<Type...>::pointer		pointer;
-		typedef typename traits<Type...>::reference		reference; 
-		typedef typename traits<Type...>::Return<n>::type_base	type;
-		typedef type&			Element; 
+		typedef Ptr		pointer;
+		typedef Ref		reference; 
+		typedef typename std::tuple_element<n,reference>::type	Element;
 
 		template<class ... ptr_types> 
 		reference  operator()(	pointer&& ptr,
 							ptr_types&&... args)
 		{
 			Element element=*std::get<n>(ptr);			
-			dereference<n-1,Type...> recusive;
-
+			dereference<n-1,Ref,Ptr,Type...> recusive;
 
 			return recusive(	std::forward<pointer>(ptr),
 							std::forward<Element>(element),
@@ -62,7 +93,7 @@ namespace iterator_functors{
 		{
 			Element element=*std::get<n>(ptr);			
 
-			dereference<n-1,Type...> recusive;
+			dereference<n-1,Ref,Ptr,Type...> recusive;
 
 
 			return recusive(	std::forward<pointer>(ptr),
@@ -71,12 +102,11 @@ namespace iterator_functors{
 		}
 	};
 
-	template<class ... Type> 
-	struct dereference<0,Type...>{
-		typedef typename traits<Type...>::pointer		pointer;
-		typedef typename traits<Type...>::reference		reference; 
-		typedef typename traits<Type...>::Return<0>::type_base	type;
-		typedef type&			Element; 
+	template<typename Ref,typename Ptr,class ... Type> 
+	struct dereference<0,Ref,Ptr,Type...>{
+		typedef Ptr		pointer;
+		typedef Ref		reference; 
+		typedef typename std::tuple_element<0,reference>::type	Element;
 
 		template<class ... ptr_types> 
 		reference  operator()(	pointer&& ptr,
@@ -84,7 +114,7 @@ namespace iterator_functors{
 		{
 			Element element=*std::get<0>(ptr);			
 
-			return std::tie(	std::forward<Element>(element),
+			return reference(	std::forward<Element>(element),
 							std::forward<ptr_types>(args)...
 			); 
 		}
@@ -178,6 +208,7 @@ namespace iterator_functors{
 			std::get<0>(lhs)-=rhs;
 		}
 	};
+	
 }
 
 

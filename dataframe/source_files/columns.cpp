@@ -53,9 +53,9 @@ struct column  {
 					unified_column
 				> MemoryTuple; 
 
-	typedef T				value_type;
-	typedef value_type*		pointer; 
-	typedef const pointer	const_pointer; 	
+	typedef T					value_type;
+	typedef value_type*			pointer; 
+	typedef const value_type*	const_pointer; 	
 
 	template<Memory M>
 	struct Return{

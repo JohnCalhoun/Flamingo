@@ -23,6 +23,7 @@ class dataframe_iterator: public traits<Type...> {
 	dataframe_iterator();
 	dataframe_iterator(const self&);
 	dataframe_iterator(ColumnTuple&); 
+	dataframe_iterator(const  ColumnTuple&); 
 	dataframe_iterator(pointer p):_pointer(p){}; 
 	~dataframe_iterator();
 
@@ -46,6 +47,7 @@ class dataframe_iterator: public traits<Type...> {
 	difference_type operator-(const self&) const; 
 
 	reference operator*();
+	reference operator*()const;
 	reference operator[](size_type); //optional
 
 	void swap(self&); 

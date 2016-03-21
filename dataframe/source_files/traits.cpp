@@ -15,6 +15,7 @@
 #include <boost/mpl/range_c.hpp>
 #include <cstddef> 
 #include <type_traits>
+#include <functional>
 
 template<int n,typename vec, typename ... T>
 struct vec2tuple {
@@ -62,6 +63,15 @@ struct assert_pod<0,vec> {
 		typename std::false_type
 						>::type type; 
 };
+template<typename T>
+struct add_ptr_to_const{
+	typedef const T* type; 
+};
+
+template<typename T>
+struct add_const_ref{
+	typedef std::reference_wrapper<const T> type; 
+};
 
 using boost::mpl::placeholders::_1;
 template<class ... Type>
@@ -77,9 +87,11 @@ struct traits {
 	typedef typename 
 		transform<type_vector,std::add_lvalue_reference<_1> >::type reference_vector;
 	typedef typename 
-		transform<pointer_vector,std::add_const<_1> >::type		const_pointer_vector;
+		transform<	type_vector,
+					add_ptr_to_const<_1> 
+				>::type	const_pointer_vector;
 	typedef typename 
-		transform<reference_vector,std::add_const<_1> >::type		const_reference_vector;
+		transform<type_vector,add_const_ref<_1> >::type		const_reference_vector;
 
 	typedef typename 
 		vec2tuple<_numCol-1,type_vector>::type			value_tuple;
@@ -99,7 +111,8 @@ struct traits {
 	typedef thrust::zip_iterator<pointer>	zip_iterator; 
 	typedef const_pointer_tuple	const_pointer;
 	typedef reference_tuple		reference;
-	typedef const_reference_tuple	const_reference; 
+	typedef const_reference_tuple	const_reference;
+
 	typedef std::ptrdiff_t		difference_type;
  
 	template<int n>

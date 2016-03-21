@@ -31,6 +31,16 @@ dataframe_iterator<ref_type,pointer_type,Type...>::dataframe_iterator(
 		std::forward<pointer>(_pointer)
 	); 
 }
+template<typename ref_type,typename pointer_type,class ... Type>
+dataframe_iterator<ref_type,pointer_type,Type...>::dataframe_iterator(
+	const dataframe_iterator<ref_type,pointer_type,Type...>::ColumnTuple& tuple)
+{
+	typename iterator_functors::assign_const<traits<Type...>::_numCol-1,Type...> assigner; 
+	assigner(
+		std::forward<const ColumnTuple>(tuple),
+		std::forward<pointer>(_pointer)
+	); 
+}
 
 template<typename ref_type,typename pointer_type,class ... Type>
 dataframe_iterator<ref_type,pointer_type,Type...>::~dataframe_iterator(){}
@@ -140,22 +150,17 @@ dataframe_iterator<ref_type,pointer_type,Type...>::difference_type dataframe_ite
 	return result;
 } 
 
-
 template<typename ref_type,typename pointer_type,class ... Type>
 dataframe_iterator<ref_type,pointer_type,Type...>::reference dataframe_iterator<ref_type,pointer_type,Type...>::operator*(){
 	
 	iterator_functors::
-		dereference<sizeof...(Type)-1,Type...> rec;
+		dereference<sizeof...(Type)-1,reference,pointer,Type...> rec;
 	return rec(std::forward<pointer>(_pointer));
 }
 
 template<typename ref_type,typename pointer_type,class ... Type>
 dataframe_iterator<ref_type,pointer_type,Type...>::reference dataframe_iterator<ref_type,pointer_type,Type...>::operator[](dataframe_iterator<ref_type,pointer_type,Type...>::size_type n){
-	typedef typename traits<Type...>::value_type value_type;
-
-	value_type tmp(*this); 
-	tmp+=n;
-	return *tmp;
+	return *(this+n);
 }
 
 template<typename ref_type,typename pointer_type,class ... Type>

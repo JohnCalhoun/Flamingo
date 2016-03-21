@@ -122,6 +122,20 @@ template<class ... Type>
 	return it; 
 };
 template<class ... Type>
+	dataframe<Type...>::const_iterator 
+	dataframe<Type...>::begin()const
+{
+	return cbegin(); 
+};
+template<class ... Type>
+	dataframe<Type...>::const_iterator 
+	dataframe<Type...>::cbegin()const
+{
+	const_iterator it(_column_tuple); 
+	return it; 
+};
+
+template<class ... Type>
 	dataframe<Type...>::zip_iterator 
 	dataframe<Type...>::begin_zip()
 {
@@ -137,6 +151,20 @@ template<class ... Type>
 	it+=size(); 	
 	return it;
 }; 
+template<class ... Type>
+	dataframe<Type...>::const_iterator 
+	dataframe<Type...>::end()const
+{
+	return cend();
+}; 
+template<class ... Type>
+	dataframe<Type...>::const_iterator 
+	dataframe<Type...>::cend()const
+{
+	const_iterator it=cbegin(); 
+	it+=size(); 	
+	return it;
+};
 template<class ... Type>
 	dataframe<Type...>::zip_iterator 
 	dataframe<Type...>::end_zip()

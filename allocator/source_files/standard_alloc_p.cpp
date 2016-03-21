@@ -13,12 +13,12 @@ class standard_alloc_policy : public Policy {
 
     public:
      //    typedefs
-     typedef T value_type;
-     typedef value_type* pointer;
-     typedef const value_type* const_pointer;
-     typedef value_type& reference;
-     typedef const value_type& const_reference;
-     typedef std::size_t size_type;
+     typedef T					value_type;
+     typedef value_type*			pointer;
+     typedef const value_type*	const_pointer;
+     typedef value_type&			reference;
+     typedef const value_type&	const_reference;
+     typedef std::size_t			size_type;
      typedef std::ptrdiff_t difference_type;
 
     public:

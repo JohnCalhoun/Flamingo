@@ -26,14 +26,14 @@ class buddy_alloc_policy : public Policy {
 
     public:
      //    typedefs
-     typedef T value_type;
-     typedef Handle<T> pointer;
-     typedef Handle<T> const_pointer;
-     typedef Handle_void void_pointer;
-     typedef const Handle_void const_void_pointer;
-     typedef value_type& reference;
-     typedef const value_type& const_reference;
-     typedef std::size_t size_type;
+     typedef T					value_type;
+     typedef Handle<T>			pointer;
+     typedef Handle<const T>		const_pointer;
+     typedef Handle_void			void_pointer;
+     typedef const Handle_void	const_void_pointer;
+     typedef value_type&			reference;
+     typedef const value_type&	const_reference;
+     typedef std::size_t			size_type;
      typedef typename Handle<T>::difference_type difference_type;
 
 

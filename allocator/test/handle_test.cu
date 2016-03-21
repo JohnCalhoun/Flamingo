@@ -42,6 +42,13 @@ class HandleTest : public ::testing::Test {
      DEFINE(DeviceMultipleTest, HANDLE_THREADS)
      DEFINE(MemCopyTest, HANDLE_THREADS)
 	DEFINE(AssignementTest,HANDLE_THREADS)
+	DEFINE(ConstTest,HANDLE_THREADS)
+};
+void HandleTest::ConstTest() {
+	int A=10;
+	const int* A_ptr=&A; 
+
+     Handle<const int> h(A_ptr);
 };
 void HandleTest::ConstDereferenceTest() {
      const Handle<int> h(0, 0, base_ptr);
@@ -258,7 +265,7 @@ void HandleTest::MemCopyTest() {
 }
 
 // clang-format off
-// python:key:function=AssignementTest MemCopyTest DeviceSingleTest DeviceMultipleTest ConstDereferenceTest ConvertToConstTest IfStatementTest BoolConvertTest VoidTest BuddyOffSetTest CopyConstructorTest JoinOperatorTest DereferenceOperatorTest IndirectionOperatorTest EqualityComparableTest DefaultConstructionTest CopyAssignableTest NullablePointerTest BiderectionalTest RandomAccessTest
+// python:key:function=ConstTest AssignementTest MemCopyTest DeviceSingleTest DeviceMultipleTest ConstDereferenceTest ConvertToConstTest IfStatementTest BoolConvertTest VoidTest BuddyOffSetTest CopyConstructorTest JoinOperatorTest DereferenceOperatorTest IndirectionOperatorTest EqualityComparableTest DefaultConstructionTest CopyAssignableTest NullablePointerTest BiderectionalTest RandomAccessTest
 // python:key:concurency=Single Threaded
 // python:template=TEST_F(HandleTest,|function||concurency|){this->|function||concurency|();};
 // python:start

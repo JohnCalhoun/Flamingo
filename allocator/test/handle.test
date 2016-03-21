@@ -1,5 +1,6 @@
 //typedefs 
 //Tests/benchmarks 
+TEST_F(HandleTest,ConstTestSingle){this->ConstTestSingle();};
 TEST_F(HandleTest,AssignementTestSingle){this->AssignementTestSingle();};
 TEST_F(HandleTest,MemCopyTestSingle){this->MemCopyTestSingle();};
 TEST_F(HandleTest,DeviceSingleTestSingle){this->DeviceSingleTestSingle();};
@@ -20,6 +21,7 @@ TEST_F(HandleTest,CopyAssignableTestSingle){this->CopyAssignableTestSingle();};
 TEST_F(HandleTest,NullablePointerTestSingle){this->NullablePointerTestSingle();};
 TEST_F(HandleTest,BiderectionalTestSingle){this->BiderectionalTestSingle();};
 TEST_F(HandleTest,RandomAccessTestSingle){this->RandomAccessTestSingle();};
+TEST_F(HandleTest,ConstTestThreaded){this->ConstTestThreaded();};
 TEST_F(HandleTest,AssignementTestThreaded){this->AssignementTestThreaded();};
 TEST_F(HandleTest,MemCopyTestThreaded){this->MemCopyTestThreaded();};
 TEST_F(HandleTest,DeviceSingleTestThreaded){this->DeviceSingleTestThreaded();};

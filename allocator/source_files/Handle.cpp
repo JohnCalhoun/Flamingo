@@ -21,9 +21,10 @@ class Handle {
      // suport type safe bool idiom
      typedef void (Handle<T>::*bool_type)() const;
      __both__ void this_type_does_not_support_comparisons() const {};
-     T* _base_pointer;
-     int _offset;
-     size_t _size;
+
+     pointer	_base_pointer;
+     int		_offset;
+     size_t	_size;
 
      // Special members
      Handle(int offset, size_t size, T* base)
@@ -31,7 +32,7 @@ class Handle {
      __both__ Handle();
      __both__ Handle(std::nullptr_t);
      __both__ Handle(Handle<T>&&) = default;
-     __both__ Handle(const Handle<T>&);
+	__both__ Handle(const Handle<T>&);
      template<typename L>
 		__both__ Handle(L*);
 	
@@ -48,7 +49,8 @@ class Handle {
      __both__ T& operator*();
      __both__ pointer operator->();
      // nullable pointer
-     __both__ Handle<T>& operator=(const Handle<T>&);
+	__both__ Handle<T>& operator=(const Handle<T>&);
+
      __both__ bool operator==(const Handle<T>&) const;
      __both__ bool operator!=(const Handle<T>&) const;
      __both__ bool operator!=(const std::nullptr_t&) const;
@@ -69,7 +71,7 @@ class Handle {
 
      // casting
      template <typename U>
-     __both__ operator Handle<U>();
+     __both__ operator Handle<U>()const;
      __both__ operator bool_type() const;
 
      template <typename L>
@@ -281,7 +283,7 @@ Handle<T>& Handle<T>::operator+=(const int x) {
 // casting
 template <typename T>
 template <typename U>
-Handle<T>::operator Handle<U>() {
+Handle<T>::operator Handle<U>()const {
      Handle<U> temp = *this;
      return temp;
 }

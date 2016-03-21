@@ -26,7 +26,7 @@ class AllocatorTest : public ::testing::Test {
 
 template <typename T>
 void AllocatorTest<T>::CopyTest() {
-     Vector copy = vector;
+     Vector copy_of(vector);
 };
 #define HOST host
 #define MANAGED unified

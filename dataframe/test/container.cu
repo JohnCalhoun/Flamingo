@@ -30,6 +30,7 @@ class dataframeTest : public ::testing::Test{
 	DEFINE(ModifyTest,		DATAFRAME_THREADS)
 	DEFINE(EraseTest,		DATAFRAME_THREADS)
 	DEFINE(SwapTest,		DATAFRAME_THREADS)
+	DEFINE(ConstTest,		DATAFRAME_THREADS)
 	DEFINE(EmptyTest,		DATAFRAME_THREADS)
 };
 
@@ -64,6 +65,19 @@ void dataframeTest<Type...>::EraseTest()
 	EXPECT_EQ(local3.back(),one);
 }
 
+template<class ... Type>
+void dataframeTest<Type...>::ConstTest()
+{
+	typedef typename Container::const_iterator const_iterator;
+
+	value_type value(5,6,7,8);
+	Container local(10,value);
+ 
+	const_iterator itbegin=local.cbegin();
+	const_iterator itend=local.cend(); 
+
+	EXPECT_LT(itbegin,itend); 
+}
 template<class ... Type>
 void dataframeTest<Type...>::EmptyTest()
 {
@@ -251,7 +265,7 @@ void dataframeTest<Type...>::QuerryTest()
 }
 
 
-//python:key:tests=SwapTest EmptyTest BeginEndTest InsertTest AccessTest ModifyTest QuerryTest EqualityTest ConstructorTest AssignmentTest AddressTest
+//python:key:tests=ConstTest SwapTest EmptyTest BeginEndTest InsertTest AccessTest ModifyTest QuerryTest EqualityTest ConstructorTest AssignmentTest AddressTest
 //python:template=TEST_F($dataframeTest<int,double,long,float>$,|tests|){this->|tests|();}
 
 //python:start

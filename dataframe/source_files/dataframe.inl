@@ -314,7 +314,8 @@ template<class ... Type>
 	dataframe<Type...>::swap(
 		dataframe<Type...>& other)
 {	
-	std::swap(_column_tuple,other._column_tuple); 
+	std::swap(	_column_tuple,
+				other._column_tuple); 
 }; 
 //-------------------------operators
 

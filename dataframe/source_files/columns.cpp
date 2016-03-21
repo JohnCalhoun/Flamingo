@@ -55,7 +55,8 @@ struct column  {
 
 	typedef T				value_type;
 	typedef value_type*		pointer; 
-	
+	typedef const pointer	const_pointer; 	
+
 	template<Memory M>
 	struct Return{
 		typedef typename boost::mpl::at<map,typename memory2type<M>::type>::type column;
@@ -85,6 +86,7 @@ struct column  {
 	typename Return<M>::column& access(); 	
 
 	pointer data(); 
+	const_pointer data()const; 
 
 	void swap(column<T>& );
 	column<T>& operator=(const column<T>& );

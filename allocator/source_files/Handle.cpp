@@ -284,8 +284,11 @@ Handle<T>& Handle<T>::operator+=(const int x) {
 template <typename T>
 template <typename U>
 Handle<T>::operator Handle<U>()const {
-     Handle<U> temp = *this;
-     return temp;
+     Handle<U> tmp;
+	tmp._offset		=this->_offset;
+	tmp._size			=this->_size;
+	tmp._base_pointer	=this->_base_pointer;
+     return tmp;
 }
 // use type safe bool idiom
 template <typename T>

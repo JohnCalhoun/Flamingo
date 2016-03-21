@@ -16,7 +16,7 @@ namespace iterator_functors{
 				pointerTuple&&		it_pointer)
 		{
 			Column& column=std::get<n>(columnTuple);
-			void* void_ptr=column.access_raw(); 
+			void* void_ptr=column.data(); 
 			std::get<n>(it_pointer)=static_cast<pointer>(void_ptr);
 
 			assign<n-1,Type...> assigner;
@@ -36,7 +36,7 @@ namespace iterator_functors{
 				pointerTuple&&		it_pointer)
 		{
 			Column& column=std::get<0>(columnTuple);
-			void* void_ptr=column.access_raw(); 
+			void* void_ptr=column.data(); 
 			std::get<0>(it_pointer)=static_cast<pointer>(void_ptr);
 		}
 	};

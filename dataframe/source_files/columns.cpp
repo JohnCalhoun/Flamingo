@@ -84,7 +84,7 @@ struct column  {
 	template<Memory M>
 	typename Return<M>::column& access(); 	
 
-	pointer access_raw(); 
+	pointer data(); 
 
 	void swap(column<T>& );
 	column<T>& operator=(const column<T>& );

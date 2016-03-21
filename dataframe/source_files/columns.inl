@@ -98,7 +98,7 @@ typename column<T>::Return<M>::column& column<T>::access(){
 	return std::get<position>(_tuple); 
 } 
 template<typename T>
-column<T>::pointer column<T>::access_raw(){
+column<T>::pointer column<T>::data(){
 	pointer ptr;	
 	switch(getlocation())
 	{

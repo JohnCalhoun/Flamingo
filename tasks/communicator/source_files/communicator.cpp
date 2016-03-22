@@ -1,7 +1,34 @@
 //communicator.cpp
 #include <task.cpp>
+#include "traits.cpp"
+#include <functional>
 
-template<typename Messages>
-class communicator : public taskBase<DataFrame>{
+template<	typename Message,
+		typename Reducer>
+class communicator : public taskBase<In,out>{
+	typedef std::ref_wrapper<Message> In_msg; 
+	typedef std::ref_wrapper<Message> Out_msg; 
 
-}
+	public:
+	communicator(In& in,Out& out):inMessages(in),outMessages(out); 
+
+	private:
+	void translate_address(); 
+	void send_recieve();
+	void erase_sent();
+	void sort();
+	void reduce(); 
+	
+	public:	
+	void operator()(){
+		translate_address(); 
+		send_recieve();
+		erase_sent();
+		sort();
+		reduce(); 	
+	};
+	
+	private: 	
+	In_msg		outMessages;
+	Out_msg		inMessages;
+};

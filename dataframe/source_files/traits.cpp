@@ -108,11 +108,12 @@ struct traits {
 
 	typedef value_tuple			value_type;
 	typedef pointer_tuple		pointer; 
-	typedef thrust::zip_iterator<pointer>	zip_iterator; 
 	typedef const_pointer_tuple	const_pointer;
 	typedef reference_tuple		reference;
 	typedef const_reference_tuple	const_reference;
 
+	typedef thrust::zip_iterator<pointer>		zip_iterator; 
+	typedef thrust::zip_iterator<const_pointer>	const_zip_iterator; 
 	typedef std::ptrdiff_t		difference_type;
  
 	template<int n>

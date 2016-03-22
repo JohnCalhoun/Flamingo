@@ -9,6 +9,7 @@
 #include "addressbook.cpp"
 #include <vector>
 #include <array>
+#include <iterator>
 
 class dataframeBase {
 	public:
@@ -43,7 +44,8 @@ class dataframe : public dataframeBase{
 	typedef typename Traits::const_reference	const_reference;
 	typedef typename Traits::pointer			pointer;
 	typedef typename Traits::const_pointer		const_pointer;
-	typedef typename Traits::zip_iterator		zip_iterator; 
+	typedef typename Traits::zip_iterator		zip_iterator;
+	typedef typename Traits::const_zip_iterator	const_zip_iterator; 
 	typedef dataframe_iterator<	reference,
 							pointer,
 							Type...>		iterator;
@@ -51,6 +53,8 @@ class dataframe : public dataframeBase{
 							const_pointer,
 							Type...>		const_iterator;
 
+	typedef std::reverse_iterator<iterator>		reverse_iterator; 
+	typedef std::reverse_iterator<const_iterator> const_reverse_iterator; 
 
 	typedef typename Traits::type_vector		type_vector;
 	typedef typename column_tuple<Type...>::type		ColumnTuple;
@@ -84,12 +88,22 @@ class dataframe : public dataframeBase{
 	iterator			begin();
 	const_iterator		begin()const;
 	const_iterator		cbegin()const;
-	zip_iterator		begin_zip();
+	reverse_iterator			rbegin();
+	const_reverse_iterator		rbegin()const;
+	const_reverse_iterator		crbegin()const;
+	zip_iterator			begin_zip();
+	const_zip_iterator		begin_zip()const;
+	const_zip_iterator		cbegin_zip()const;
 
 	iterator			end(); 
 	const_iterator		end()const; 
 	const_iterator		cend()const; 
-	zip_iterator		end_zip(); 
+	reverse_iterator			rend();
+	const_reverse_iterator		rend()const;
+	const_reverse_iterator		crend()const;
+	zip_iterator			end_zip();
+	const_zip_iterator		end_zip()const;
+	const_zip_iterator		cend_zip()const;
 
 	size_type size()const;
 	size_type max_size()const;

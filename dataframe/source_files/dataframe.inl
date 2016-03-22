@@ -113,7 +113,7 @@ template<class ... Type>
 {
 	return at(size()-1);
 };
-
+//--------------begin iterators
 template<class ... Type>
 	dataframe<Type...>::iterator 
 	dataframe<Type...>::begin()
@@ -134,7 +134,28 @@ template<class ... Type>
 	const_iterator it(_column_tuple); 
 	return it; 
 };
-
+template<class ... Type>
+	dataframe<Type...>::reverse_iterator 
+	dataframe<Type...>::rbegin()
+{
+	reverse_iterator it=rend();
+	it+=size();  
+	return it; 
+};
+template<class ... Type>
+	dataframe<Type...>::const_reverse_iterator 
+	dataframe<Type...>::rbegin()const
+{
+	return crbegin(); 
+};
+template<class ... Type>
+	dataframe<Type...>::const_reverse_iterator 
+	dataframe<Type...>::crbegin()const
+{
+	const_reverse_iterator it=crend();
+	it+=size();
+	return it; 
+};
 template<class ... Type>
 	dataframe<Type...>::zip_iterator 
 	dataframe<Type...>::begin_zip()
@@ -142,7 +163,20 @@ template<class ... Type>
 	zip_iterator it(begin()); 
 	return it; 
 };
-
+template<class ... Type>
+	dataframe<Type...>::const_zip_iterator 
+	dataframe<Type...>::begin_zip()const
+{
+	return cbegin_zip(); 
+};
+template<class ... Type>
+	dataframe<Type...>::const_zip_iterator 
+	dataframe<Type...>::cbegin_zip()const
+{
+	const_zip_iterator it(cbegin()); 
+	return it; 
+};
+//------------------end iterators 
 template<class ... Type>
 	dataframe<Type...>::iterator 
 	dataframe<Type...>::end()
@@ -166,13 +200,47 @@ template<class ... Type>
 	return it;
 };
 template<class ... Type>
+	dataframe<Type...>::reverse_iterator 
+	dataframe<Type...>::rend()
+{
+	reverse_iterator it(_column_tuple); 
+	return it; 
+};
+template<class ... Type>
+	dataframe<Type...>::const_reverse_iterator 
+	dataframe<Type...>::rend()const
+{
+	return crbegin(); 
+};
+template<class ... Type>
+	dataframe<Type...>::const_reverse_iterator 
+	dataframe<Type...>::crend()const
+{
+	const_reverse_iterator it(_column_tuple); 
+	return it; 
+};
+template<class ... Type>
 	dataframe<Type...>::zip_iterator 
 	dataframe<Type...>::end_zip()
 {
 	zip_iterator it(end()); 
 	return it; 
 };
+template<class ... Type>
+	dataframe<Type...>::const_zip_iterator 
+	dataframe<Type...>::end_zip()const
+{
+	return cend_zip(); 
+};
+template<class ... Type>
+	dataframe<Type...>::const_zip_iterator 
+	dataframe<Type...>::cend_zip()const
+{
+	const_zip_iterator it(cend()); 
+	return it; 
+};
 
+//-----------------------querry members
 template<class ... Type>
 	dataframe<Type...>::size_type 
 	dataframe<Type...>::size()const

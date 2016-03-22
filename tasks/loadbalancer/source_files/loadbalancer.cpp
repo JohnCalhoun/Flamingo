@@ -12,17 +12,18 @@ class loadbalancer_base{
 std::size_type loadbalancer_base::total=0;
 std::mutex	loadbalancer_base::lock; 
 
-template<typename Agents,typename Counts>
+template<typename Agents,typename Counts,typename Address>
 class loadbalancer : public taskBase<Agents,Counts>,loadbalancer_base{
 	private
 	typedef std::ref_wrapper<Agents> agent_ref;
 	typedef std::ref_wrapper<Counts> counts_ref; 
-
+	typedef std::ref_wrapper<Address> address_ref; 
+	
 	public:
-	loadbalancer(Agents& a,Counts& c):agent(a),counts(c); 
+	loadbalancer(Agents& a,Counts& c,Address& ad):agent(a),counts(c),address(ad); 
 
 	private:
-	void update(); 
+	void update(); //binary_serach,lower_bound 
 	void move();
 
 	public: 
@@ -32,6 +33,7 @@ class loadbalancer : public taskBase<Agents,Counts>,loadbalancer_base{
 	}; 
 
 	private:	
-	agents_ref agent;
-	counts_ref counts; 
+	agents_ref	agent;
+	counts_ref	counts; 
+	address_ref	addresss;
 };

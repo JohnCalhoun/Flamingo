@@ -1,4 +1,4 @@
-//communicator.cpp
+//inport_chanel.cpp
 #include <task.cpp>
 #include "traits.cpp"
 #include <functional>
@@ -8,7 +8,7 @@ template<	typename Function,
 		typename Agents,
 		typename Counts,
 		int message_tag>
-class outport : public taskBase<Messages,Agents,Counts>{
+class inport_chanel : public taskBase<Messages,Agents,Counts>{
 	private: 
 	typedef std::ref_wrapper<Messages> Msg;
 	typedef std::ref_wrapper<messages> Agent_ref;
@@ -16,18 +16,18 @@ class outport : public taskBase<Messages,Agents,Counts>{
 	typedef std::ref_wrapper<Function> func_ref;
 
 	public:
-	outport(	Messages& m,
+	inport_chanel(	Messages& m,
 			Agents& a,
 			Counts& c
 			Function& f):messages(m),agents(a),counts(c),function(f); 
 
 	private:
-	void send();
+	void recieve();
 	void count(); 
 	
 	public:
 	void operator()(){
-		send();
+		recieve();
 		count();
 	}; 
 	
@@ -37,3 +37,4 @@ class outport : public taskBase<Messages,Agents,Counts>{
 	Counts_ref	counts; 
 	func_ref		function; 
 };
+#include "inport_chanel.inl"

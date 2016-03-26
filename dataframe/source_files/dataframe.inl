@@ -239,6 +239,15 @@ template<class ... Type>
 	size_type size=column.size();
 	return size;
 };
+template<class ... Type>
+	dataframe<Type...>::size_type 
+	dataframe<Type...>::device_size()const
+{
+	dataframe_functors::byte_size<	traits<Type...>::_numCol-1,
+								Type...> recursive;
+	size_type size=recursive(std::forward<ColumnTuple>(_column_tuple)); 
+	return size;
+};
 
 template<class ... Type>
 	dataframe<Type...>::size_type 

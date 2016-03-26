@@ -103,6 +103,7 @@ class dataframe : public dataframeBase{
 	const_zip_iterator		cend_zip()const;
 
 	size_type size()const;
+	size_type device_size()const; 
 	size_type max_size()const;
 	bool empty()const;
 	void reserve(size_type);

@@ -480,6 +480,42 @@ namespace dataframe_functors{
 			column.template move<M>();
 		}
 	};
+	template<int n,class ... Type>
+	struct byte_size {
+		typedef typename dataframe<Type...>::ColumnTuple ColumnTuple;
+		typedef typename column_tuple<Type...>::element<n>::type Column; 
+		typedef typename dataframe<Type...>::size_type	size_type;
+		typedef typename traits<Type...>::Return<n>::type_base T; 
+
+		size_type operator()(	ColumnTuple&& column_tuple)
+		{
+			Column& column=std::get<n>(column_tuple);
+			size_type size=column.size()*sizeof(T); 
+
+			byte_size<n-1,Type...> recursive;
+			return size+recursive(std::forward<ColumnTuple>(column_tuple)); 
+		}
+	};
+	template<class ... Type>
+	struct byte_size<0,Type...> {
+		typedef typename dataframe<Type...>::ColumnTuple ColumnTuple;
+		typedef typename column_tuple<Type...>::element<0>::type Column; 
+		typedef typename dataframe<Type...>::size_type	size_type;
+		typedef typename traits<Type...>::Return<0>::type_base T; 
+
+		size_type operator()(	ColumnTuple&& column_tuple)
+		{
+			Column& column=std::get<0>(column_tuple);
+			size_type size=column.size()*sizeof(T); 
+
+			return size; 
+		}
+	};
+
+
+
+
+
 
 
 }

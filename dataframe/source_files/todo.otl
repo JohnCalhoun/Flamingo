@@ -1,0 +1,29 @@
+dataframe
+	access
+		begin_zip
+			convert
+		end_zip
+			convet
+		capacity
+			pass down
+		reserve 
+			pass down
+	modify
+		assign 
+			pass down 
+		insert 
+			pass down 
+		erase
+			pass down
+		push_back
+			use insert
+		pop_back
+			use erase
+		resize
+	interactions 
+		swap
+			use std?
+		=
+			use constructor
+		==
+			pass down

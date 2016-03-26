@@ -11,32 +11,7 @@
 #include <array>
 #include <iterator>
 #include <tbb/queuing_rw_mutex.h>
-
-class dataframeBase {
-	public:
-	typedef addressbook<dataframeBase>			AddressBook;
-	typedef typename AddressBook::Key			Key;
-	typedef typename AddressBook::Value		Value; 
-	typedef typename AddressBook::iterator		iterator; 
-
-	dataframeBase();  	
-	~dataframeBase(); 
-
-	static Value find(Key);
-	Key id();
-	void id(int); 
-
-	iterator begin();
-	iterator end(); 
-
-	virtual void move(Memory)=0;
-	void request_move(Memory,Key);
-	void force_move(Key); 
-	private: 
-	static AddressBook						_addressbook;
-	Key									_key; 	
-}; 
-dataframeBase::AddressBook dataframeBase::_addressbook; 
+#include "dataframe_base.cpp"
 
 template<class ... Type>
 class dataframe : public dataframeBase{	

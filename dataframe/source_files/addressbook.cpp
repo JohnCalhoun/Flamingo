@@ -5,26 +5,27 @@
 #include <unordered_map>
 #include <boost/thread.hpp>
 #include <mutex>
-#include <threading/shared_mutex.cpp>
+#include <tbb/concurrent_hash_map.h>
 #include "traits.cpp"
 
 template<typename Object>
 class addressbook {
 	public:
-	typedef typename traits<int>::size_type		Key;
-	typedef Object*						Value;
-	typedef std::unordered_map<Key,Value>		Map;
-	typedef typename Map::iterator	iterator; 
+	typedef typename traits<int>::size_type			Key;
+	typedef Object*							Value;
 
 	private:
+	typedef tbb::concurrent_hash_map<Key,Value>		Map;
+	typedef typename Map::const_accessor			r_accessor; 
+	typedef typename Map::accessor				w_accessor; 
+	typedef typename Map::value_type				value_type; 
 
-	typedef flamingo::threading::shared_mutex			Mutex;
-	typedef flamingo::threading::shared_lock_guard<Mutex>	shared_guard;
-	typedef flamingo::threading::lock_guard<Mutex>		lock_guard;
-
+	public:	
+	typedef typename Map::iterator				iterator; 
+	
+	private:
 	//data members
 	Map		_map;
-	Mutex	_mutex;
 
 	public:
 	//constructors
@@ -37,10 +38,13 @@ class addressbook {
 
 	public:
 	Key insert(Object*);
-	void insert(Key,Value);  
+	Key insert(Key,Value);  
 	void remove(Key); 
 	Value find(Key);
-	void change(Key,Key); 
+	void change(Key,Key);
+	
+	iterator begin();
+	iterator end(); 
 };
 
 #include "addressbook.inl"

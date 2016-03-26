@@ -8,50 +8,40 @@ template<typename Object>
 addressbook<Object>::~addressbook(){}
 
 template<typename Object>
-addressbook<Object>::Key addressbook<Object>::objectToKey(Object* object){
-	Key key=reinterpret_cast<Key>(object);
-	int count=_map.count(key);
-	while(count!=0){
-		key++;
-		count=_map.count(key);
-	}
-	return key;
-}
-
-template<typename Object>
 addressbook<Object>::Key addressbook<Object>::insert(Object* ob){
-	lock_guard guard(_mutex);
-
-	Key key=objectToKey(ob); 
-	Value value=ob;
- 
-	_map.insert(std::make_pair(key,value));
+	Key key=reinterpret_cast<Key>(ob);	
+	key=insert(key,ob); 
 	return key; 
 } 
 template<typename Object>
-void addressbook<Object>::insert(
+addressbook<Object>::Key addressbook<Object>::insert(
 				addressbook<Object>::Key key,
 				addressbook<Object>::Value value)
 			
 {
-	lock_guard guard(_mutex);
-	_map.insert({key,value});
+	r_accessor access;
+	bool result; 
+
+	result=_map.insert(access,value_type(key,value) );
+
+	while(!result){
+		result=_map.insert(access,value_type(key++,value));
+	}
+	return key; 
 } 
 
 template<typename Object>
 void addressbook<Object>::remove(addressbook<Object>::Key key){
-	lock_guard guard(_mutex);
-
-	iterator it=_map.find(key);
-	_map.erase(it); 
+	_map.erase(key); 
 }
 
 template<typename Object>
 addressbook<Object>::Value addressbook<Object>::find(
 					addressbook<Object>::Key key)
 {
-	shared_guard guard(_mutex); 
-	return std::get<1>(*(_map.find(key)));
+	w_accessor access;
+	_map.find(access,key);
+	return std::get<1>(*(access));
 }
 
 template<typename Object>
@@ -64,6 +54,16 @@ void addressbook<Object>::change(
 	insert(New,value);  
 }
 
+template<typename Object>
+addressbook<Object>::iterator addressbook<Object>::begin()
+{
+	return _map.begin(); 
+}
+template<typename Object>
+addressbook<Object>::iterator addressbook<Object>::end()
+{
+	return _map.end(); 
+}
 
 
 

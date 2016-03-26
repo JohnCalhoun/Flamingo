@@ -10,20 +10,31 @@
 #include <vector>
 #include <array>
 #include <iterator>
+#include <tbb/queuing_rw_mutex.h>
 
 class dataframeBase {
 	public:
 	typedef addressbook<dataframeBase>			AddressBook;
 	typedef typename AddressBook::Key			Key;
 	typedef typename AddressBook::Value		Value; 
-	static AddressBook						_addressbook;
-	Key _key; 	
+	typedef typename AddressBook::iterator		iterator; 
 
 	dataframeBase();  	
 	~dataframeBase(); 
+
 	static Value find(Key);
 	Key id();
-	void id(int);  
+	void id(int); 
+
+	iterator begin();
+	iterator end(); 
+
+	virtual void move(Memory)=0;
+	void request_move(Memory,Key);
+	void force_move(Key); 
+	private: 
+	static AddressBook						_addressbook;
+	Key									_key; 	
 }; 
 dataframeBase::AddressBook dataframeBase::_addressbook; 
 
@@ -56,11 +67,15 @@ class dataframe : public dataframeBase{
 	typedef std::reverse_iterator<iterator>		reverse_iterator; 
 	typedef std::reverse_iterator<const_iterator> const_reverse_iterator; 
 
-	typedef typename Traits::type_vector		type_vector;
+	typedef typename Traits::type_vector			type_vector;
 	typedef typename column_tuple<Type...>::type		ColumnTuple;
 
+	typedef tbb::queuing_rw_mutex			Mutex; 
+	typedef typename Mutex::scoped_lock			lock_guard;
+ 
 	private:
 	ColumnTuple		_column_tuple;
+	Mutex*			_mutex;
 
 	public:
 	dataframe();
@@ -77,7 +92,15 @@ class dataframe : public dataframeBase{
 
 	ColumnTuple& tuple(); 
 	const ColumnTuple& tuple_const()const;
+	void move(Memory);
+	void request_move(Memory); 
+	friend class dataframeBase; 
 	public:
+	Memory location()const; 
+
+	lock_guard* use(Memory); 	
+	void release(lock_guard*);  
+
 	void assign(iterator,iterator);
 	void assign(size_type,value_type);
 

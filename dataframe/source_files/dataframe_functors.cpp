@@ -455,4 +455,31 @@ namespace dataframe_functors{
 			column.reserve(s);
 		}
 	};
+	template<int n,Memory M,class ... Type>
+	struct Move {
+		typedef typename dataframe<Type...>::ColumnTuple ColumnTuple;
+		typedef typename column_tuple<Type...>::element<n>::type Column; 
+
+		void operator()(	ColumnTuple&& column_tuple)
+		{
+			Column& column=std::get<n>(column_tuple);
+			column.template move<M>();
+
+			Move<n-1,M,Type...> recursive;
+			recursive(std::forward<ColumnTuple>(column_tuple)); 
+		}
+	};
+	template<Memory M,class ... Type>
+	struct Move<0,M,Type...> {
+		typedef typename dataframe<Type...>::ColumnTuple ColumnTuple;
+		typedef typename column_tuple<Type...>::element<0>::type Column; 
+
+		void operator()(	ColumnTuple&& column_tuple)
+		{
+			Column& column=std::get<0>(column_tuple);
+			column.template move<M>();
+		}
+	};
+
+
 }

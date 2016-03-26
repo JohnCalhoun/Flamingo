@@ -174,6 +174,10 @@ void dataframe_iterator<ref_type,pointer_type,Type...>::swap(dataframe_iterator<
 	std::swap(_pointer,other._pointer);
 }
 
+template<typename ref_type,typename pointer_type,class ... Type>
+dataframe_iterator<ref_type,pointer_type,Type...>::operator bool(){
+	return  std::get<0>(_pointer); 
+}
 
 
 

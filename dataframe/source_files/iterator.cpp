@@ -54,6 +54,8 @@ class dataframe_iterator: public traits<Type...> {
 
 	template<int n>
 	typename traits<Type...>::Return<n>::pointer_base get();
+
+	explicit operator bool(); 
 };
 
 #include "iterator.inl"

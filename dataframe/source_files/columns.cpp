@@ -9,7 +9,6 @@
 #include <boost/mpl/pair.hpp>
 #include <type_traits>
 #include <boost/mpl/int.hpp>
-#include "columnbase.cpp"
 #include <tuple>
 
 template<Memory M>

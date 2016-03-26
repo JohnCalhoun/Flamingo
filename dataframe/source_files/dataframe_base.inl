@@ -3,19 +3,19 @@
 
 //--------------------base------------
 dataframeBase::dataframeBase(){
-	_key=_addressbook.insert(this); 
+	_key=_cordinator.insert(this); 
 }
 dataframeBase::~dataframeBase(){
-	_addressbook.remove(id()); 
+	_cordinator.remove(id()); 
 }
 dataframeBase::Value dataframeBase::find(dataframeBase::Key key){
-	return _addressbook.find(key); 
+	return _cordinator.find(key); 
 }
 dataframeBase::Key dataframeBase::id(){
 	return _key; 
 }
 void dataframeBase::id(int x){
-	_addressbook.change(id(),x); 
+	_cordinator.change(id(),x); 
 	_key=x; 
 }
 

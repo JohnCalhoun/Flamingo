@@ -6,7 +6,7 @@
 #include "traits.cpp"
 #include "columns.cpp"
 #include "iterator.cpp"
-#include "addressbook.cpp"
+#include "cordinator.cpp"
 #include <vector>
 #include <array>
 #include <iterator>
@@ -14,10 +14,10 @@
 
 class dataframeBase {
 	public:
-	typedef addressbook<dataframeBase>			AddressBook;
-	typedef typename AddressBook::Key			Key;
-	typedef typename AddressBook::Value		Value; 
-	typedef typename AddressBook::iterator		iterator; 
+	typedef cordinator<dataframeBase>			Cordinator;
+	typedef typename Cordinator::Key			Key;
+	typedef typename Cordinator::Value			Value; 
+	typedef typename Cordinator::iterator		iterator; 
 
 	dataframeBase();  	
 	~dataframeBase(); 
@@ -33,10 +33,10 @@ class dataframeBase {
 	void request_move(Memory,Key);
 	void force_move(Key); 
 	private: 
-	static AddressBook						_addressbook;
+	static Cordinator						_cordinator;
 	Key									_key; 	
 }; 
-dataframeBase::AddressBook dataframeBase::_addressbook; 
+dataframeBase::Cordinator dataframeBase::_cordinator; 
 
 #include"dataframe_base.inl"
 #endif 

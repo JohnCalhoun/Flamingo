@@ -44,8 +44,18 @@ class LocationTest : public ::testing::Test {
 	DEFINE(cudablockmovetest, LOCATION_THREADS)
 	DEFINE(overlaptest, LOCATION_THREADS)
 	DEFINE(sourceindextest,LOCATION_THREADS)
+	DEFINE(sizetest,LOCATION_THREADS)
+};
+template <Memory M>
+void LocationTest<M>::sizetest() {
+     size_t size = policy.free_memory();
+     EXPECT_GT(size,0);
 
-
+     size_t maximum = policy.max_memory();
+     EXPECT_GT(maximum,0);
+	
+	int gpus = policy.number_of_gpus();
+     EXPECT_GT(gpus,0);
 };
 
 template <Memory M>
@@ -234,7 +244,7 @@ void LocationTest<M>::sourceindextest() {
 
 
 // python:key:policy=host unified device pinned
-// python:key:tests=sourceindextest cudaextracttest cudainserttest cudablockmovetest overlaptest copytest mallocfreetest filltest
+// python:key:tests=sizetest sourceindextest cudaextracttest cudainserttest cudablockmovetest overlaptest copytest mallocfreetest filltest
 // python:key:concurrency=Single
 // python:template=TEST_F($LocationTest<|policy|>$,|tests||concurrency|){this->|tests||concurrency|();}
 // python:start

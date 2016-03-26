@@ -13,23 +13,7 @@
 #include <cmath>
 #include <type_traits>
 #include <thrust/iterator/reverse_iterator.h>
-/**\struct host
- * \ingroup allocator-module
- *  @brief empty struct representing host side memory
- */
-/**\struct pinned
- * \ingroup allocator-module
- *  @brief empty struct representing Cuda pinned memory
- */
-/**\struct device
- * \ingroup allocator-module
- *  @brief empty struct representing Cuda raw device memory
- */
-/**\struct unified
- * \ingroup allocator-module
- *  @brief empty struct representing Cuda unified memory memory
- */
-
+#include <sys/unistd.h>
 
 enum Memory { host,pinned,device,unified };
 
@@ -81,6 +65,10 @@ class location {
 
      template <typename size_type>
      static void MemCopy(Handle_void src_ptr, Handle_void dst_ptr, size_type size);
+	static size_t max_memory(); 
+	static size_t free_memory();
+
+	static int number_of_gpus(); 
 
      template <typename pointer, typename Item>
      void fill_in(pointer dst, int count, Item item);
@@ -204,6 +192,55 @@ void location<M>::MemCopy(pointer src_ptr, pointer dst_ptr, size_type size) {
           cudaMemcpy(dst_ptr, src_ptr, size, cudaMemcpyDefault);
      }
 };
+template<Memory M>
+int location<M>::number_of_gpus(){
+	int Devices;
+	cudaGetDeviceCount(&Devices);
+	return Devices; 	
+}
+template<Memory M>
+size_t location<M>::max_memory(){
+	return ~(0); //virtual memory allows maximum size of 2^64 for unified and host memory 
+}
+template<>
+size_t location<pinned>::max_memory(){
+	size_t page_size=sysconf(_SC_PAGE_SIZE);
+	size_t pages=sysconf(_SC_PHYS_PAGES);   
+	
+	return pages*page_size; 
+}
+template<>
+size_t location<device>::max_memory(){
+	size_t free;
+	size_t total; 
+	
+	cudaMemGetInfo(&free,&total); 
+	return total; //virtual memory allows maximum size of 2^64 for unified and host memory 
+}
+
+
+template<Memory M>
+size_t location<M>::free_memory(){
+	return ~(0); //virtual memory allows maximum size of 2^64 for unified and host memory 
+}
+template<>
+size_t location<pinned>::free_memory(){
+	size_t page_size=sysconf(_SC_PAGE_SIZE);
+	size_t free_pages=sysconf(_SC_AVPHYS_PAGES);   
+	
+	return free_pages*page_size; 
+}
+template<>
+size_t location<device>::free_memory(){
+	size_t free;
+	size_t total; 
+	
+	cudaMemGetInfo(&free,&total); 
+	return free; 
+}
+
+
+
 template <>
 template <typename pointer, typename size_type>
 void location<host>::MemCopy(pointer src_ptr, pointer dst_ptr, size_type size) {

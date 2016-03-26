@@ -31,7 +31,15 @@ typedef LocationTest<host> LocationTest_host_;
 typedef LocationTest<unified> LocationTest_unified_; 
 typedef LocationTest<device> LocationTest_device_; 
 typedef LocationTest<pinned> LocationTest_pinned_; 
+typedef LocationTest<host> LocationTest_host_; 
+typedef LocationTest<unified> LocationTest_unified_; 
+typedef LocationTest<device> LocationTest_device_; 
+typedef LocationTest<pinned> LocationTest_pinned_; 
 //Tests/benchmarks 
+TEST_F(LocationTest_host_,sizetestSingle){this->sizetestSingle();}
+TEST_F(LocationTest_unified_,sizetestSingle){this->sizetestSingle();}
+TEST_F(LocationTest_device_,sizetestSingle){this->sizetestSingle();}
+TEST_F(LocationTest_pinned_,sizetestSingle){this->sizetestSingle();}
 TEST_F(LocationTest_host_,sourceindextestSingle){this->sourceindextestSingle();}
 TEST_F(LocationTest_unified_,sourceindextestSingle){this->sourceindextestSingle();}
 TEST_F(LocationTest_device_,sourceindextestSingle){this->sourceindextestSingle();}

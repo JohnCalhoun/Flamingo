@@ -174,16 +174,27 @@ void LocationTest<M>::cudainserttest() {
 	int block=4;
 	int offset=2;
 	int tmp_size=6;
-	cudaMalloc((void**)&tmp,tmp_size); 
-	int tmp_h[6]={4,5,8,9,12,13}; 
-	cudaMemcpy(tmp, tmp_h, sizeof(int)*tmp_size, cudaMemcpyHostToDevice);
+	cudaMalloc((void**)&tmp,tmp_size*sizeof(int)); 
+	gpuErrorCheck( cudaGetLastError()); 
+	int tmp_h[6]={4,5,8,9,12,13};
+	pointer tmp_h_ptr=tmp_h;  
+	cudaMemcpy(	tmp, 
+				tmp_h_ptr, 
+				sizeof(int)*tmp_size, 
+				cudaMemcpyDefault);
+	gpuErrorCheck( cudaGetLastError()); 
 	cuda_overlapinsert<pointer>
 		<<<1,32>>>(		d_ptr,
 						tmp,
 						block,
 						offset,
 						length);
-	cudaMemcpy(h_ptr, d_ptr, size, cudaMemcpyDeviceToHost);	
+	gpuErrorCheck( cudaGetLastError()); 
+	cudaMemcpy(	h_ptr, 
+				d_ptr, 
+				sizeof(int)*tmp_size, 
+				cudaMemcpyDeviceToHost);	
+	gpuErrorCheck( cudaGetLastError()); 
 	int results[6]={4,5,8,9,12,13};
 	int indexes[6]={2,3,6,7,10,11};
 	for(int i=0; i<6;i++){
@@ -191,7 +202,10 @@ void LocationTest<M>::cudainserttest() {
 				results[i],
 				h_ptr[ indexes[i] ]
 			);
-	}	cudaFree(tmp); 
+	}	
+	gpuErrorCheck( cudaGetLastError()); 	
+	cudaFree(tmp); 
+	gpuErrorCheck( cudaGetLastError()); 
 }
 
 template <Memory M>

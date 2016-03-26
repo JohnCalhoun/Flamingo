@@ -14,6 +14,8 @@
 #include <type_traits>
 #include <thrust/iterator/reverse_iterator.h>
 #include <sys/unistd.h>
+#include "exceptions.cpp"
+#include <iostream>
 
 enum Memory { host,pinned,device,unified };
 
@@ -165,7 +167,7 @@ void location<M>::MemCopy(pointer src_ptr, pointer dst_ptr, size_type size) {
           int type_size = sizeof(value_type);
           int tmp_size = std::abs(type_size * numofinserts * offset);
           value_type* tmp;
-          cudaMalloc((void**)&tmp, tmp_size);
+		cudaMalloc((void**)&tmp, tmp_size);
 
           if (offset > 0) {
                cuda_memmove(src_ptr,
@@ -189,7 +191,7 @@ void location<M>::MemCopy(pointer src_ptr, pointer dst_ptr, size_type size) {
                             blocksize);
           }
      } else {
-          cudaMemcpy(dst_ptr, src_ptr, size, cudaMemcpyDefault);
+          gpuErrorCheck(cudaMemcpy(dst_ptr, src_ptr, size, cudaMemcpyDefault));
      }
 };
 template<Memory M>
@@ -247,7 +249,7 @@ void location<host>::MemCopy(pointer src_ptr, pointer dst_ptr, size_type size) {
      if (src_ptr <= (dst_ptr + size) && dst_ptr <= (src_ptr + size)) {
           std::memmove(dst_ptr, src_ptr, size);
     } else {
-          cudaMemcpy(dst_ptr, src_ptr, size, cudaMemcpyDefault);
+          gpuErrorCheck(cudaMemcpy(dst_ptr, src_ptr, size, cudaMemcpyDefault));
      }
 };
 
@@ -263,7 +265,8 @@ void location<M>::fill_in(pointer dst, int count, Item item) {
      gridsize = (count + blocksize - 1) / blocksize;
 
      cuda_fill << <gridsize, blocksize>>> (dst, count, item);
-     cudaDeviceSynchronize();
+ 	gpuErrorCheck(cudaGetLastError() );
+     gpuErrorCheck(cudaDeviceSynchronize() );
 };
 template <>
 template <typename pointer, typename Item>
@@ -275,11 +278,8 @@ void location<host>::fill_in(pointer dst, int count, Item item) {
 template <>
 void* location<host>::New(size_t size) {
      void* p;
-     p = std::malloc(size);
-     if (!p) {
-          std::bad_alloc exception;
-          throw exception;
-     }
+	p=std::malloc(size);
+     hostErrorCheck(!p,std::bad_alloc)
      return p;
 };
 /** \ingroup allocator-module
@@ -293,49 +293,53 @@ void location<host>::Delete(void* p) {
 template <>
 void* location<pinned>::New(size_t size) {
      void* p;
-     cudaError_t error = cudaMallocHost((void**)&p, size);
-     if (error != cudaSuccess) {
-          std::bad_alloc exception;
-          throw exception;
-     }
+	gpuErrorCheck(	
+		cudaMallocHost((void**)&p, size),
+		std::bad_alloc	
+	);
      return p;
 };
 template <>
 void location<pinned>::Delete(void* p) {
-     cudaFreeHost(p);
+	gpuErrorCheck(	
+	     cudaFreeHost(p)
+	);	
 };
 //**************************************PINNED***************************
 //**************************************DEVICE***************************
 template <>
 void* location<device>::New(size_t size) {
      void* p;
-     cudaError_t error = cudaMalloc((void**)&p, size);
-     if (error != cudaSuccess) {
-          std::bad_alloc exception;
-          throw exception;
-     }
-     return p;
+	gpuErrorCheck(	
+		cudaMalloc((void**)&p, size),
+		std::bad_alloc
+     );
+	return p;
 };
 template <>
 void location<device>::Delete(void* p) {
-     cudaFree(p);
+	gpuErrorCheck(	
+		cudaFree(p),
+		std::bad_alloc
+	);
 };
 //**************************************DEVICE***************************
 //**************************************MANAGED***************************
 template <>
 void* location<unified>::New(size_t size) {
      void* p;
-     cudaError_t error = cudaMallocManaged((void**)&p, size);
-     if (error != cudaSuccess) {
-          std::bad_alloc exception;
-          throw exception;
-     }
-     return p;
+	gpuErrorCheck(	
+		cudaMallocManaged((void**)&p, size),
+		std::bad_alloc
+     );
+	return p;
 };
 
 template <>
 void location<unified>::Delete(void* p) {
-     cudaFree(p);
+	gpuErrorCheck(	
+		cudaFree(p)
+	);
 };
 //**************************************MANAGED***************************
 //************************************CUDA FUNCTIONS**********************
@@ -450,26 +454,32 @@ __global__ void cuda_overlapinsert(T dst, U* tmp, int block, int off, int count)
 
 template <typename pointer, typename value_type>
 void cuda_memmove(pointer src_ptr, pointer dst_ptr, value_type* tmp, int groupsize, int offset, int totalsize, int* mingridsize, int* blocksize) {
+	gpuErrorCheck(cudaGetLastError() );
      cuda_overlapextract<pointer, value_type> << <mingridsize[0], blocksize[0]>>> (dst_ptr,
                                                                                    tmp,
                                                                                    groupsize,
                                                                                    offset,
                                                                                    totalsize);
+
      //block moves
-     cudaDeviceSynchronize();
+	gpuErrorCheck(cudaGetLastError() );
+     gpuErrorCheck(cudaDeviceSynchronize() );
      int SMem = blocksize[1] * sizeof(value_type);
      cuda_blockmove<pointer, value_type> << <mingridsize[0], blocksize[1], SMem>>> (dst_ptr,
                                                                                     dst_ptr,
                                                                                     groupsize,
                                                                                     offset,
                                                                                     totalsize);
-     cudaDeviceSynchronize();
-     //insert overlaps
+	gpuErrorCheck(cudaGetLastError() );
+     gpuErrorCheck(cudaDeviceSynchronize() );
+	//insert overlaps
      cuda_overlapinsert<pointer, value_type> << <mingridsize[0], blocksize[2]>>> (dst_ptr,
                                                                                   tmp,
                                                                                   groupsize,
                                                                                   offset,
                                                                                   totalsize);
+	gpuErrorCheck(cudaGetLastError() );
+     gpuErrorCheck(cudaDeviceSynchronize() );
 };
 
 //*********************************CUDA FUNCTIONS**********************************

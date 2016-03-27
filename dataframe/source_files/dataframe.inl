@@ -322,6 +322,13 @@ template<class ... Type>
 	}
 };
 template<class ... Type>
+	Memory
+	dataframe<Type...>::location()const
+{
+	return std::get<0>(_column_tuple).getlocation(); 
+};
+
+template<class ... Type>
 	void 
 	dataframe<Type...>::assign(
 		dataframe<Type...>::iterator start,

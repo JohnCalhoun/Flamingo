@@ -43,8 +43,6 @@ class dataframe : public dataframeBase{
 	typedef typename Traits::type_vector			type_vector;
 	typedef typename column_tuple<Type...>::type		ColumnTuple;
 
-	typedef typename dataframeBase::lock_guard		lock_guard; 
-
 	private:
 	ColumnTuple		_column_tuple;
 

@@ -13,14 +13,17 @@
 #include <tbb/queuing_rw_mutex.h>
 
 class dataframeBase {
+	private:
+	typedef tbb::queuing_rw_mutex				Mutex;
+	typedef typename Mutex::scoped_lock		scoped_lock;
 	public:
-	typedef cordinator<dataframeBase>			Cordinator;
+	typedef std::shared_ptr<scoped_lock>		lock_guard; 
+
+	public:
+	typedef cordinator<dataframeBase,lock_guard>			Cordinator;
+
 	typedef typename Cordinator::Key			Key;
 	typedef typename Cordinator::Value			Value; 
-	typedef typename Cordinator::iterator		iterator; 
-
-	typedef tbb::queuing_rw_mutex				Mutex;
-	typedef typename Mutex::scoped_lock		lock_guard; 
 
 	dataframeBase();  	
 	~dataframeBase(); 
@@ -30,19 +33,15 @@ class dataframeBase {
 	Key id();
 	void id(int); 
 
-	iterator begin();
-	iterator end(); 
-
-	lock_guard* use(Memory); 
+	lock_guard use(Memory);
+	virtual Memory location()const=0; 	
+	void release(lock_guard&); 
 	private:
 	virtual void unsafe_move(Memory)=0;
-	void request_move(Memory,Key);
-	void force_move(Key); 
 
-	std::tuple<	lock_guard*,
+	std::tuple<	lock_guard,
 				bool> try_lock(bool); 
-	lock_guard* lock(bool);
-	void release(lock_guard*); 
+	lock_guard lock(bool);
 
 	private: 
 	static Cordinator						_cordinator;

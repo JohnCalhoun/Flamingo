@@ -21,3 +21,33 @@ void dataframeBase::id(int x){
 	_key=x; 
 }
 
+dataframeBase::lock_guard dataframeBase::use(Memory M)
+{
+	bool write=false;
+	lock_guard guard=lock(write);
+	_cordinator.move(id(),M,guard); 
+	return guard; 
+};
+
+std::tuple<	dataframeBase::lock_guard,
+			bool> 
+	dataframeBase::try_lock(bool write)
+{
+	scoped_lock* guard=new scoped_lock();
+	bool result=guard->try_acquire(*_mutex_ptr,write);
+	if(!result){
+		guard=NULL; 
+	}
+	lock_guard return_guard(guard); 
+	return std::make_tuple(return_guard,result); 
+};
+
+dataframeBase::lock_guard dataframeBase::lock(bool write)
+{
+	scoped_lock* guard=new scoped_lock(*_mutex_ptr,write);
+	return lock_guard(guard); 
+};
+
+void dataframeBase::release(dataframeBase::lock_guard& lock_ptr){
+	lock_ptr=NULL; 
+};

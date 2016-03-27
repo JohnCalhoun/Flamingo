@@ -1,4 +1,7 @@
 //arc.inl
+#ifndef ARC_INL
+#define ARC_INL
+
 #include "cordinator.cpp"
 
 template<typename Object,typename Guard>
@@ -9,32 +12,35 @@ void cordinator<Object,Guard>::ARC::request(
 	//assumptions
 	//	write access to the key dataframe
 
-	lock_guard guard(*mutex); 
-	Value dataframe_ptr=get_ptr(Key); 
+	lock_guard guard(*_mutex_ptr); 
+	Value dataframe_ptr=get_ptr(key); 
 	if(dataframe_ptr->location() != M){
 		cases Case=find_case(key); 
 		remove(key,Case); 
 
-		switch M:
-		case device:
-		{
-			arc_body(key,Case);
-			unsafe_move(key,device);
-		}
-		case pinned:
-		{
-			//run pinned LRU algorithm 
-			unsafe_move(key,pinned);
-		}
-		case host: 
-		{
-			if(data_frame_ptr->location() = device){
-				unsafe_move(key,host);
+		switch(M){
+			case device:
+			{
+				arc_body(key,Case);
+				unsafe_move(key,device);
 			}
-		}
-		case unified:
-		{
-			unsafe_move(key,unified);		
-		}
-	}
-}			
+			case pinned:
+			{
+				//run pinned LRU algorithm 
+				unsafe_move(key,pinned);
+			}
+			case host: 
+			{
+				if(dataframe_ptr->location() == device){
+					unsafe_move(key,host);
+				}
+			}
+			case unified:
+			{
+				unsafe_move(key,unified);		
+			}
+		}//switch
+	}//if
+}//request
+
+#endif			

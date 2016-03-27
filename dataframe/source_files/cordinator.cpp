@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include <boost/thread.hpp>
 #include <mutex>
+#include <tbb/queuing_mutex.h>
 #include <tbb/concurrent_hash_map.h>
 #include "traits.cpp"
 
@@ -25,8 +26,8 @@ class cordinator {
 	class ARC	{
 		typedef std::deque<Key>				LRU_list; 
 
-		enum cases{one,two,three,four}; 
-		enum status{t1,b1,t2,b3};
+		enum cases	{one,two,three,four}; 
+		enum status	{t1,b1,t2,b3};
 
 		typedef std::unordered_map<Key,status>	Status_map; 
 
@@ -34,7 +35,7 @@ class cordinator {
 		typedef typename Mutex::scoped_lock	lock_guard;
 
 		public:	
-		ARC(Cordinator& cor):_cordinator(cor); 	
+		ARC(cordinator& cor):_cordinator(cor){_mutex_ptr=new Mutex;}; 	
 		~ARC(); 
 		void request(Key,Memory); 
 
@@ -50,26 +51,26 @@ class cordinator {
 		void replace();
 		void pinned_request(); 
 			//helper functions
-		void push_front_t1(key);
-		void push_front_t2(key); 
+		void push_front_t1(Key);
+		void push_front_t2(Key); 
 
-		void push_front_b1(key);
-		void push_front_b2(key); 
+		void push_front_b1(Key);
+		void push_front_b2(Key); 
 
-		void pop_back_t1(key);
-		void pop_back_t2(key); 
+		void pop_back_t1(Key);
+		void pop_back_t2(Key); 
 
-		void pop_back_b1(key);
-		void pop_back_b2(key); 
+		void pop_back_b1(Key);
+		void pop_back_b2(Key); 
 		
-		void pop_back_pinned(key);
-		void push_front_pinned(key); 
+		void pop_back_pinned(Key);
+		void push_front_pinned(Key); 
 				
 		size_t LRU_byte_size(LRU_list&); 
 		private:
 		Mutex* _mutex_ptr; 
 
-		Cordinator& _cordinator
+		cordinator& _cordinator;
 		size_t	max_device;
 		size_t	max_pinned;
 		size_t	max_host; 		
@@ -91,7 +92,7 @@ class cordinator {
 	
 	public:
 	//constructors
-	cordinator():_cache(*this);
+	cordinator():_cache(*this){};
 	~cordinator();
 
 	//member functions
@@ -113,5 +114,6 @@ class cordinator {
 };
 #include "arc.inl"
 #include "cordinator.inl"
+
 #endif 
 

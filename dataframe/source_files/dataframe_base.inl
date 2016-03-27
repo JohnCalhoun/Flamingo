@@ -6,6 +6,12 @@ dataframeBase::dataframeBase(){
 	_key=_cordinator.insert(this); 
 	_mutex_ptr=new Mutex; 
 }
+
+dataframeBase::dataframeBase(const dataframeBase& other){
+	_key=_cordinator.insert(this); 
+	_mutex_ptr=new Mutex; 
+}
+
 dataframeBase::~dataframeBase(){
 	_cordinator.remove(id()); 
 	delete _mutex_ptr; 

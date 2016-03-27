@@ -31,14 +31,6 @@ template<class ... Type>
 
 template<class ... Type>
 	dataframe<Type...>::dataframe(
-		const dataframe<Type...>& other)
-{	
-	tuple()=other.tuple_const(); 
-};
-
-
-template<class ... Type>
-	dataframe<Type...>::dataframe(
 		dataframe<Type...>::size_type s,
 		dataframe<Type...>::value_type v)
 {
@@ -463,6 +455,7 @@ template<class ... Type>
 	dataframe<Type...>::operator=(
 		const dataframe<Type...>& other)
 {
+	dataframeBase::operator=(other); 
 	_column_tuple=other._column_tuple;
 	return *this; 
 };

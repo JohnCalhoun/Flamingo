@@ -48,7 +48,9 @@ class dataframe : public dataframeBase{
 
 	public:
 	dataframe();
-	dataframe(const dataframe<Type...>&);
+	dataframe(const dataframe<Type...>& other):
+				dataframeBase(other),
+				_column_tuple(other.tuple_const()){};
 	dataframe(size_type,value_type);
 	dataframe(size_type);
 	dataframe(iterator,iterator);

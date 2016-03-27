@@ -26,16 +26,18 @@ class dataframeBase {
 	typedef typename Cordinator::Value			Value; 
 
 	dataframeBase();  	
+	dataframeBase(const dataframeBase&); 
 	~dataframeBase(); 
 
 	public:
 	static Value find(Key);
 	Key id();
-	void id(int); 
+	void id(int); //value must be unique  
 
 	lock_guard use(Memory);
 	virtual Memory location()const=0; 	
 	void release(lock_guard&); 
+	dataframeBase& operator=(const dataframeBase& other){return *this;}; 
 	private:
 	virtual void unsafe_move(Memory)=0;
 

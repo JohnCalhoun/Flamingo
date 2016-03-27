@@ -1,8 +1,8 @@
 //cordinator.inl
-#include "cordinator.cpp"
+#ifndef CORDINATOR_INL_CPP
+#define CORDINATOR_INL_CPP
 
-template<typename Object,typename Guard>
-cordinator<Object,Guard>::cordinator(){}
+#include "cordinator.cpp"
 
 template<typename Object,typename Guard>
 cordinator<Object,Guard>::~cordinator(){}
@@ -24,7 +24,8 @@ cordinator<Object,Guard>::Key cordinator<Object,Guard>::insert(
 
 	result=_map.insert(access,value_type(key,value) );
 
-	while(!result){
+	if(!result){
+		//maybe throw exception, need way to enfore uniquness of ids
 		result=_map.insert(access,value_type(key++,value));
 	}
 	return key; 
@@ -69,7 +70,7 @@ void cordinator<Object,Guard>::move(
 	}//end if
 }//end move
 
-
+#endif
 
 
 

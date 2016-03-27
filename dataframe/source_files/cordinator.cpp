@@ -36,7 +36,7 @@ class cordinator {
 
 		public:	
 		ARC(cordinator& cor):_cordinator(cor){_mutex_ptr=new Mutex;}; 	
-		~ARC(); 
+		~ARC(){delete _mutex_ptr;}; 
 		void request(Key,Memory); 
 
 		private:

@@ -27,15 +27,12 @@ const dataframe<Type...>::ColumnTuple&	dataframe<Type...>::tuple_const()const
 
 //-------------------constructors/descrutors 
 template<class ... Type>
-	dataframe<Type...>::dataframe(){
-	_mutex= new Mutex; 
-};
+	dataframe<Type...>::dataframe(){};
 
 template<class ... Type>
 	dataframe<Type...>::dataframe(
 		const dataframe<Type...>& other)
 {	
-	_mutex= new Mutex; 
 	tuple()=other.tuple_const(); 
 };
 
@@ -45,7 +42,6 @@ template<class ... Type>
 		dataframe<Type...>::size_type s,
 		dataframe<Type...>::value_type v)
 {
-	_mutex= new Mutex; 
 	dataframe_functors::fill<traits<Type...>::_numCol-1,Type...> filler;
 	filler(std::forward<ColumnTuple>(_column_tuple),s,v); 
 };
@@ -54,7 +50,6 @@ template<class ... Type>
 	dataframe<Type...>::dataframe(
 		dataframe<Type...>::size_type s)
 {
-	_mutex= new Mutex; 
 	dataframe_functors::construct<traits<Type...>::_numCol-1,Type...> recurs;
 	recurs(std::forward<ColumnTuple>(_column_tuple),s); 
 };
@@ -64,7 +59,6 @@ template<class ... Type>
 		dataframe<Type...>::iterator start,
 		dataframe<Type...>::iterator stop)
 {
-	_mutex= new Mutex; 
 	dataframe_functors::it_copy<traits<Type...>::_numCol-1,Type...> it_copier;
 	it_copier(
 		std::forward<ColumnTuple>(_column_tuple),
@@ -75,7 +69,6 @@ template<class ... Type>
 
 template<class ... Type>
 	dataframe<Type...>::~dataframe(){
-	delete _mutex; 	
 };
 
 //-------------------container member functions-------------
@@ -290,9 +283,11 @@ template<class ... Type>
 };
 
 //-------------------non consts
+//------------------movement and locking
+
 template<class ... Type>
 	void
-	dataframe<Type...>::move(Memory M)
+	dataframe<Type...>::unsafe_move(Memory M)
 {	
 	switch(M)
 	{
@@ -326,34 +321,6 @@ template<class ... Type>
 		}	
 	}
 };
-template<class ... Type>
-	void
-	dataframe<Type...>::request_move(Memory M)
-{	
-	dataframeBase::request_move(M,id()); 	
-};
-
-template<class ... Type>
-	dataframe<Type...>::lock_guard*
-	dataframe<Type...>::use(Memory M)
-{	
-	lock_guard* guard=new lock_guard(*_mutex,false); 
-	if(location()!=M){
-		guard->upgrade_to_writer(); 
-		if(location()!=M){
-			request_move(M);	
-		}
-		guard->downgrade_to_reader(); 
-	}
-	return guard; 
-};
-template<class ... Type>
-	void
-	dataframe<Type...>::release(dataframe<Type...>::lock_guard* guard)
-{
-	delete guard; 	 	
-};
-
 template<class ... Type>
 	void 
 	dataframe<Type...>::assign(

@@ -9,7 +9,6 @@
 #include <vector>
 #include <array>
 #include <iterator>
-#include <tbb/queuing_rw_mutex.h>
 #include "dataframe_base.cpp"
 
 template<class ... Type>
@@ -44,12 +43,10 @@ class dataframe : public dataframeBase{
 	typedef typename Traits::type_vector			type_vector;
 	typedef typename column_tuple<Type...>::type		ColumnTuple;
 
-	typedef tbb::queuing_rw_mutex			Mutex; 
-	typedef typename Mutex::scoped_lock			lock_guard;
- 
+	typedef typename dataframeBase::lock_guard		lock_guard; 
+
 	private:
 	ColumnTuple		_column_tuple;
-	Mutex*			_mutex;
 
 	public:
 	dataframe();
@@ -66,14 +63,11 @@ class dataframe : public dataframeBase{
 
 	ColumnTuple& tuple(); 
 	const ColumnTuple& tuple_const()const;
-	void move(Memory);
-	void request_move(Memory); 
+	
+	void unsafe_move(Memory);
 	friend class dataframeBase; 
 	public:
 	Memory location()const; 
-
-	lock_guard* use(Memory); 	
-	void release(lock_guard*);  
 
 	void assign(iterator,iterator);
 	void assign(size_type,value_type);

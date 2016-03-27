@@ -11,8 +11,8 @@ CFLAGS=--std=c++11 -g -G -O0 -pg
 #dataframe tests
 dataframe.test:container.cu $(COVERAGE) ../source_files/*
 	python $(COVERAGE) -i ./container.cu
-dataframe_test:container.cu dataframe.test
-	clear && $(CC) -o dataframe_test main_test.cu $(FOLDERS) $(LINKS) $(CFLAGS) -D DATAFRAME_TEST
+dataframe:container.cu dataframe.test
+	clear && $(CC) -o dataframe main_test.cu $(FOLDERS) $(LINKS) $(CFLAGS) -D DATAFRAME_TEST
 
 #iterator tests
 iterator.test:iterator.cu $(COVERAGE) ../source_files/*

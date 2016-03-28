@@ -23,11 +23,12 @@ class cordinator {
 	typedef typename Map::value_type				value_type; 
 	typedef typename Map::iterator				iterator; 
 
+	public:
 	class ARC	{
 		typedef std::deque<Key>				LRU_list; 
 
 		enum cases	{one,two,three,four}; 
-		enum status	{t1,b1,t2,b3};
+		enum status	{t1,b1,t2,b2};
 
 		typedef std::unordered_map<Key,status>	Status_map; 
 
@@ -35,38 +36,24 @@ class cordinator {
 		typedef typename Mutex::scoped_lock	lock_guard;
 
 		public:	
-		ARC(cordinator& cor):_cordinator(cor){_mutex_ptr=new Mutex;}; 	
+		ARC(cordinator& cor):_cordinator(cor),p(0)
+			{_mutex_ptr=new Mutex;}; 	
 		~ARC(){delete _mutex_ptr;}; 
 		void request(Key,Memory); 
 
 		private:
 			//key functions used in request
-		cases find_case(Key); 
-		void unsafe_move(Key,Memory); 
-		void arc_body(Key,cases); 
-		void remove(Key,cases); 
-		Value get_ptr(Key);		
+		cases	find_case(Key); 
+		void		remove_key(Key); 
+		void		unsafe_move(Key,Memory); 
+		void		arc_body(Key,cases); 
+		Value	get_ptr(Key);		
 			//functions used in ^
-		void change_status(Key,status);	
-		void replace();
-		void pinned_request(); 
+		void		change_status(Key,status);	
+		void		replace(status);
+		void		pinned_request(Key); 
 			//helper functions
-		void push_front_t1(Key);
-		void push_front_t2(Key); 
-
-		void push_front_b1(Key);
-		void push_front_b2(Key); 
-
-		void pop_back_t1(Key);
-		void pop_back_t2(Key); 
-
-		void pop_back_b1(Key);
-		void pop_back_b2(Key); 
-		
-		void pop_back_pinned(Key);
-		void push_front_pinned(Key); 
-				
-		size_t LRU_byte_size(LRU_list&); 
+		size_t	LRU_byte_size(LRU_list&); 
 		private:
 		Mutex* _mutex_ptr; 
 

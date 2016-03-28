@@ -64,9 +64,8 @@ class dataframe : public dataframeBase{
 	ColumnTuple& tuple(); 
 	const ColumnTuple& tuple_const()const;
 	
-	void unsafe_move(Memory);
-	friend class dataframeBase; 
 	public:
+	void unsafe_move(Memory);
 	Memory location()const; 
 
 	void assign(iterator,iterator);

@@ -230,7 +230,7 @@ template<class ... Type>
 {
 	dataframe_functors::byte_size<	traits<Type...>::_numCol-1,
 								Type...> recursive;
-	size_type size=recursive(std::forward<ColumnTuple>(_column_tuple)); 
+	size_type size=recursive(std::forward<const ColumnTuple>(_column_tuple)); 
 	return size;
 };
 

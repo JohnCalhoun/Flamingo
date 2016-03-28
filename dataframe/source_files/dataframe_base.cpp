@@ -18,10 +18,9 @@ class dataframeBase {
 	typedef typename Mutex::scoped_lock		scoped_lock;
 	public:
 	typedef std::shared_ptr<scoped_lock>		lock_guard; 
-
-	public:
 	typedef cordinator<dataframeBase,lock_guard>			Cordinator;
 
+	public:
 	typedef typename Cordinator::Key			Key;
 	typedef typename Cordinator::Value			Value; 
 
@@ -36,13 +35,14 @@ class dataframeBase {
 
 	lock_guard use(Memory);
 	virtual Memory location()const=0; 	
+	virtual size_t device_size()const=0; 
 	void release(lock_guard&); 
 	dataframeBase& operator=(const dataframeBase& other){return *this;}; 
-	private:
 	virtual void unsafe_move(Memory)=0;
-
 	std::tuple<	lock_guard,
 				bool> try_lock(bool); 
+
+	private:
 	lock_guard lock(bool);
 
 	private: 

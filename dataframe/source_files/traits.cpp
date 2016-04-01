@@ -17,67 +17,14 @@
 #include <type_traits>
 #include <functional>
 
-template<int n,typename vec, typename ... T>
-struct vec2tuple {
-	typedef typename boost::mpl::int_<n>				position;
-	typedef typename boost::mpl::at<vec,position>::type	element;
-	typedef typename vec2tuple<n-1,vec,element,T...>::type		type;
-};
-template<typename vec, typename ... T>
-struct vec2tuple<0,vec,T...> {
-	typedef typename boost::mpl::int_<0>				position;
-	typedef typename boost::mpl::at<vec,position>::type	element;
-
-	typedef std::tuple<element,T...>	type;
-};
-
-template<typename vec, typename op>
-struct transform{
-	typedef typename boost::mpl::transform<vec,op>::type type; 
-};	
-
-template<typename T>
-struct add_ref_wrap{
-	typedef std::reference_wrapper<T> type; 
-};
-
-template<int n,typename vec>
-struct assert_pod {
-	typedef typename boost::mpl::int_<n>				position;
-	typedef typename boost::mpl::at<vec,position>::type	element;
-	
-	typedef typename std::conditional<	
-		std::is_pod<element>::value,
-		typename assert_pod<n-1,vec>::type,
-		typename std::false_type::type
-						>::type type; 
-};
-template<typename vec>
-struct assert_pod<0,vec> {
-	typedef typename boost::mpl::int_<0>				position;
-	typedef typename boost::mpl::at<vec,position>::type	element;
-	
-	typedef typename std::conditional<	
-		std::is_pod<element>::value,
-		typename std::true_type,
-		typename std::false_type
-						>::type type; 
-};
-template<typename T>
-struct add_ptr_to_const{
-	typedef const T* type; 
-};
-
-template<typename T>
-struct add_const_ref{
-	typedef std::reference_wrapper<const T> type; 
-};
-
-using boost::mpl::placeholders::_1;
+#include "traits.inl"
 template<class ... Type>
 struct traits {
 	typedef std::size_t			size_type; 
 	static const size_type _numCol=sizeof...(Type);
+
+	type_add<_numCol-1,Type...> type_add_recursive;
+	size_type row_size(){ return type_add_recursive(); }; 
 
 	typedef boost::mpl::vector<Type...>	type_vector;	
 	static_assert(assert_pod<_numCol-1,type_vector>::type::value,"DataFrame Types must be POD"); 

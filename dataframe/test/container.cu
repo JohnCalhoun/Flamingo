@@ -9,6 +9,8 @@
 #include<vector>
 #include<thread>
 #include<stdio.h>
+#include <chrono>
+#include <random>
 
 template<class ... Type>
 class dataframeTest : public ::testing::Test{
@@ -17,8 +19,18 @@ class dataframeTest : public ::testing::Test{
 	typedef typename Container::iterator		iterator;
 	typedef typename Container::value_type		element; 
 	typedef typename Container::value_type		value_type;
+
+	Container global; 
+
+	virtual void SetUp(){
+		value_type initial(0,0,0,0);
+		Container g(100,initial);
+		global=g;
+	};
 	
 //	Container global_container; 	
+	DEFINE(UnsafeMoveTest,	DATAFRAME_THREADS)
+	DEFINE(MoveTest,		DATAFRAME_THREADS)
 	DEFINE(AddressTest,		DATAFRAME_THREADS)
 	DEFINE(ConstructorTest,	DATAFRAME_THREADS)
 	DEFINE(AssignmentTest,	DATAFRAME_THREADS)	
@@ -33,7 +45,41 @@ class dataframeTest : public ::testing::Test{
 	DEFINE(ConstTest,		DATAFRAME_THREADS)
 	DEFINE(EmptyTest,		DATAFRAME_THREADS)
 };
+template<class ... Type>
+void dataframeTest<Type...>::UnsafeMoveTest()
+{
+	const int size=10;
+	value_type one(1,1,1,1);
+	Container local(size,one);
+	
 
+//	local.unsafe_move(host);
+}
+
+template<class ... Type>
+void dataframeTest<Type...>::MoveTest()
+{
+/*	typedef std::chrono::duration<double> duration;
+	
+	std::random_device rd;
+	std::mt19937 gen(rd()); 
+	std::uniform_real_distribution<> dist_time(.1,1);
+	std::uniform_int_distribution<> dist_mem(0,3);
+
+	duration  dur( dist_time(gen) );	
+
+	Memory memory[4]={host,device,pinned,unified}; 
+
+	for(int i=0;i<5;i++){
+		Memory m=memory[dist_mem(gen)];
+		typename Container::lock_guard guard=global.use(m);
+		std::cout<<" request memory: "<<m<<std::endl;
+		EXPECT_EQ(global.location(),m); 
+		std::this_thread::sleep_for(dur);
+		global.release(guard); 
+	}
+*/
+}
 template<class ... Type>
 void dataframeTest<Type...>::AddressTest()
 {
@@ -265,7 +311,7 @@ void dataframeTest<Type...>::QuerryTest()
 }
 
 
-//python:key:tests=ConstTest SwapTest EmptyTest BeginEndTest InsertTest AccessTest ModifyTest QuerryTest EqualityTest ConstructorTest AssignmentTest AddressTest
+//python:key:tests=UnsafeMoveTest MoveTest ConstTest SwapTest EmptyTest BeginEndTest InsertTest AccessTest ModifyTest QuerryTest EqualityTest ConstructorTest AssignmentTest AddressTest
 //python:template=TEST_F($dataframeTest<int,double,long,float>$,|tests|){this->|tests|();}
 
 //python:start

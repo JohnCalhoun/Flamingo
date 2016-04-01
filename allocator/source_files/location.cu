@@ -17,7 +17,7 @@
 #include "exceptions.cpp"
 #include <iostream>
 
-enum Memory { host,pinned,device,unified };
+enum Memory { host=0,pinned=1,unified=2,device=3 };
 
 template <typename pointer, typename Item>
 __global__ void cuda_fill(pointer dst, int count, Item item);
@@ -279,7 +279,7 @@ template <>
 void* location<host>::New(size_t size) {
      void* p;
 	p=std::malloc(size);
-     hostErrorCheck(!p,std::bad_alloc)
+//     hostErrorCheck(!p)
      return p;
 };
 /** \ingroup allocator-module

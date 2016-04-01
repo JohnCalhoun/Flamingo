@@ -35,7 +35,7 @@ struct column  {
 	typedef typename allocation_policy<T,unified>::allocator unified_allocator; 
 
 	typedef thrust::device_vector<T,device_allocator>		device_column;
-	typedef thrust::device_vector<T,pinned_allocator>		pinned_column;
+	typedef thrust::host_vector<T,pinned_allocator>		pinned_column;
 	typedef thrust::device_vector<T,unified_allocator>	unified_column;
 	typedef thrust::host_vector<T>					host_column;
 	

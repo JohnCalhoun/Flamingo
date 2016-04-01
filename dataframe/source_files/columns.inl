@@ -67,24 +67,25 @@ void column<T>::move(){
 			}
 			case pinned:
 			{
-				const int source=memory2type<pinned>::type::value;
+		/*		const int source=memory2type<pinned>::type::value;
 				const int destination=memory2type<M>::type::value;
 
 				std::get<destination>(_tuple)=std::get<source>(_tuple); 
 				std::get<source>(_tuple).clear(); 
-				break;
+		*/		break;
 			}
 			case unified:
 			{
-				const int source=memory2type<unified>::type::value;
+		/*		const int source=memory2type<unified>::type::value;
 				const int destination=memory2type<M>::type::value;
 
 				std::get<destination>(_tuple)=std::get<source>(_tuple); 
 				std::get<source>(_tuple).clear(); 
-				break;
+		*/		break;
 			}
-		}
-	}
+		}//end switch
+		_location=M; 
+	}//end if
 }
 template<typename T>
 Memory column<T>::getlocation()const{

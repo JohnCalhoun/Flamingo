@@ -10,6 +10,7 @@
 #include <thread>
 #include <iostream>
 #include <stdlib.h>
+#include <thrust/device_vector.h>
 
 #define ALLOCATOR_THREADS 8
 
@@ -17,16 +18,22 @@
 template <typename Allocator>
 class AllocatorTest : public ::testing::Test {
     protected:
-     typedef std::vector<int, Allocator> Vector;
+     typedef std::vector<int, Allocator>	Vector;
+	typedef std::vector<int>				Std_vector; 
 
      Vector vector;
+	Std_vector std_vector; 
+
+	AllocatorTest():vector(10),std_vector(10){};
 
      DEFINE(CopyTest, ALLOCATOR_THREADS)
 };
 
 template <typename T>
 void AllocatorTest<T>::CopyTest() {
+
      Vector copy_of(vector);
+	thrust::device_vector<int,T> device(std_vector);  
 };
 #define HOST host
 #define MANAGED unified

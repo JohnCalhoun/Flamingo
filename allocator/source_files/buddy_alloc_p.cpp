@@ -2,10 +2,8 @@
 #ifndef BUDDY_ALLOC
 #define BUDDY_ALLOC
 
-#include \
-    "Free_List.cpp"
-#include \
-    "Handle.cpp"
+#include "Free_List.cpp"
+#include "Handle.cpp"
 
 #include <cmath>
 #include <cstdlib>

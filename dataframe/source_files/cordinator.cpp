@@ -8,6 +8,7 @@
 #include <tbb/queuing_mutex.h>
 #include <tbb/concurrent_hash_map.h>
 #include "traits.cpp"
+#include "exceptions.cpp"
 
 template<typename Object,typename Guard>
 class cordinator {
@@ -27,17 +28,32 @@ class cordinator {
 	class ARC	{
 		typedef std::deque<Key>				LRU_list; 
 
-		enum cases	{one,two,three,four}; 
-		enum status	{t1,b1,t2,b2};
+		enum cases			{one,two,three,four}; 
+		enum LRU_placement		{t1,b1,t2,b2,NONE};
 
-		typedef std::unordered_map<Key,status>	Status_map; 
+		typedef std::unordered_map<Key,LRU_placement>	Placement_map; 
 
 		typedef tbb::queuing_mutex			Mutex;
 		typedef typename Mutex::scoped_lock	lock_guard;
 
+		typedef std::tuple<Key,Guard>			delete_tuple;
+		typedef std::list<delete_tuple>		Lock_list; 
+
 		public:	
 		ARC(cordinator& cor):_cordinator(cor),p(0)
-			{_mutex_ptr=new Mutex;}; 	
+		{	_mutex_ptr=new Mutex;
+			max_device=location<device>::max_memory(); 
+			max_pinned=location<pinned>::max_memory();
+			max_host=location<host>::max_memory(); 
+			#ifndef RELEASE
+				if(max_device > max_pinned){
+					dataframe_exceptions::
+					host_exception<> ex(	__FILE__,
+										__LINE__);
+					throw ex; 
+				}
+			#endif
+		}; 	
 		~ARC(){delete _mutex_ptr;}; 
 		void request(Key,Memory); 
 
@@ -48,9 +64,9 @@ class cordinator {
 		void		unsafe_move(Key,Memory); 
 		void		arc_body(Key,cases); 
 		Value	get_ptr(Key);		
-			//functions used in ^
-		void		change_status(Key,status);	
-		void		replace(status);
+			//functions used in 
+		void		change_placement(Key,LRU_placement);	
+		void		replace(LRU_placement);
 		void		pinned_request(Key); 
 			//helper functions
 		size_t	LRU_byte_size(LRU_list&); 
@@ -60,8 +76,20 @@ class cordinator {
 		cordinator& _cordinator;
 		size_t	max_device;
 		size_t	max_pinned;
-		size_t	max_host; 		
-		double		p;
+		size_t	max_host; 	
+		size_t	cache_size(){return max_device;};
+	
+		size_t		p;
+
+		void		push_front_t1(Key);
+		void		push_front_t2(Key);
+		void		push_front_b1(Key);
+		void		push_front_b2(Key);
+		void		push_front_NONE(Key); 	
+		
+		//key remove
+		delete_tuple	delete_LRU(LRU_list&); 
+		void		unlock_list(Lock_list&); 
 
 		//arc list
 		LRU_list		_T1;//on device
@@ -74,7 +102,7 @@ class cordinator {
 		LRU_list		_pinned;//lru for pinned memory
 	
 		//status map, dont search 
-		Status_map	_status_map; 
+		Placement_map	_placement_map; 
 	};
 	
 	public:

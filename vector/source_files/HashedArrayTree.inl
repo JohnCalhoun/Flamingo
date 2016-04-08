@@ -9,35 +9,35 @@
 #include<cstdlib>
 #include<utility>
 //***************************CONSTRUCTORS/DESTRUCTORS********************************************
-template<typename T,typename L>
-HashedArrayTree<T,L>::HashedArrayTree(){
+template<typename T,Memory M>
+HashedArrayTree<T,M>::HashedArrayTree(){
 	_size=0;
 	resize(_size); 	
 };
 
-template<typename T,typename L>
-HashedArrayTree<T,L>::HashedArrayTree(const HashedArrayTree<T,L>& other){
+template<typename T,Memory M>
+HashedArrayTree<T,M>::HashedArrayTree(const HashedArrayTree<T,M>& other){
 	_size=other._size; 
 	_tree=other._tree; 
 };
-template<typename T,typename L>
-HashedArrayTree<T,L>::HashedArrayTree(int x,T item){
+template<typename T,Memory M>
+HashedArrayTree<T,M>::HashedArrayTree(int x,T item){
 	resize(x);
 	insert(this->begin(),x,item);
 };
 
-template<typename T,typename L>
-HashedArrayTree<T,L>::~HashedArrayTree(){};
+template<typename T,Memory M>
+HashedArrayTree<T,M>::~HashedArrayTree(){};
 
 //***********************************CONSTRUCTORS/DESTRUCTORS********************************************
 //***********************************INTERNAL FUNCTIONS********************************************
-template<typename T,typename L>
-int HashedArrayTree<T,L>::calculate_width(int x){
+template<typename T,Memory M>
+int HashedArrayTree<T,M>::calculate_width(int x){
 	return std::pow(2,std::ceil( std::log2( std::sqrt(x) ) ) );
 }
 
-template<typename T,typename L>
-void HashedArrayTree<T,L>::resize(int x){
+template<typename T,Memory M>
+void HashedArrayTree<T,M>::resize(int x){
 	if(x>size() ){
 		if(x>capacity() ){
 			int width_new=calculate_width(x);
@@ -65,7 +65,7 @@ void HashedArrayTree<T,L>::resize(int x){
 			_tree=tmp; 
 		}else{
 			Cordinate cor;
-			cor.setTree(&_tree);
+			cor.setTree(_tree);
 			cor.setDistance(x);
 
 			int needed_leaves=cor.row(); 
@@ -84,21 +84,26 @@ void HashedArrayTree<T,L>::resize(int x){
 	}
 }
 
-template<typename T,typename L>
-void HashedArrayTree<T,L>::add_end(int x){
+template<typename T,Memory M>
+HashedArrayTree<T,M>::iterator HashedArrayTree<T,M>::add_end(
+			int x,
+			HashedArrayTree<T,M>::iterator it	){
 	int needed_size=_size+x;
 	resize(needed_size); 
+
+	iterator out(_tree,it);
+	return out;
 }
 
-template<typename T,typename L>
-void HashedArrayTree<T,L>::remove_end(int x){
+template<typename T,Memory M>
+void HashedArrayTree<T,M>::remove_end(int x){
 	int needed_size=_size-x;
 	resize(needed_size); 	
 };
 
-template<typename T,typename L>
+template<typename T,Memory M>
 template<typename D>
-void HashedArrayTree<T,L>::shift(HashedArrayTree<T,L>::iterator it,int n){
+void HashedArrayTree<T,M>::shift(HashedArrayTree<T,M>::iterator it,int n){
 	typedef std::tuple<Cordinate,Cordinate,int>	paramater;
 	typedef std::vector<paramater>			paramater_vector;
 	
@@ -124,7 +129,7 @@ void HashedArrayTree<T,L>::shift(HashedArrayTree<T,L>::iterator it,int n){
 	util.adjust(param_v); 
 	std::for_each(param_v.begin(),param_v.end(),
 		[this](paramater p){
-			typedef typename tree::device_pointer pointer; 
+			typedef typename tree::pointer pointer; 
 			Cordinate source=		std::get<0>(p);
 			Cordinate destination=	std::get<1>(p);
 			int s=				std::get<2>(p); 
@@ -140,69 +145,69 @@ void HashedArrayTree<T,L>::shift(HashedArrayTree<T,L>::iterator it,int n){
 
 }
 
-template<typename T,typename L>
+template<typename T,Memory M>
 template<typename I>
-void HashedArrayTree<T,L>::copy(I it,int n,const T& item){
+void HashedArrayTree<T,M>::copy(I it,int n,const T& item){
 	location.fill_in(it,n,item);
 }
-template<typename T,typename L>
+template<typename T,Memory M>
 template<typename I>
-void HashedArrayTree<T,L>::copy(I it_in,int n,I it_out){
+void HashedArrayTree<T,M>::copy(I it_in,int n,I it_out){
 	location.MemCopy(it_in,it_out,n); 
 }
 
 //***********************************INTERNAL FUNCTIONS********************************************
 //***********************************ITERATOR GETTERS********************************************
 
-template<typename T,typename L>
-HashedArrayTree<T,L>::iterator HashedArrayTree<T,L>::begin(){
+template<typename T,Memory M>
+HashedArrayTree<T,M>::iterator HashedArrayTree<T,M>::begin(){
 	iterator it(_tree);
 	it.initalize(0,0); 
 	return it; 
 };
 
-template<typename T,typename L>
-HashedArrayTree<T,L>::iterator HashedArrayTree<T,L>::end(){
+template<typename T,Memory M>
+HashedArrayTree<T,M>::iterator HashedArrayTree<T,M>::end(){
 	iterator it(_tree);
 	it.initalize( size() );
 	return it; 
 };
 
-template<typename T,typename L>
-HashedArrayTree<T,L>::const_iterator HashedArrayTree<T,L>::cbegin(){
+template<typename T,Memory M>
+HashedArrayTree<T,M>::const_iterator HashedArrayTree<T,M>::cbegin(){
 	const_iterator it=begin();
 	return it;
 };
 
-template<typename T,typename L>
-HashedArrayTree<T,L>::iterator HashedArrayTree<T,L>::cend(){
+template<typename T,Memory M>
+HashedArrayTree<T,M>::iterator HashedArrayTree<T,M>::cend(){
 	const_iterator it=end();
 	return it; 
 };
 
 
-template<typename T,typename L>
-HashedArrayTree<T,L>::reverse_iterator HashedArrayTree<T,L>::rbegin(){
+template<typename T,Memory M>
+HashedArrayTree<T,M>::reverse_iterator HashedArrayTree<T,M>::rbegin(){
 	reverse_iterator it(_tree);
 	it.initalize(0,0); 
 	return it; 
 };
 
-template<typename T,typename L>
-HashedArrayTree<T,L>::reverse_iterator HashedArrayTree<T,L>::rend(){	
+template<typename T,Memory M>
+HashedArrayTree<T,M>::reverse_iterator HashedArrayTree<T,M>::rend(){	
 	reverse_iterator it(_tree);
 	it.initalize( size() );
 	return it; 
 };
 
-template<typename T,typename L>
-HashedArrayTree<T,L>::const_reverse_iterator HashedArrayTree<T,L>::crbegin(){
+template<typename T,Memory M>
+HashedArrayTree<T,M>::const_reverse_iterator HashedArrayTree<T,M>::crbegin(){
 	const_reverse_iterator it=rbegin();
 	return it;
 };
 
-template<typename T,typename L>
-HashedArrayTree<T,L>::const_reverse_iterator HashedArrayTree<T,L>::crend(){
+template<typename T,Memory M>
+HashedArrayTree<T,M>::const_reverse_iterator HashedArrayTree<T,M>::crend(){
 	const_reverse_iterator it=rend();
 	return it; 
 };
@@ -210,24 +215,16 @@ HashedArrayTree<T,L>::const_reverse_iterator HashedArrayTree<T,L>::crend(){
 //***********************************ITERATOR GETTERS********************************************
 //***********************************OPERATORS********************************************
 //deal with T!=T=>false and L!=L=>false,maybe
-template<typename T,typename L>
-template<typename A>
-HashedArrayTree<T,L>& HashedArrayTree<T,L>::operator=(const HashedArrayTree<T,A>& other){
-	
-//	HashedArrayTree_Internal::Assign<T,L,A> _assign;
-//	_assign(this,other);
-	return *this;
-};
-template<typename T,typename L>
-HashedArrayTree<T,L>& HashedArrayTree<T,L>::operator=(const HashedArrayTree<T,L>& other){
-	
-	this->_size=other._size;
-	this->_tree=other._tree;
+template<typename T,Memory M>
+template<Memory A>
+HashedArrayTree<T,M>& HashedArrayTree<T,M>::operator=(const HashedArrayTree<T,A>& other){
+	_size=other._size;
+	_tree=other._tree;
 	return *this;
 };
 
-template<typename T,typename L>
-bool HashedArrayTree<T,L>::operator==(const HashedArrayTree<T,L>& other)const{
+template<typename T,Memory M>
+bool HashedArrayTree<T,M>::operator==(const HashedArrayTree<T,M>& other)const{
 	if(_size==other._size){
 		return (this->_tree)==(other._tree);
 	}else{
@@ -235,110 +232,117 @@ bool HashedArrayTree<T,L>::operator==(const HashedArrayTree<T,L>& other)const{
 	}
 };
 
-template<typename T,typename L>
-bool HashedArrayTree<T,L>::operator!=(const HashedArrayTree<T,L>& other)const{
+template<typename T,Memory M>
+bool HashedArrayTree<T,M>::operator!=(const HashedArrayTree<T,M>& other)const{
 	return !(*this==other);
 };
 
 //***********************************OPERTORS********************************************
 ///***********************************INTERFACE********************************************/
 
-template<typename T,typename L>
-void	HashedArrayTree<T,L>::swap(HashedArrayTree<T,L>& other){
+template<typename T,Memory M>
+void	HashedArrayTree<T,M>::swap(HashedArrayTree<T,M>& other){
 	_tree.swap( (other._tree) );
 
 	std::swap(this->_size,other._size); 
 };
 
-template<typename T,typename L>
-HashedArrayTree<T,L>::size_type HashedArrayTree<T,L>::size()const{
+template<typename T,Memory M>
+HashedArrayTree<T,M>::size_type HashedArrayTree<T,M>::size()const{
 	return _size; 
 };
 
-template<typename T,typename L>
-HashedArrayTree<T,L>::size_type HashedArrayTree<T,L>::capacity()const{
+template<typename T,Memory M>
+HashedArrayTree<T,M>::size_type HashedArrayTree<T,M>::capacity()const{
 	return std::pow(_tree.width(),2); 
 };
 
-template<typename T,typename L>
-HashedArrayTree<T,L>::size_type HashedArrayTree<T,L>::max_size()const{
+template<typename T,Memory M>
+HashedArrayTree<T,M>::size_type HashedArrayTree<T,M>::max_size()const{
 	return _allocator.max_size(); 
 };
 
-template<typename T,typename L>
-bool	HashedArrayTree<T,L>::empty()const{
+template<typename T,Memory M>
+bool	HashedArrayTree<T,M>::empty()const{
 	return _size>0;
 };
 
-template<typename T,typename L>
-void HashedArrayTree<T,L>::reserve(int x){
+template<typename T,Memory M>
+void HashedArrayTree<T,M>::reserve(int x){
 	resize(x);
 };
 
-template<typename T,typename L>
-void	HashedArrayTree<T,L>::shrink_to_fit(){
+template<typename T,Memory M>
+void	HashedArrayTree<T,M>::shrink_to_fit(){
 	resize( size() ); 
 };
 
 /*	
-emplate<typename T,typename L>
+emplate<typename T,Memory M>
 template<class ...Args>
-	HashedArrayTree<T,A>::iterator HashedArrayTree<T,A>::emplace(HashedArrayTree<T,A>::const_iterator iter, Args...){
+	HashedArrayTree<T,M>::iterator HashedArrayTree<T,M>::emplace(HashedArrayTree<T,M>::const_iterator iter, Args...){
 
 	};
 */
-template<typename T,typename L>
-HashedArrayTree<T,L>::iterator HashedArrayTree<T,L>::insert(HashedArrayTree<T,L>::const_iterator iter, const T& item){
-	add_end(1);
-	shift<DOWN>(iter,1);	
-	copy(iter,1,item);
-	return iter+1;
+template<typename T,Memory M>
+HashedArrayTree<T,M>::iterator HashedArrayTree<T,M>::insert(HashedArrayTree<T,M>::const_iterator iter, const T& item){
+	iterator new_iter=add_end(1,iter);
+
+	shift<DOWN>(new_iter,1);	
+	copy(new_iter,1,item);
+	return new_iter+1;
 }
 
-template<typename T,typename L>
-HashedArrayTree<T,L>::iterator HashedArrayTree<T,L>::insert(HashedArrayTree<T,L>::const_iterator iter, T&& item){ 
-	add_end(1);
-	shift<DOWN>(iter,1); 
-	copy(iter,1,item); 
-	return iter+1;
+template<typename T,Memory M>
+HashedArrayTree<T,M>::iterator HashedArrayTree<T,M>::insert(HashedArrayTree<T,M>::const_iterator iter, T&& item){ 
+	iterator new_iter=add_end(1,iter);
+
+	shift<DOWN>(new_iter,1); 
+	copy(new_iter,1,item); 
+	return new_iter+1;
 };
 
-template<typename T,typename L>
-HashedArrayTree<T,L>::iterator HashedArrayTree<T,L>::insert(HashedArrayTree<T,L>::const_iterator iter, HashedArrayTree<T,L>::size_type n, T& item){
-	add_end(n); 
-	shift<DOWN>(iter,n); 
-	copy(iter,n,item);
-	return iter+1;
+template<typename T,Memory M>
+HashedArrayTree<T,M>::iterator HashedArrayTree<T,M>::insert(HashedArrayTree<T,M>::const_iterator iter, HashedArrayTree<T,M>::size_type n, T& item){
+	size_type index=iter.distance; 
+
+	iterator new_iter=add_end(n,iter); 
+
+	shift<DOWN>(new_iter,n); 
+	copy(new_iter,n,item);
+	return new_iter+1;
 }
 	
-template<typename T,typename L>
+template<typename T,Memory M>
 template<class iter>
-	HashedArrayTree<T,L>::iterator HashedArrayTree<T,L>::insert(HashedArrayTree<T,L>::const_iterator iter_1, iter iter_2,  iter iter_3){
+	HashedArrayTree<T,M>::iterator HashedArrayTree<T,M>::insert(HashedArrayTree<T,M>::const_iterator iter_1, iter iter_2,  iter iter_3){
  	int n=iter_2-iter_1;
-	add_end(n);
-	shift<DOWN>(iter_1,n);
-	copy(iter_1,n,iter_2);
-	iter_1.setWidth( _tree.width() ); 
-	return iter_1+1;	
+	iterator new_iter_1=add_end(n,iter_1);
+
+	shift<DOWN>(new_iter_1,n);
+
+	copy(new_iter_1,n,iter_3);
+	new_iter_1.setWidth( _tree.width() ); 
+	return new_iter_1+1;	
 };
 /*
 specialize for location
 
-template<typename T,typename L>
-HashedArrayTree<T,A>::iterator HashedArrayTree<T,A>::insert(HashedArrayTree<T,A>::const_iterator iter, std::initializer_list<T> list){
+template<typename T,Memory M>
+HashedArrayTree<T,M>::iterator HashedArrayTree<T,M>::insert(HashedArrayTree<T,M>::const_iterator iter, std::initializer_list<T> list){
 
 };
 */
 
-template<typename T,typename L>
-HashedArrayTree<T,L>::iterator HashedArrayTree<T,L>::erase(HashedArrayTree<T,L>::const_iterator iter){
+template<typename T,Memory M>
+HashedArrayTree<T,M>::iterator HashedArrayTree<T,M>::erase(HashedArrayTree<T,M>::const_iterator iter){
 	shift<UP>(iter,1); 
 	remove_end(1);
 	return iter-1; 
 };
 
-template<typename T,typename L>
-HashedArrayTree<T,L>::iterator HashedArrayTree<T,L>::erase(HashedArrayTree<T,L>::const_iterator iter_begin , HashedArrayTree<T,L>::const_iterator iter_end){
+template<typename T,Memory M>
+HashedArrayTree<T,M>::iterator HashedArrayTree<T,M>::erase(HashedArrayTree<T,M>::const_iterator iter_begin , HashedArrayTree<T,M>::const_iterator iter_end){
 	int n=iter_end-iter_begin; 
 	shift<UP>(iter_end,n);
 	remove_end(n); 
@@ -346,82 +350,49 @@ HashedArrayTree<T,L>::iterator HashedArrayTree<T,L>::erase(HashedArrayTree<T,L>:
 };
 
 
-template<typename T,typename L>
-void	HashedArrayTree<T,L>::clear(){
+template<typename T,Memory M>
+void	HashedArrayTree<T,M>::clear(){
 	_tree.clear(); 
 	_size=0; 
 };
 /*
-template<typename T,typename L>
-template<class iter> void HashedArrayTree<T,A>::assign(iter it_1, iter it_2){
+template<typename T,Memory M>
+template<class iter> void HashedArrayTree<T,M>::assign(iter it_1, iter it_2){
 
 };
 */
-template<typename T,typename A>
-void	HashedArrayTree<T,A>::assign(std::initializer_list<T> list){
+template<typename T,Memory M>
+void	HashedArrayTree<T,M>::assign(std::initializer_list<T> list){
 	assign(list.begin(),list.end()); 
 };
 
-template<typename T,typename L>
-void	HashedArrayTree<T,L>::assign(HashedArrayTree<T,L>::size_type n, const T& item){
+template<typename T,Memory M>
+void	HashedArrayTree<T,M>::assign(HashedArrayTree<T,M>::size_type n, const T& item){
 	clear();
 	resize(n);
 	copy(this->begin(),n,item); 
 };
 
-template<typename T,typename A>
-HashedArrayTree<T,A>::allocator_type HashedArrayTree<T,A>::get_allocator(){
+template<typename T,Memory M>
+HashedArrayTree<T,M>::allocator_type HashedArrayTree<T,M>::get_allocator(){
 	return _allocator; 
 };
 
-template<typename T,typename A>
-HashedArrayTree<T,A>::reference HashedArrayTree<T,A>::operator[](size_type x){
+template<typename T,Memory M>
+HashedArrayTree<T,M>::reference HashedArrayTree<T,M>::operator[](size_type x){
 	return at(x);
 };
-template<typename T,typename A>
-HashedArrayTree<T,A>::reference HashedArrayTree<T,A>::at(size_type x){
+template<typename T,Memory M>
+HashedArrayTree<T,M>::reference HashedArrayTree<T,M>::at(size_type x){
 	return *(begin()+x);
 };
-template<typename T,typename A>
-HashedArrayTree<T,A>::reference HashedArrayTree<T,A>::front(){
+template<typename T,Memory M>
+HashedArrayTree<T,M>::reference HashedArrayTree<T,M>::front(){
 	return at(0);
 };
-template<typename T,typename A>
-HashedArrayTree<T,A>::reference HashedArrayTree<T,A>::back(){
+template<typename T,Memory M>
+HashedArrayTree<T,M>::reference HashedArrayTree<T,M>::back(){
 	return at(size() ); 
 };
 
 //***********************************INTERFACE ******************************************** 
-//***********************************LOCKING********************************************
-
-template<typename T,typename L>
-void	HashedArrayTree<T,L>::lock(){
-	_mutex.lock();
-};
-
-template<typename T,typename L>
-void	HashedArrayTree<T,L>::unlock(){
-	_mutex.unlock(); 
-};
-
-template<typename T,typename L>
-bool	HashedArrayTree<T,L>::try_lock(){
-	bool result=_mutex.try_lock(); 
-	return result; 
-};
-//***********************************LOCKING********************************************
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

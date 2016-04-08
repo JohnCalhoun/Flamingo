@@ -38,17 +38,30 @@ template <typename T>
 void BuddyAllocTest<T>::AllocDeallocTest() {
      auto q = (this->allocator).allocate(sizeof(int));
      (this->allocator).deallocate(q);
+
+     q = (this->allocator).allocate(1);
+	(this->allocator).deallocate(q);
 }
 
 template <typename T>
 void BuddyAllocTest<T>::MultiAllocDeallocTest() {
      auto q1 = (this->allocator).allocate(sizeof(int));
      auto q2 = (this->allocator).allocate(sizeof(int));
-     auto q3 = (this->allocator).allocate(sizeof(int));
 
      (this->allocator).deallocate(q1);
      (this->allocator).deallocate(q2);
-     (this->allocator).deallocate(q3);
+
+	for(int i=1; i<20; i++){
+		q1 = (this->allocator).allocate(i*sizeof(int));
+		q2 = (this->allocator).allocate(i*sizeof(int));
+
+		T::Location_Policy::MemCopy(q1,q2,i*sizeof(int) );
+		
+		(this->allocator).deallocate(q1);
+		(this->allocator).deallocate(q2);
+	}
+
+
 }
 
 template <typename T>

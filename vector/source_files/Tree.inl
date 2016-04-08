@@ -8,17 +8,25 @@
 #include<algorithm>
 #include<stdio.h>
 #include"internal.h"
+#include <thrust/device_ptr.h>
 
 template<typename T, typename A>
 Tree<T,A>::Tree(){
 	resize(0);
 	setopenbranch(0);
+
+	for(auto it=_root.begin();it<_root.end(); it++){
+		*it=NULL; 
+	}
 };
 
 template<typename T, typename A>
 Tree<T,A>::Tree(int size){
 	setopenbranch(0);
 	resize(size); 
+	for(auto it=_root.begin();it<_root.end(); it++){
+		*it=NULL; 
+	}
 };
 //*******************************const  functions*********************
 template<typename T, typename A>
@@ -55,8 +63,7 @@ void Tree<T,A>::replacebranch(Tree<T,A>::pointer p,int x){
 
 template<typename T, typename A>
 void Tree<T,A>::addbranch(Tree<T,A>::pointer p){
-	int offset=_openbranch;
-	replacebranch(p,offset); 
+	_root[_openbranch]=p;
 	if(_openbranch<width()){
 		_openbranch++; 
 	};
@@ -64,7 +71,9 @@ void Tree<T,A>::addbranch(Tree<T,A>::pointer p){
 template<typename T, typename A>
 void Tree<T,A>::addbranch(){
 	if(_openbranch<width()){
-		pointer p=_allocator.allocate(width());
+
+		pointer p=_allocator.allocate(width()*sizeof(T));
+
 		addbranch(p);
 	};
 };
@@ -78,8 +87,9 @@ template<typename T, typename A>
 void Tree<T,A>::removebranch(int x){
 	if(x>0 && x<width()){
 		pointer p=_root[x];
-		if(p)
+		if(p){
 			_allocator.deallocate(p);
+		}
 		_root[x]=NULL;
 	}
 };
@@ -89,28 +99,86 @@ bool Tree<T,A>::isfree()const{
 };
 template<typename T, typename A>
 void Tree<T,A>::clear(){
-	_root.clear(); 
-	setopenbranch(0);
+	while(openbranch()>0){
+		removebranch(); 		
+	}
+};
+template<typename T, typename A>
+size_t Tree<T,A>::size()const{
+	return _root.size(); 
 };
 template<typename T, typename A>
 void Tree<T,A>::resize(int y){
-	_root.resize(y); 
+	_root.resize(y,NULL); 
+};
+template<typename T, typename A>
+Tree<T,A>::const_iterator Tree<T,A>::cbegin()const{	
+	return const_iterator(thrust::raw_pointer_cast( _root.data() )); 
+};
+template<typename T, typename A>
+Tree<T,A>::const_iterator Tree<T,A>::cend()const{
+	return cbegin()+width()+1; 
+};
+template<typename T, typename A>
+Tree<T,A>::iterator Tree<T,A>::begin(){	
+	return thrust::raw_pointer_cast( _root.data() ); 
+};
+template<typename T, typename A>
+Tree<T,A>::iterator Tree<T,A>::end(){
+	return begin()+width()+1; 
 };
 template<typename T, typename A>
 const Tree<T,A>::Root& Tree<T,A>::root()const{
 	return _root; 
 };
 template<typename T, typename A>
-Tree<T,A>& Tree<T,A>::operator=(const Tree<T,A>& other){
-	_root=other._root;
-	_openbranch=other._openbranch;
+Tree<T,A>::Root& Tree<T,A>::root(){
+	return _root; 
+};
+
+template<typename T, typename A>
+template<typename B>
+Tree<T,A>& Tree<T,A>::operator=(const Tree<T,B>& other){
+	typedef typename Tree<T,B>::const_iterator	other_iterator; 
+	typedef typename Tree<T,B>::Root			Other_Root;
+	typedef typename Tree<T,B>::pointer		Other_pointer; 
+
+	clear(); 
+	resize( other.size() ); 
+
+	while(openbranch()<other.openbranch() ){
+		addbranch(); 
+	}
+
+	const Other_Root& other_root=other.root(); 
+	Root& this_root=this->root(); 
+
+	for(int n=0; n<other.openbranch(); n++){
+		Other_pointer src=other_root[n]; 
+		pointer src_ptr=pointer(src); 
+		pointer dst=this_root[n]; 
+
+		if( src_ptr ){
+			Location::MemCopy(	src_ptr,
+							dst,
+							sizeof(T)*width() 
+						); 
+		}else{
+			this_root[n]=NULL; 
+		}
+	}	
 	return *this;
 };
 //*****************************non const functions********************
 /************************************equality operator******************/
 template<typename A,typename B,typename C,typename D>
 bool operator==(const Tree<A,B>& tree_1, const Tree<C,D>& tree_2){
-	return tree_1.root()==tree_2.root(); 
+
+	if( tree_1.width()==tree_2.width() ){	
+		return tree_1.root()==tree_2.root(); 
+	}else{
+		return false;
+	}
 };
 
 template<typename A,typename B>

@@ -65,15 +65,17 @@ class location {
      template <typename pointer, typename size_type>
      static void MemCopy(pointer src_ptr, pointer dst_ptr, size_type size);
 
-     template <typename size_type>
-     static void MemCopy(Handle_void src_ptr, Handle_void dst_ptr, size_type size);
-	static size_t max_memory(); 
+//     template <typename size_type>
+//     static void MemCopy(Handle_void src_ptr, Handle_void dst_ptr, size_type size);
+ 	static size_t max_memory(); 
 	static size_t free_memory();
 
 	static int number_of_gpus(); 
 
      template <typename pointer, typename Item>
      void fill_in(pointer dst, int count, Item item);
+	
+	static const Memory memory=M; 
 };
 
 /** \fn void* location<T>::New(size_t s)
@@ -267,6 +269,16 @@ void location<M>::fill_in(pointer dst, int count, Item item) {
      cuda_fill << <gridsize, blocksize>>> (dst, count, item);
  	gpuErrorCheck(cudaGetLastError() );
      gpuErrorCheck(cudaDeviceSynchronize() );
+};
+template <>
+template <typename pointer, typename Item>
+void location<unified>::fill_in(pointer dst, int count, Item item) {
+     std::fill_n(dst, count, item);
+};
+template <>
+template <typename pointer, typename Item>
+void location<pinned>::fill_in(pointer dst, int count, Item item) {
+     std::fill_n(dst, count, item);
 };
 template <>
 template <typename pointer, typename Item>

@@ -99,11 +99,15 @@ Free_Container<T>::Handle_ptr Free_Container<T>::find_remove_handle(
      int max_index = size2order(size);
      if (max_index <= max_order) {
           Handle_ptr h;
-          for (int i = max_index; i <= max_order; i++) {
-               h = column[i - 1]->get_remove_any();
-               if (h)
-                    break;
-          }
+		if(max_index>0){
+			for (int i = max_index; i <= max_order; i++) {
+				h = column[i - 1]->get_remove_any();
+				if (h)
+					break;
+			}
+		}else{
+			h=column[0]->get_remove_any(); 
+		}
           return h;
      } else {
           return NULL;

@@ -12,7 +12,7 @@
 template<typename T, Memory M>
 class TreeTest : public ::testing::Test{
 	public: 
-	typedef typename allocation_policy<T,M>::allocator Allocator; 
+	typedef standard_alloc_policy<T,location<M> > Allocator; 
 	typedef Tree<T,Allocator>	tree; 
 	tree globalTree;
 
@@ -31,14 +31,39 @@ void TreeTest<T,M>::AssignmentTest(){
 	tree local_tree(2);
 	tree local_tree_2(2); 
 	local_tree_2=local_tree; 
+	EXPECT_TRUE(local_tree_2==local_tree); 
 
 	tree local_tree_3(2);
-	tree local_tree_4; 
+	tree local_tree_4;
 	local_tree_4=local_tree_3; 
+	EXPECT_TRUE(local_tree_2==local_tree); 
 
 	tree local_tree_5;
 	tree local_tree_6; 
 	local_tree_5=local_tree_6;  
+	EXPECT_TRUE(local_tree_2==local_tree);
+
+
+	Tree<T,standard_alloc_policy<T, location<host> > > other(10); 
+	tree local_copy;
+	other.addbranch(); 
+	local_copy=other; 	
+	
+	Tree<T,standard_alloc_policy<T,location<device> > > other1(10); 
+	tree local_copy1;
+	other1.addbranch(); 
+	local_copy1=other1; 		
+
+	Tree<T,standard_alloc_policy<T,location<pinned> > > other2(10); 
+	tree local_copy2;
+	other2.addbranch(); 
+	local_copy2=other2; 		
+
+	Tree<T,standard_alloc_policy<T,location<unified> > > other3(10); 
+	tree local_copy3;
+	other3.addbranch(); 
+	local_copy3=other3; 		
+
 };
 
 template<typename T,Memory M>
@@ -115,7 +140,7 @@ void TreeTest<T,M>::SwapTest(){
 	tree_1.addbranch();
 
 	tree_2=tree_1;
-//	tree_2.swap(tree_3);
+	tree_2.swap(tree_3);
 };
 
 //python:key:tests=SwapTest SetGetTest AssignmentTest ConstructorTest GetBranchTest AddBranchTest RemoveBranchTest EqualityTest

@@ -3,28 +3,26 @@
 #define HASHED_ARRAY_TREE_CPP
 
 #include<allocator.cu>
-#include<mutex>
 #include<cmath>
 #include"Tree.cu"
 #include<type_traits>
 #include"internal.h"
+#include "reference.cu"
 #define __both__ __host__ __device__ 
 
-template<typename T,typename L>
+template<typename T,Memory M>
 class HashedArrayTree {
 	public:
-	typedef typename allocation_policy<T,L>::allocator		allocator_type;
-	typedef location<L>									Location;
+	typedef typename allocation_policy<T,M>::allocator		allocator_type;
+	typedef location<M>									Location;
 
 	typedef typename allocator_type::value_type		value_type;
-	typedef typename allocator_type::reference		reference;
-	typedef typename allocator_type::const_reference	const_reference;
+	typedef vector::reference_wrapper<T,M>			reference;
+	typedef vector::reference_wrapper<const T,M>		const_reference;
 	typedef typename allocator_type::difference_type	difference_type;
 	typedef typename allocator_type::size_type		size_type;
 	typedef typename allocator_type::pointer		pointer;
 	typedef Tree<int,allocator_type>				tree;
-
-	typedef std::recursive_mutex		Mutex;
 	
 	//iterators
 	typedef Internal::forward forward;
@@ -36,19 +34,17 @@ class HashedArrayTree {
 	template<typename operation>
 	class Iterator : public operation {
 		public:
-		typedef typename allocator_type::value_type		value_type;
-		typedef typename allocator_type::reference		reference;
-		typedef typename allocator_type::difference_type	difference_type;
-		typedef typename allocator_type::size_type		size_type;
-		typedef typename allocator_type::pointer		pointer;
 		typedef std::random_access_iterator_tag			iterator_category;
-		typedef typename tree::device_pointer			pointer_branch;
+		typedef typename tree::pointer				pointer_branch;
+		typedef typename tree::Root::iterator			root_iterator;
 
-		Cordinate			_cordinate;
-		tree*			_tree_ptr;	
+		friend HashedArrayTree<T,M>;
+
+
 		
 		__both__ Iterator();
 			    Iterator(tree&); 
+			    Iterator(tree&,Iterator&); 
 		__both__ Iterator(const Iterator&);
 		__both__ ~Iterator();
 	
@@ -80,6 +76,9 @@ class HashedArrayTree {
 		__both__ reference operator*();
 		__both__ pointer operator->();
 		__both__ reference operator[](size_type); //optional
+
+		private: 
+		Cordinate			_cordinate;
 	};
 	typedef Iterator<forward> const_iterator;
 	typedef Iterator<forward> iterator;
@@ -88,7 +87,6 @@ class HashedArrayTree {
 
 	allocator_type		_allocator;
 	Location			location; 
-	Mutex			_mutex;
 	tree				_tree;
 	size_type			_size;	
 	
@@ -100,7 +98,7 @@ class HashedArrayTree {
 	
 	//internal functions
 	void	resize(int); 
-	void add_end(int); 
+	iterator add_end(int,iterator); 
 	void remove_end(int);
 	template<typename D>
 		void shift(iterator,int);
@@ -120,9 +118,8 @@ class HashedArrayTree {
 	const_reverse_iterator crbegin();
 	const_reverse_iterator crend(); 
 	
-	HashedArrayTree& operator=(const HashedArrayTree&);
-	template<typename A>
-		HashedArrayTree& operator=(const HashedArrayTree<T,A>&);
+	template<Memory O>
+		HashedArrayTree& operator=(const HashedArrayTree<T,O>&);
 
 	bool operator==(const HashedArrayTree&)const;
 	bool operator!=(const HashedArrayTree&)const;
@@ -165,10 +162,6 @@ class HashedArrayTree {
 	reference back();
 	
 	allocator_type get_allocator(); 
-	//locking 
-	void		lock();
-	void		unlock();
-	bool		try_lock();
 };
 //test between different arrays
 //conversion between different arrays

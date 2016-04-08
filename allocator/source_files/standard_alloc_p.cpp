@@ -40,8 +40,8 @@ class standard_alloc_policy : public Policy {
      }
 
      //    memory allocation
-     inline pointer allocate(size_type cnt) {
-          return reinterpret_cast<pointer>(Policy::New(cnt * sizeof(T)));
+     inline pointer allocate(size_type size) {
+          return reinterpret_cast<pointer>(Policy::New(size));
      }
      inline void deallocate(pointer p) {
           Policy::Delete(p);

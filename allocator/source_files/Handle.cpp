@@ -19,7 +19,7 @@ class Handle {
 
      typedef std::random_access_iterator_tag iterator_category;
      // suport type safe bool idiom
-     typedef void (Handle<T>::*bool_type)() const;
+	  typedef void (Handle<T>::*bool_type)() const;
      __both__ void this_type_does_not_support_comparisons() const {};
 
      pointer	_base_pointer;
@@ -31,7 +31,7 @@ class Handle {
          : _offset(offset), _size(size), _base_pointer(base) {};
      __both__ Handle();
      __both__ Handle(std::nullptr_t);
-     __both__ Handle(Handle<T>&&) = default;
+     __both__ Handle(Handle<T>&&);
 	__both__ Handle(const Handle<T>&);
      template<typename L>
 		__both__ Handle(L*);
@@ -293,7 +293,7 @@ Handle<T>::operator Handle<U>()const {
 // use type safe bool idiom
 template <typename T>
 Handle<T>::operator bool_type() const {
-     return (this->_base_pointer)
+     return (_base_pointer)
                 ? &Handle<T>::this_type_does_not_support_comparisons
                 : 0;
 }

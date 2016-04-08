@@ -170,6 +170,9 @@ void buddy_alloc_policy<T, Policy>::removebank(
 template <typename T, typename Policy>
 buddy_alloc_policy<T, Policy>::pointer buddy_alloc_policy<T, Policy>::allocate(
     buddy_alloc_policy<T, Policy>::size_type size) {
+	if(size==1){
+		size++; //nasty fix
+	}
      auto it = _bank.begin();
      handle_ptr free_handle = (it->second)->find_free_handle(size);
      int n = 0;

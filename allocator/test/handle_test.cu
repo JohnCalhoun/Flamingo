@@ -63,6 +63,12 @@ void HandleTest::BuddyOffSetTest() {
 
 void HandleTest::CopyConstructorTest() {
      Handle<int> handle_new(handle);
+
+	Handle<int> handle_null(NULL); 
+	Handle<int> handle_null_copy(handle_null); 
+
+	Handle<int>* handle_ptr=&handle_null; 
+	Handle<int> handle_move(*handle_ptr); 
 };
 void HandleTest::JoinOperatorTest() {
      Handle<int> h_1(handle);
@@ -171,7 +177,26 @@ void HandleTest::RandomAccessTest() {
 
 void HandleTest::VoidTest() { Handle_void handle_void; }
 
-void HandleTest::BoolConvertTest() { bool test = handle; }
+void HandleTest::BoolConvertTest() { 
+
+     int base_l[2] = {0, 1};
+     int* base_ptr_l = base_l;
+     Handle<int> handle_1(base_ptr_l);
+
+	if(handle_1){
+		EXPECT_TRUE(true); 
+	}else{
+		EXPECT_TRUE(false); 
+	}
+	
+	Handle<int> handle_2(NULL); 
+
+	if(handle_2){
+		EXPECT_TRUE(false); 
+	}else{
+		EXPECT_TRUE(true); 
+	}
+}
 
 void HandleTest::IfStatementTest() {
      bool True = true;

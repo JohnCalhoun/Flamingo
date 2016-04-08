@@ -19,27 +19,21 @@ namespace Internal {
 	template<typename T,typename L>
 	class Cordinate{	
 		public:
-		typedef Tree<T,L> tree;
-		typedef typename tree::device_pointer pointer;
+		typedef Tree<T,L>				tree;
+		typedef typename tree::pointer	pointer;
+		typedef typename tree::iterator	iterator;	
+	
+		__both__ Cordinate(int x, int y):_data(x,y){}; 
 		
-		__both__ Cordinate(int x, int y):
-					_data(x,y){}; 
-		
-		__both__ Cordinate(int x, int y, tree* t):
-					_data(x,y),tree_ptr(t){}; 
-		
-		__both__ Cordinate(int x, int y, tree t):
-					_data(x,t),tree_ptr(t){};
-		__both__ Cordinate():
-					_data(0,0),tree_ptr(NULL){};
+		__both__ Cordinate():_data(0,0){};
 		struct data{
 			__both__ data(int x,int y):first(x),second(y){};
 			int first;
 			int second;
 		}; 
 		data _data;
-
-		tree*  tree_ptr;
+		iterator begin;
+		iterator end; 
 			
 		__both__ int width()const;
 		__both__ int row()const;
@@ -49,7 +43,7 @@ namespace Internal {
 		__both__ void setRow(int x);
 		__both__ void setOffset(int x);
 		__both__ void setDistance(int x);
-		__both__ void setTree(tree* t);
+			    void setTree(tree& t);
 		__both__ void set(int x, int y);
 		__both__ bool operator<(Cordinate other);
 		__both__ bool operator>(Cordinate other);

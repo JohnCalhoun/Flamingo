@@ -3,6 +3,7 @@
 #include<location.cu>
 #include<cuda.h>
 #include<vector>
+#include "traits.cpp"
 
 #define __both__ __device__ __host__ 
 
@@ -13,7 +14,11 @@ class Tree {
 
 	typedef typename Allocator::Location_Policy	Location;
 	typedef typename Allocator::pointer		pointer;
-	typedef std::vector<pointer>				Root;
+	typedef typename 
+		Root_vector<pointer,Location::memory>::type		Root;
+
+	typedef pointer*						iterator; 
+	typedef pointer*						const_iterator; 
 
 	typedef T								value_type;
 	typedef int							Width;
@@ -28,6 +33,7 @@ class Tree {
 	pointer			getbranch(const int)const;
 	Root				getRoot()const;
 	bool				isfree()const;
+	size_t			size()const;
 
 	void		setopenbranch(int);
 	void		addbranch();
@@ -38,8 +44,18 @@ class Tree {
 	void		clear();
 	void		resize(int); 
 	const Root&	root()const;
+	Root&	root(); 
+
+	iterator begin();
+	const_iterator begin()const{return cbegin(); }; 
+	const_iterator cbegin()const;
+
+	iterator end(); 
+	const_iterator bend()const{return cend(); }; 
+	const_iterator cend()const;
 	
-	Tree& operator= (const Tree&);  
+	template<typename B>
+	Tree& operator= (const Tree<T,B>&);  
 	void swap( Tree<T,A>&);
 
 	private:

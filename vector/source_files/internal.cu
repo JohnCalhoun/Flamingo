@@ -18,7 +18,7 @@ class Internal::copyToDevice<location<host>,location<device> >{
 //******************************Cordinate**********************
 template<typename T,typename L>
 int Internal::Cordinate<T,L>::width()const{
-	return tree_ptr->width();
+	return end-begin;
 };
 template<typename T,typename L>
 int Internal::Cordinate<T,L>::row()const{
@@ -51,8 +51,9 @@ void Internal::Cordinate<T,L>::setDistance(int x){
 	}
 };
 template<typename T,typename L>
-void Internal::Cordinate<T,L>::setTree(Internal::Cordinate<T,L>::tree* t){
-	tree_ptr=t;
+void Internal::Cordinate<T,L>::setTree(Internal::Cordinate<T,L>::tree& t){
+	begin=t.begin(); 
+	end=t.end(); 
 };
 template<typename T,typename L>
 void Internal::Cordinate<T,L>::set(int x, int y){
@@ -69,7 +70,8 @@ bool Internal::Cordinate<T,L>::operator>(Internal::Cordinate<T,L> other){
 };
 template<typename T,typename L>
 Internal::Cordinate<T,L>::pointer Internal::Cordinate<T,L>::access(){
-	return tree_ptr->getbranch(this->row())+this->offset(); 
+	pointer branch=*(begin+row()); 
+	return branch+offset();
 };
 //*****************************Cordinate*********************
 template<typename U>

@@ -13,6 +13,8 @@
 #define TEST_CONTAINER_SIZE 16
 #define TEST_SIZE 4
 
+using namespace Flamingo::Memory;
+
 class FreeContainerTest : public ::testing::Test {
     public:
      typedef Handle<int>* Handle_ptr;
@@ -76,7 +78,9 @@ void FreeContainerTest::HandleListTest() {
      std::vector<Handle<int>*> vec;
      vec = (container.handle_list());
 }
-void FreeContainerTest::CoutTest() { std::cout << container << '\n'; }
+void FreeContainerTest::CoutTest() { 
+//std::cout << container << '\n'; 
+}
 void FreeContainerTest::EmptyTest() {
      Free_Container<int> empty_container;
      ASSERT_TRUE(empty_container.empty());

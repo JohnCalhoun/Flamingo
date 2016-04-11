@@ -3,16 +3,18 @@
 #include <location.cu>
 #include <gtest/gtest.h>
 
-#include \
-    "MacroUtilities.cpp"
+#include "MacroUtilities.cpp"
 
 #include <cstddef>
 #include <type_traits>
 #define HANDLE_THREADS 8
 
+using namespace Flamingo::Memory;
+
 class HandleTest : public ::testing::Test {
-    protected:
-     virtual void SetUp() {
+
+	protected:
+	virtual void SetUp() {
           int offset = 0;
           std::size_t size = 8;
           Handle<int> handle_int(offset, size, base_ptr);
@@ -86,7 +88,7 @@ void HandleTest::DereferenceOperatorTest() {
      EXPECT_EQ(*handle, 1);
 };
 void HandleTest::IndirectionOperatorTest() {
-     Handle<int>* handle_ptr = &handle;
+     Handle<int>*  handle_ptr = &handle;
      int offset = handle_ptr->_offset;
      EXPECT_EQ(offset, 0);
 };
@@ -206,9 +208,9 @@ void HandleTest::IfStatementTest() {
 }
 
 void HandleTest::ConvertToConstTest() {
-     bool convertable = std::is_convertible<Handle<int>, const Handle<int>>::value;
+     bool convertable = std::is_convertible<Handle<int>,  const Handle<int> >::value;
      EXPECT_TRUE(convertable);
-     convertable = std::is_convertible<Handle<int>, const Handle<int>>::value;
+     convertable = std::is_convertible<Handle<int>,  const Handle<int> >::value;
      EXPECT_TRUE(convertable);
 };
 
@@ -266,37 +268,54 @@ void HandleTest::DeviceMultipleTest() {
      cudaFree(y_d);
 }
 
-void HandleTest::MemCopyTest() {
-     typedef location<device> Location;
-     Location location;
+template<Region SRC,Region DST>
+void copyfunction(){
+     typedef location<SRC>	Src_Location;
+	typedef location<DST>	Dst_Location;
+
+	Src_Location	src_location;
+	Dst_Location	dst_location;
+
      int size = 3 * sizeof(int);
-     int* x_d;
-     int* y_d;
 
-     x_d = static_cast<int*>(location.New(size));
-     y_d = static_cast<int*>(location.New(size));
+     int* x_d = static_cast<int*>(src_location.New(size));
+     int* y_d = static_cast<int*>(dst_location.New(size));
 
-     Handle<int> x_h(0, 3, x_d);
-     Handle<int> y_h(0, 3, y_d);
+     Handle<int> x_h(x_d);
+     Handle<int> y_h(y_d);
 
-     Handle_void x_v(x_h);
-     Handle_void y_v(y_h);
+     Src_Location::MemCopy(x_h, y_h, 3*sizeof(int) );
 
-     //	Location::MemCopy(x_v,y_v,3);
-     Location::MemCopy(x_h, y_h, 3);
+     src_location.Delete(x_d);
+     dst_location.Delete(y_d);
+}
+void HandleTest::MemCopyTest() {
+	copyfunction<host,host>();
+	copyfunction<host,device>(); 
+	copyfunction<host,pinned>();
+	copyfunction<host,unified>();
 
-     location.Delete(x_d);
-     location.Delete(y_d);
+	copyfunction<device,host>();
+	copyfunction<device,device>();
+	copyfunction<device,pinned>();
+	copyfunction<device,unified>();
+
+	copyfunction<pinned,host>();
+	copyfunction<pinned,device>();
+	copyfunction<pinned,pinned>();
+	copyfunction<pinned,unified>();
+
+	copyfunction<unified,host>();
+	copyfunction<unified,device>();
+	copyfunction<unified,pinned>();
+	copyfunction<unified,unified>();
 }
 
-// clang-format off
 // python:key:function=ConstTest AssignementTest MemCopyTest DeviceSingleTest DeviceMultipleTest ConstDereferenceTest ConvertToConstTest IfStatementTest BoolConvertTest VoidTest BuddyOffSetTest CopyConstructorTest JoinOperatorTest DereferenceOperatorTest IndirectionOperatorTest EqualityComparableTest DefaultConstructionTest CopyAssignableTest NullablePointerTest BiderectionalTest RandomAccessTest
 // python:key:concurency=Single Threaded
 // python:template=TEST_F(HandleTest,|function||concurency|){this->|function||concurency|();};
 // python:start
 // python:include=handle.test
-#include \
-    "handle.test"
+#include "handle.test"
 // python:end
-// clang-format on
 #undef HANDLE_THREADS

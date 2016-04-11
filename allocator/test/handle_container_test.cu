@@ -4,14 +4,15 @@
 #include <gtest/gtest.h>
 #include <iostream>
 
-#include \
-    "MacroUtilities.cpp"
+#include "MacroUtilities.cpp"
 #include <thread>
 #include <iostream>
 #include <stdlib.h>
 
 #define HANDLE_CONTAINER_THREADS 8
 #define TEST_CONTAINER_SIZE 16
+
+using namespace Flamingo::Memory;
 
 class HandleContainerTest : public ::testing::Test {
     protected:
@@ -65,10 +66,12 @@ void HandleContainerTest::GetRemoveAnyTest() {
      Handle_ptr h_ptr = container.get_remove_any();
      EXPECT_FALSE(h_ptr == NULL);
 }
-void HandleContainerTest::PrintTest() { std::cout << container << '\n'; }
+void HandleContainerTest::PrintTest() { 
+//	std::cout << container << '\n'; 
+}
 
 void HandleContainerTest::EmptyTest() { EXPECT_FALSE(container.empty()); }
-// clang-format off
+
 // python:key:function=FindHandleTest FindRemoveHandleTest HandleListTest
 // GetRemoveAnyTest PrintTest EmptyTest
 // python:key:concurency=Single Threaded

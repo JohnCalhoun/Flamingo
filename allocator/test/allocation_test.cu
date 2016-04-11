@@ -16,6 +16,8 @@
 #define TEST_CONTAINER_SIZE 16
 #define TEST_SIZE 4
 
+using namespace Flamingo::Memory; 
+
 //***************************buddy allocator*****************
 template <typename Policy>
 class BuddyAllocTest : public ::testing::Test {
@@ -55,7 +57,10 @@ void BuddyAllocTest<T>::MultiAllocDeallocTest() {
 		q1 = (this->allocator).allocate(i*sizeof(int));
 		q2 = (this->allocator).allocate(i*sizeof(int));
 
-		T::Location_Policy::MemCopy(q1,q2,i*sizeof(int) );
+		int* p1=q1;
+		int* p2=q2;	
+
+		T::Location_Policy::MemCopy(p1,p2,i*sizeof(int) );
 		
 		(this->allocator).deallocate(q1);
 		(this->allocator).deallocate(q2);

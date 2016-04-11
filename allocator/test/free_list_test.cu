@@ -15,6 +15,8 @@
 #define TEST_CONTAINER_SIZE 16
 #define TEST_SIZE 4
 
+using namespace Flamingo::Memory;
+
 class FreeListTest : public ::testing::Test {
     public:
      typedef Handle<int> handle;
@@ -52,7 +54,9 @@ int FreeListTest::id2off() {
      return id;
 }
 
-void FreeListTest::CoutTest() { std::cout << free_list << '\n'; }
+void FreeListTest::CoutTest() { 
+//std::cout << free_list << '\n'; 
+}
 void FreeListTest::FindFreeHandleTest() {
 
      auto h = free_list.find_free_handle(TEST_SIZE);

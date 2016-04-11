@@ -10,16 +10,18 @@
 #include<stdio.h>
 #include<stdlib.h>
 
+using namespace Flamingo::Memory;
 // host location test
-template <Memory M>
+template <Region M>
 class LocationTest : public ::testing::Test {
 	protected:
-	typedef int test_type;
-	typedef test_type* pointer;
-	pointer h_ptr;
-	pointer d_ptr;
+	typedef int		test_type;
+	typedef test_type*	pointer;
+	pointer			h_ptr;
+	pointer			d_ptr;
 	int length=16;
 	int size=sizeof(test_type)*length;
+	location<M> policy;
 
 	virtual void SetUp(){
 		h_ptr=static_cast<pointer>(malloc(size));
@@ -28,13 +30,12 @@ class LocationTest : public ::testing::Test {
 			h_ptr[i]=i; 
 		}
 		policy.MemCopy(h_ptr,d_ptr,size);
-		//for cuda functions
 	}
+
 	virtual void TearDown(){
 		free(h_ptr);
 		cudaFree(d_ptr);
 	}
-	location<M> policy;
 
 	DEFINE(mallocfreetest, LOCATION_THREADS)
      DEFINE(copytest, LOCATION_THREADS)
@@ -46,7 +47,7 @@ class LocationTest : public ::testing::Test {
 	DEFINE(sourceindextest,LOCATION_THREADS)
 	DEFINE(sizetest,LOCATION_THREADS)
 };
-template <Memory M>
+template <Region M>
 void LocationTest<M>::sizetest() {
      size_t size = policy.free_memory();
      EXPECT_GT(size,0);
@@ -58,7 +59,7 @@ void LocationTest<M>::sizetest() {
      EXPECT_GT(gpus,0);
 };
 
-template <Memory M>
+template <Region M>
 void LocationTest<M>::mallocfreetest() {
      void* p = NULL;
      p = policy.New(10);
@@ -66,7 +67,7 @@ void LocationTest<M>::mallocfreetest() {
      EXPECT_TRUE(p);
 };
 
-template <Memory M>
+template <Region M>
 void LocationTest<M>::copytest() {
      int a = 1;
      int* a_ptr = &a;
@@ -79,6 +80,7 @@ void LocationTest<M>::copytest() {
 
 template <>
 void LocationTest<device>::copytest() {
+
      size_t size = sizeof(int);
      int a = 1;
      int* a_d = static_cast<int*>(policy.New(size));
@@ -96,7 +98,7 @@ void LocationTest<device>::copytest() {
      EXPECT_EQ(1, b);
 };
 
-template <Memory M>
+template <Region M>
 void LocationTest<M>::filltest() {
 	int locallength=10;
 	int size = locallength*sizeof(int);
@@ -114,7 +116,7 @@ void LocationTest<M>::filltest() {
 
 }
 
-template <Memory M>
+template <Region M>
 void LocationTest<M>::overlaptest() {
 	int offset=2;
 	int locallength=length-offset;
@@ -146,7 +148,7 @@ void LocationTest<host>::overlaptest() {
 	}
 }
 
-template <Memory M>
+template <Region M>
 void LocationTest<M>::cudaextracttest() {
 	pointer tmp;
 	int block=4;
@@ -168,7 +170,7 @@ void LocationTest<M>::cudaextracttest() {
 	cudaFree(tmp);
 }
 
-template <Memory M>
+template <Region M>
 void LocationTest<M>::cudainserttest() {
 	pointer tmp;
 	int block=4;
@@ -212,7 +214,7 @@ void LocationTest<M>::cudainserttest() {
 	gpuErrorCheck( cudaGetLastError()); 
 }
 
-template <Memory M>
+template <Region M>
 void LocationTest<M>::cudablockmovetest() {
 	pointer tmp;
 	int block=4;
@@ -235,7 +237,7 @@ void LocationTest<M>::cudablockmovetest() {
 	cudaFree(tmp); 
 }
 
-template <Memory M>
+template <Region M>
 void LocationTest<M>::sourceindextest() {
 	#define NUMOFTEST_SIDT 12
 	int param[NUMOFTEST_SIDT][3];
@@ -257,9 +259,7 @@ void LocationTest<M>::sourceindextest() {
 	for(int i=0; i<NUMOFTEST_SIDT; i++){
 		EXPECT_EQ(anwsers2[i],getSourceIndex<BLOCK>(i,block,off) );
 	}
-
 }
-
 
 // python:key:policy=host unified device pinned
 // python:key:tests=sizetest sourceindextest cudaextracttest cudainserttest cudablockmovetest overlaptest copytest mallocfreetest filltest

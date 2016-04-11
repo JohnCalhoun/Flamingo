@@ -10,6 +10,10 @@
 #include"internal.h"
 #include <thrust/device_ptr.h>
 
+
+namespace Flamingo {
+namespace Vector {
+
 template<typename T, typename A>
 Tree<T,A>::Tree(){
 	resize(0);
@@ -189,7 +193,8 @@ void Tree<A,B>::swap(Tree<A,B>& other){
 
 
 
-
+}
+}
 
 
 

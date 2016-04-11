@@ -72,8 +72,10 @@ bool operator==(const Tree<A,B>&,const Tree<A,B>&);
 
 }
 }
+
 #undef __both__
 #include"Tree.inl"
+
 #endif
 
 

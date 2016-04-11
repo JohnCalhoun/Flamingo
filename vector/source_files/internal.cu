@@ -4,11 +4,15 @@ class Internal::copyToDevice{
 	public:
 	template<typename pointer,typename Size>
 	void operator()(pointer src, pointer dst, Size size){
-		location<host>::MemCopy(src,dst,size); 
+		Memory::location<	Memory::Region::host>::
+					MemCopy(src,dst,size); 
 	}
 };
 template<>
-class Internal::copyToDevice<location<host>,location<device> >{
+class Internal::copyToDevice<
+			Memory::location<Memory::Region::host>,
+			Memory::location<Memory::Region::device> >
+{
 	public:
 	template<typename pointer,typename Size>
 	void operator()(pointer src, pointer dst, Size size){
@@ -175,7 +179,7 @@ bool Internal::Equality_device<T,L>::operator()(	const Tree<T,L>& tree_1,
 									const Tree<T,L>& tree_2){
 	int width=tree_1.width();
 	typedef typename Tree<T,L>::pointer	pointer;
-	typedef location<device>				Location;
+	typedef Memory::location<Memory::Region::device>		Location;
 	Location location;
 
 	if(tree_1.width()==tree_2.width()){	

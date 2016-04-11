@@ -1,5 +1,5 @@
 // Handle.inl
-
+#include "Handle.cpp"
 namespace Flamingo {
 namespace Memory {
 

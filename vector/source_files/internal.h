@@ -132,9 +132,10 @@ namespace Internal {
 		bool operator()(const Tree<T,L>& tree_1, const Tree<T,L>& tree_2);
 	};
 }; //end HashedArrayTree_Internal
-};
-};
 #include<internal.cu>
+
+};
+};
 
 
 #undef __both__

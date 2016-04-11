@@ -7,14 +7,15 @@
 namespace Flamingo{
 namespace Vector{ 
 
-template<typename T,Memory M> 
+template<typename T,Memory::Region M> 
 struct Root_vector {
 	typedef thrust::host_vector<T> type; 
 };
 template<typename T> 
-struct Root_vector<T,device> {
+struct Root_vector<T,Memory::Region::device> {
 	typedef thrust::device_vector<T> type; 
 };
 
+}
 }
 #endif

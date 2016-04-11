@@ -5,7 +5,8 @@
 #include <memory>
 #include <utility>
 
-namespace vector{ 
+namespace Flamingo{
+namespace Vector{ 
 #define __both__ __host__ __device__ 
 
 //reference to memory on device
@@ -54,6 +55,7 @@ class reference_wrapper<T,device>{
 };
 
 #include "reference.inl"
+}
 }
 #undef __both__
 

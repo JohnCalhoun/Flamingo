@@ -10,6 +10,9 @@
 #include "reference.cu"
 #define __both__ __host__ __device__ 
 
+namespace Flamingo {
+namespace Vector {
+
 template<typename T,Memory M>
 class HashedArrayTree {
 	public:
@@ -168,6 +171,8 @@ class HashedArrayTree {
 #include"iterator.inl"
 #include"HashedArrayTree.inl"
 
+}
+}
 #undef __both__
 #endif
 

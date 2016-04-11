@@ -7,6 +7,9 @@
 
 #define __both__ __device__ __host__ 
 
+namespace Flamingo {
+namespace Vector {
+
 template<typename T, typename A>
 class Tree {
 	public:
@@ -67,7 +70,8 @@ class Tree {
 template<typename A,typename B, typename C, typename D>
 bool operator==(const Tree<A,B>&,const Tree<A,B>&);
 
-
+}
+}
 #undef __both__
 #include"Tree.inl"
 #endif

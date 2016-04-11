@@ -21,7 +21,7 @@
 namespace Flamingo{
 namespace Memory {
 
-enum Region { host=0,pinned=1,unified=2,device=3 };
+enum class Region { host=0,pinned=1,unified=2,device=3 };
 
 template <Region M>
 class location {

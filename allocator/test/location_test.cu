@@ -74,12 +74,12 @@ void LocationTest<M>::copytest() {
      int b = 0;
      int* b_ptr = &b;
 
-     location<host>::MemCopy(a_ptr, b_ptr, sizeof(int));
+     location<Region::host>::MemCopy(a_ptr, b_ptr, sizeof(int));
      EXPECT_EQ(1, b);
 };
 
 template <>
-void LocationTest<device>::copytest() {
+void LocationTest<Region::device>::copytest() {
 
      size_t size = sizeof(int);
      int a = 1;
@@ -93,7 +93,7 @@ void LocationTest<device>::copytest() {
      cudaMemcpy(a_d, &a, size, cudaMemcpyHostToDevice);
      cudaMemcpy(b_d, &b, size, cudaMemcpyHostToDevice);
 
-     location<device>::MemCopy(a_d, b_d, 1);
+     location<Region::device>::MemCopy(a_d, b_d, 1);
      cudaMemcpy(&b, b_d, size, cudaMemcpyDeviceToHost);
      EXPECT_EQ(1, b);
 };
@@ -136,7 +136,7 @@ void LocationTest<M>::overlaptest() {
 }
 
 template <>
-void LocationTest<host>::overlaptest() {
+void LocationTest<Region::host>::overlaptest() {
 	int offset=2;
 	int locallength=length-offset;
 	int localsize=locallength*sizeof(test_type);
@@ -260,7 +260,10 @@ void LocationTest<M>::sourceindextest() {
 		EXPECT_EQ(anwsers2[i],getSourceIndex<BLOCK>(i,block,off) );
 	}
 }
-
+const Region host=Region::host; 
+const Region unified=Region::unified; 
+const Region pinned=Region::pinned; 
+const Region device=Region::device; 
 // python:key:policy=host unified device pinned
 // python:key:tests=sizetest sourceindextest cudaextracttest cudainserttest cudablockmovetest overlaptest copytest mallocfreetest filltest
 // python:key:concurrency=Single

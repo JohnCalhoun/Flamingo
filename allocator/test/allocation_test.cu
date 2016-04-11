@@ -84,7 +84,7 @@ void BuddyAllocTest<T>::VectorAllocDeallocTest() {
 
 template <typename T>
 void BuddyAllocTest<T>::RebindTest() {
-     typedef typename T::rebind<float, location<host> >::other other;
+     typedef typename T::rebind<float, location<Region::host> >::other other;
      other alloc_other;
      typedef typename other::pointer other_pointer;
      other_pointer p;
@@ -92,7 +92,7 @@ void BuddyAllocTest<T>::RebindTest() {
      alloc_other.deallocate(p);
 
      typedef typename T::pointer pointer;
-     typedef typename T::rebind<pointer, location<host> >::other ptr_Allocator;
+     typedef typename T::rebind<pointer, location<Region::host> >::other ptr_Allocator;
      ptr_Allocator ptr_alloc;
      typename ptr_Allocator::pointer q = ptr_alloc.allocate(0);
      ptr_alloc.deallocate(q);
@@ -105,6 +105,11 @@ void BuddyAllocTest<T>::RebindTest() {
 
 #define BUDDY buddy_alloc_policy
 #define STANDARD standard_alloc_policy
+
+const Region host=Region::host;
+const Region unified=Region::unified;
+const Region pinned=Region::pinned;
+const Region device=Region::device;
 
 // clang-format off
 // python:key:function=MaxSizeTest AllocDeallocTest MultiAllocDeallocTest

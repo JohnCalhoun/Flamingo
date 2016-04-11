@@ -10,7 +10,8 @@
 #include<location.cu>
 
 #define __both__ __host__ __device__ 
-
+namespace Flamingo {
+namespace Vector {
 namespace Internal {
 	//********************************Cordinate*****************
 	template<typename SRC, typename DST>
@@ -131,7 +132,8 @@ namespace Internal {
 		bool operator()(const Tree<T,L>& tree_1, const Tree<T,L>& tree_2);
 	};
 }; //end HashedArrayTree_Internal
-
+};
+};
 #include<internal.cu>
 
 

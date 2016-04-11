@@ -290,25 +290,25 @@ void copyfunction(){
      dst_location.Delete(y_d);
 }
 void HandleTest::MemCopyTest() {
-	copyfunction<host,host>();
-	copyfunction<host,device>(); 
-	copyfunction<host,pinned>();
-	copyfunction<host,unified>();
+	copyfunction<Region::host,Region::host>();
+	copyfunction<Region::host,Region::device>(); 
+	copyfunction<Region::host,Region::pinned>();
+	copyfunction<Region::host,Region::unified>();
 
-	copyfunction<device,host>();
-	copyfunction<device,device>();
-	copyfunction<device,pinned>();
-	copyfunction<device,unified>();
+	copyfunction<Region::device,Region::host>();
+	copyfunction<Region::device,Region::device>();
+	copyfunction<Region::device,Region::pinned>();
+	copyfunction<Region::device,Region::unified>();
 
-	copyfunction<pinned,host>();
-	copyfunction<pinned,device>();
-	copyfunction<pinned,pinned>();
-	copyfunction<pinned,unified>();
+	copyfunction<Region::pinned,Region::host>();
+	copyfunction<Region::pinned,Region::device>();
+	copyfunction<Region::pinned,Region::pinned>();
+	copyfunction<Region::pinned,Region::unified>();
 
-	copyfunction<unified,host>();
-	copyfunction<unified,device>();
-	copyfunction<unified,pinned>();
-	copyfunction<unified,unified>();
+	copyfunction<Region::unified,Region::host>();
+	copyfunction<Region::unified,Region::device>();
+	copyfunction<Region::unified,Region::pinned>();
+	copyfunction<Region::unified,Region::unified>();
 }
 
 // python:key:function=ConstTest AssignementTest MemCopyTest DeviceSingleTest DeviceMultipleTest ConstDereferenceTest ConvertToConstTest IfStatementTest BoolConvertTest VoidTest BuddyOffSetTest CopyConstructorTest JoinOperatorTest DereferenceOperatorTest IndirectionOperatorTest EqualityComparableTest DefaultConstructionTest CopyAssignableTest NullablePointerTest BiderectionalTest RandomAccessTest

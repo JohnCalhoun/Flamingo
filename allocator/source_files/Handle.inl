@@ -31,7 +31,7 @@ int Handle<T>::buddy_offset() {
 
 template <typename T>
 __both__ T& Handle<T>::operator*() {
-     return *(_base_pointer + _offset);
+     return *(_base_pointer + _offset/sizeof(T));
 };
 
 template <typename T>
@@ -49,7 +49,7 @@ template <typename T>
 __both__ Handle<T> operator+(const Handle<T> handle, const int x) {
      Handle<T> temp = handle;
      int m;
-     m = x;//this can be rewriten
+     m = x*sizeof(T);//this can be rewriten
 	if (m > 0) {
           while (m--)
                ++temp._offset;
@@ -67,13 +67,13 @@ __both__ Handle<T> operator+(const int x, const Handle<T> handle) {
 
 template <typename T>
 __both__ int operator-(const Handle<T>& handle_1, const Handle<T>& handle_2) {
-     return handle_1._offset - handle_2._offset;
+     return (handle_1._offset - handle_2._offset)/sizeof(T);
 }
 
 template <typename T>
 __both__ Handle<T> operator-(const Handle<T>& handle, const int& x) {
      Handle<T> temp = handle;
-     temp._offset -= x;
+     temp._offset -= x*sizeof(T);
      return temp;
 }
 
@@ -154,39 +154,39 @@ bool Handle<T>::operator>=(const Handle<T>& handle_2) const {
 
 template <typename T>
 Handle<T>& Handle<T>::operator--() {
-     --this->_offset;
+	_offset-=sizeof(T); 
      return *this;
 }
 
 template <typename T>
 Handle<T>& Handle<T>::operator++() {
-     ++this->_offset;
+	_offset+=sizeof(T);	
      return *this;
 }
 
 template <typename T>
 Handle<T> Handle<T>::operator--(int x) {
      Handle<T> temp = *this;
-     --this->_offset;
+	_offset-=sizeof(T); 
      return temp;
 }
 
 template <typename T>
 Handle<T> Handle<T>::operator++(int x) {
      Handle<T> temp = *this;
-     ++this->_offset;
+	_offset+=sizeof(T); 
      return temp;
 }
 
 template <typename T>
 Handle<T>& Handle<T>::operator-=(const int x) {
-     this->_offset -= x;
+     this->_offset -= x*sizeof(T);
      return *this;
 }
 
 template <typename T>
 Handle<T>& Handle<T>::operator+=(const int x) {
-     this->_offset += x;
+     this->_offset += x*sizeof(T);
      return *this;
 }
 

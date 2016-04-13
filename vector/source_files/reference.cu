@@ -10,15 +10,17 @@ namespace Vector{
 #define __both__ __host__ __device__ 
 
 //reference to memory on device
-template <class T,Memory M>
+template <class T,Memory::Region M>
 class reference_wrapper{
 	public:
 	// construct/copy/destroy
+	__both__ reference_wrapper():_ptr(NULL){};  
 	__both__ reference_wrapper(T& ref): _ptr(&ref){};
 	__both__ reference_wrapper(T&&) = delete;
 	__both__ reference_wrapper(const reference_wrapper& wrap):
 		_ptr(wrap._ptr){};
-	__both__ reference_wrapper(T* ptr):_ptr(ptr){}; 
+	__both__ reference_wrapper(T* ptr):
+		_ptr(ptr){}; 
 
 	// assignment
 	reference_wrapper& operator=(const reference_wrapper&);
@@ -31,27 +33,27 @@ class reference_wrapper{
 };
 
 template <class T>
-class reference_wrapper<T,device>{
+class reference_wrapper<T,Memory::Region::device>{
 	public:
 	// construct/copy/destroy
-	__both__ reference_wrapper(T& ref): _ptr_host(NULL),_ptr(&ref) {};
+	__both__ reference_wrapper():_ptr(NULL){};  
+	__both__ reference_wrapper(T& ref): _ptr(&ref) {};
 	__both__ reference_wrapper(T&&) = delete;
 	__both__ reference_wrapper(const reference_wrapper& wrap):
-			_ptr_host(NULL),
 			_ptr(wrap._ptr){};
 	__both__ reference_wrapper(T* ptr):
-			_ptr_host(NULL){}; 
-	__both__ ~reference_wrapper(){ delete _ptr_host;}; 
+			_ptr(ptr){}; 
+	__both__ ~reference_wrapper(){}; 
 
 	// assignment
 	__both__ reference_wrapper& operator=(const reference_wrapper&);
 	__both__ reference_wrapper& operator=(const T&);
 
-	__both__ operator T& ()const{ return get(); };
-	__both__ T& get()const;
+	__both__ operator const T& ()const{ return get(); };
+	__both__ const T& get()const;
 
 	T* _ptr; 
-	T* _ptr_host; 
+	T  _value_host; 
 };
 
 #include "reference.inl"

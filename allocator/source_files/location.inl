@@ -67,7 +67,12 @@ void location<M>::MemCopy(pointer src_ptr, pointer dst_ptr, size_type size) {
                             blocksize);
           }
      } else {
-          gpuErrorCheck(cudaMemcpy(dst_ptr, src_ptr, size, cudaMemcpyDefault));
+//		cudaPointerAttributes at; 
+//		cudaPointerAttributes bt; 
+//		cudaPointerGetAttributes(&at,dst_ptr); 
+//		cudaPointerGetAttributes(&bt,src_ptr); 
+ 
+	     gpuErrorCheck(cudaMemcpy(dst_ptr, src_ptr, size, cudaMemcpyDefault));
      }
 };
 template<Region M>

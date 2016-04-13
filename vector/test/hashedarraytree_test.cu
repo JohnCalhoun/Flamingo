@@ -2,7 +2,7 @@
 #include <gtest/gtest.h>
 
 #define HASHEDARRAYTREE_THREADS 8
-#define HASHEDARRAYTREE_SIZE 10 
+#define HASHEDARRAYTREE_SIZE 40 
 
 #include<MacroUtilities.cpp>
 #include<HashedArrayTree.cu>
@@ -11,11 +11,14 @@
 
 #include<stdio.h>
 //host location test
-template<typename T,Memory M>
+using namespace Flamingo::Memory;
+using namespace Flamingo::Vector; 
+
+template<typename T,Region M>
 class HashedArrayTreeTest : public ::testing::Test{
 	public:
 	typedef HashedArrayTree<T,M >		Container;
-	typedef HashedArrayTree<T,host >	Container_host;
+	typedef HashedArrayTree<T,Region::host >	Container_host;
 	typedef typename Container_host::iterator	host_iterator;
 	Container_host global_host;
 	Container vector;
@@ -37,37 +40,37 @@ class HashedArrayTreeTest : public ::testing::Test{
 	DEFINE(ModifyTest,		HASHEDARRAYTREE_THREADS)
 };
 
-template<typename T,Memory M>
+template<typename T,Region M>
 void HashedArrayTreeTest<T,M>::InsertTest(){
 	Container local;
 	int s=local.size();
 	local.insert(local.begin(),1);
 	EXPECT_TRUE(s<local.size());
 }
-template<typename T,Memory M>
+template<typename T,Region M>
 void HashedArrayTreeTest<T,M>::AccessTest(){
 	auto it=global_host.begin();	
 	int r=*it;
 	EXPECT_EQ(r,0); 
 }
-template<typename T,Memory M>
+template<typename T,Region M>
 void HashedArrayTreeTest<T,M>::ModifyTest(){
 	Container local;
 	local=global_host;
 
 	for(int i=0; i<HASHEDARRAYTREE_SIZE; i++){
-		EXPECT_EQ(local[i],i);
-//		local[i]=i+1;
+		EXPECT_EQ(local[i],global_host[i]);
+		local[i]=i+1;
 	}
 	for(int j=0; j<HASHEDARRAYTREE_SIZE; j++){
-//		EXPECT_EQ(local[i],i+1);
+		EXPECT_EQ(local[j],j+1);
 	}
 }
-template<typename T,Memory M>
+template<typename T,Region M>
 void HashedArrayTreeTest<T,M>::ConstructorTest(){
 //	Container local_vector; 
 };
-template<typename T,Memory M>
+template<typename T,Region M>
 void HashedArrayTreeTest<T,M>::AssignmentTest(){
 /*
 	Container local_vector; 
@@ -75,11 +78,11 @@ void HashedArrayTreeTest<T,M>::AssignmentTest(){
 	EXPECT_TRUE(local_vector==vector); 
 */
 };
-template<typename T,Memory M>
+template<typename T,Region M>
 void HashedArrayTreeTest<T,M>::EqualityTest(){
 //	EXPECT_TRUE(vector==vector);
 };
-template<typename T,Memory M>
+template<typename T,Region M>
 void HashedArrayTreeTest<T,M>::BeginEndTest(){
 /*
 	typedef typename Container::iterator iterator; 
@@ -90,7 +93,7 @@ void HashedArrayTreeTest<T,M>::BeginEndTest(){
 	iterator ce=vector.cbegin();
 */
 };
-template<typename T,Memory M>
+template<typename T,Region M>
 void HashedArrayTreeTest<T,M>::LockTest(){
 /*
 	vector.lock();
@@ -102,7 +105,7 @@ void HashedArrayTreeTest<T,M>::LockTest(){
 		vector.unlock();
 */
 }
-template<typename T,Memory M>
+template<typename T,Region M>
 void HashedArrayTreeTest<T,M>::QuerryTest(){
 /*
 	typedef typename Container::size_type size;	
@@ -114,7 +117,10 @@ void HashedArrayTreeTest<T,M>::QuerryTest(){
 */
 }
 ///device**********************
-
+const Region host=Region::host;
+const Region device=Region::device;
+const Region pinned=Region::pinned;
+const Region unified=Region::unified;
 
 //python:key:testsH=InsertTest AccessTest ModifyTest QuerryTest LockTest EqualityTest ConstructorTest AssignmentTest
 //python:key:locationH=host device

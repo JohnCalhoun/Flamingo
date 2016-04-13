@@ -1,24 +1,3 @@
-//************************copyToDevice*****************
-template<typename SRC,typename DST>
-class Internal::copyToDevice{
-	public:
-	template<typename pointer,typename Size>
-	void operator()(pointer src, pointer dst, Size size){
-		Memory::location<	Memory::Region::host>::
-					MemCopy(src,dst,size); 
-	}
-};
-template<>
-class Internal::copyToDevice<
-			Memory::location<Memory::Region::host>,
-			Memory::location<Memory::Region::device> >
-{
-	public:
-	template<typename pointer,typename Size>
-	void operator()(pointer src, pointer dst, Size size){
-		cudaMemcpy(dst,src,size,cudaMemcpyHostToDevice); 
-	}
-};
 //******************************Cordinate**********************
 template<typename T,typename L>
 int Internal::Cordinate<T,L>::width()const{
@@ -74,9 +53,25 @@ bool Internal::Cordinate<T,L>::operator>(Internal::Cordinate<T,L> other){
 };
 template<typename T,typename L>
 Internal::Cordinate<T,L>::pointer Internal::Cordinate<T,L>::access(){
-	pointer branch=*(begin+row()); 
-	return branch+offset();
-};
+	pointer output; 
+	#ifdef __CUDA_ARCH__
+		pointer branch( *(begin+row()) ); 
+		output=branch+offset();
+	#else
+		if( tree::Location::memory == Memory::Region::device){
+			Memory::location<Memory::Region::device>::MemCopy(
+									begin+row(),
+									&output,
+									sizeof(pointer)); 
+			output+=offset(); 
+		}else{
+			pointer branch( *(begin+row()) ); 
+			output=branch+offset();
+		}		
+	#endif
+
+	return output; 
+};	
 //*****************************Cordinate*********************
 template<typename U>
 void Internal::UP::operator()(U& vector){

@@ -24,7 +24,7 @@ class Handle {
      __both__ void this_type_does_not_support_comparisons() const {};
 
      pointer	_base_pointer;
-     int		_offset;
+     int		_offset; //this is the byte offset
      size_t	_size;
 
      // Special members

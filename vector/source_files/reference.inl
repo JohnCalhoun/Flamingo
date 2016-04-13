@@ -1,15 +1,20 @@
 #include "reference.cu"
 
 //---------------------host------------------------------------
-template<typename T,Memory M>
+template<typename T,Memory::Region M>
 reference_wrapper<T,M>& 
 	reference_wrapper<T,M>::operator=(const reference_wrapper<T,M>& other)
 {
-	_ptr=other._ptr; 	
+	if(!_ptr){
+		_ptr=static_cast<T*>(Memory::location<M>::New(sizeof(T)) ); 
+	}
+	Memory::location<M>::MemCopy(	other._ptr,
+							_ptr,
+							sizeof(T)); 
 	return *this; 
 }
 
-template<typename T,Memory M>
+template<typename T,Memory::Region M>
 reference_wrapper<T,M>& 
 	reference_wrapper<T,M>::operator=(const T& x)
 {
@@ -17,41 +22,55 @@ reference_wrapper<T,M>&
 	return *this; 
 }
 
-template<typename T,Memory M>
+template<typename T,Memory::Region M>
 T& reference_wrapper<T,M>::get()const
 {
 	return *_ptr; 
 }
 //-----------------------device-------------------------------
 template<typename T>
-reference_wrapper<T,device>& 
-	reference_wrapper<T,device>::operator=(const reference_wrapper<T,device>& other)
+reference_wrapper<T,Memory::Region::device>& 
+	reference_wrapper<T,Memory::Region::device>::operator=(const reference_wrapper<T,Memory::Region::device>& other)
 {
-	_ptr=other.ptr; 
+	typedef Memory::location<Memory::Region::device> Location; 
+
+	if(!_ptr){
+		_ptr=static_cast<T*>(Location::New(sizeof(T)) ); 
+	}
+	Location::MemCopy(	other._ptr,
+					_ptr,
+					sizeof(T)); 
 	return *this; 
 };
 
 template<typename T>
-reference_wrapper<T,device>& 
-	reference_wrapper<T,device>::operator=(const T& x)
+reference_wrapper<T,Memory::Region::device>& 
+	reference_wrapper<T,Memory::Region::device>::operator=(const T& x)
 {
-	#ifdef ___CUDA_ARCH___
+	#ifdef __CUDA_ARCH__
 		*_ptr=x;  
 	#else
 		T copy=x;
-		location<device>::MemCopy(&copy,_ptr,sizeof(T));
+		Memory::location<Memory::Region::device>::
+			MemCopy(	&copy,
+					_ptr,
+					sizeof(T));
 	#endif
 	return *this; 
 }
 
 template<typename T>
-T& reference_wrapper<T,device>::get()const
+const T& reference_wrapper<T,Memory::Region::device>::get()const
 {
-	#ifdef ___CUDA_ARCH__
+	#ifdef __CUDA_ARCH__
 		return *_ptr; 	
 	#else
-		location<device>::MemCopy(_ptr,_ptr_host,sizeof(T)); 
-		return *_ptr_host; 
+		T* host_ptr=const_cast<T*>(&_value_host);
+		Memory::location<Memory::Region::device>::
+			MemCopy(	_ptr,
+					host_ptr,
+					sizeof(T)); 
+		return _value_host; 
 	#endif
 }
 

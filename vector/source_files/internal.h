@@ -14,9 +14,6 @@ namespace Flamingo {
 namespace Vector {
 namespace Internal {
 	//********************************Cordinate*****************
-	template<typename SRC, typename DST>
-	class copyToDevice; 
-	
 	template<typename T,typename L>
 	class Cordinate{	
 		public:

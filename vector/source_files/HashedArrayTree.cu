@@ -13,15 +13,16 @@
 namespace Flamingo {
 namespace Vector {
 
-template<typename T,Memory M>
+template<typename T,Memory::Region M>
 class HashedArrayTree {
 	public:
-	typedef typename allocation_policy<T,M>::allocator		allocator_type;
-	typedef location<M>									Location;
+	typedef typename 
+		Memory::allocation_policy<T,M>::allocator		allocator_type;
+	typedef Memory::location<M>				Location;
 
 	typedef typename allocator_type::value_type		value_type;
-	typedef vector::reference_wrapper<T,M>			reference;
-	typedef vector::reference_wrapper<const T,M>		const_reference;
+	typedef Vector::reference_wrapper<T,M>			reference;
+	typedef Vector::reference_wrapper<const T,M>		const_reference;
 	typedef typename allocator_type::difference_type	difference_type;
 	typedef typename allocator_type::size_type		size_type;
 	typedef typename allocator_type::pointer		pointer;
@@ -121,7 +122,7 @@ class HashedArrayTree {
 	const_reverse_iterator crbegin();
 	const_reverse_iterator crend(); 
 	
-	template<Memory O>
+	template<Memory::Region O>
 		HashedArrayTree& operator=(const HashedArrayTree<T,O>&);
 
 	bool operator==(const HashedArrayTree&)const;

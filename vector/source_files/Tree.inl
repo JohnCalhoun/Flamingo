@@ -121,7 +121,7 @@ Tree<T,A>::const_iterator Tree<T,A>::cbegin()const{
 };
 template<typename T, typename A>
 Tree<T,A>::const_iterator Tree<T,A>::cend()const{
-	return cbegin()+width()+1; 
+	return cbegin()+width(); 
 };
 template<typename T, typename A>
 Tree<T,A>::iterator Tree<T,A>::begin(){	
@@ -129,7 +129,7 @@ Tree<T,A>::iterator Tree<T,A>::begin(){
 };
 template<typename T, typename A>
 Tree<T,A>::iterator Tree<T,A>::end(){
-	return begin()+width()+1; 
+	return begin()+width(); 
 };
 template<typename T, typename A>
 const Tree<T,A>::Root& Tree<T,A>::root()const{
@@ -158,9 +158,8 @@ Tree<T,A>& Tree<T,A>::operator=(const Tree<T,B>& other){
 	Root& this_root=this->root(); 
 
 	for(int n=0; n<other.openbranch(); n++){
-		Other_pointer src=other_root[n]; 
-		pointer src_ptr=pointer(src); 
-		pointer dst=this_root[n]; 
+		pointer src_ptr=pointer(other_root[n]); 
+		pointer dst	=this_root[n]; 
 
 		if( src_ptr ){
 			Location::MemCopy(	src_ptr,

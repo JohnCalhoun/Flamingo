@@ -236,6 +236,8 @@ void HandleTest::DeviceSingleTest() {
      cudaDeviceSynchronize();
      cudaMemcpy(&y, y_d, sizeof(int), cudaMemcpyDeviceToHost);
      EXPECT_EQ(x, y);
+
+	Handle<int> copy(x_h); 
      cudaFree(x_d);
      cudaFree(y_d);
 }

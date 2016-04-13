@@ -6,8 +6,6 @@ typedef HashedArrayTreeTest<int,host> HashedArrayTreeTest_int_host_;
 typedef HashedArrayTreeTest<int,host> HashedArrayTreeTest_int_host_; 
 typedef HashedArrayTreeTest<int,host> HashedArrayTreeTest_int_host_; 
 typedef HashedArrayTreeTest<int,host> HashedArrayTreeTest_int_host_; 
-typedef HashedArrayTreeTest<int,host> HashedArrayTreeTest_int_host_; 
-typedef HashedArrayTreeTest<int,device> HashedArrayTreeTest_int_device_; 
 typedef HashedArrayTreeTest<int,device> HashedArrayTreeTest_int_device_; 
 typedef HashedArrayTreeTest<int,device> HashedArrayTreeTest_int_device_; 
 typedef HashedArrayTreeTest<int,device> HashedArrayTreeTest_int_device_; 
@@ -20,7 +18,6 @@ TEST_F(HashedArrayTreeTest_int_host_,InsertTesthost){this->InsertTest();}
 TEST_F(HashedArrayTreeTest_int_host_,AccessTesthost){this->AccessTest();}
 TEST_F(HashedArrayTreeTest_int_host_,ModifyTesthost){this->ModifyTest();}
 TEST_F(HashedArrayTreeTest_int_host_,QuerryTesthost){this->QuerryTest();}
-TEST_F(HashedArrayTreeTest_int_host_,LockTesthost){this->LockTest();}
 TEST_F(HashedArrayTreeTest_int_host_,EqualityTesthost){this->EqualityTest();}
 TEST_F(HashedArrayTreeTest_int_host_,ConstructorTesthost){this->ConstructorTest();}
 TEST_F(HashedArrayTreeTest_int_host_,AssignmentTesthost){this->AssignmentTest();}
@@ -28,7 +25,6 @@ TEST_F(HashedArrayTreeTest_int_device_,InsertTestdevice){this->InsertTest();}
 TEST_F(HashedArrayTreeTest_int_device_,AccessTestdevice){this->AccessTest();}
 TEST_F(HashedArrayTreeTest_int_device_,ModifyTestdevice){this->ModifyTest();}
 TEST_F(HashedArrayTreeTest_int_device_,QuerryTestdevice){this->QuerryTest();}
-TEST_F(HashedArrayTreeTest_int_device_,LockTestdevice){this->LockTest();}
 TEST_F(HashedArrayTreeTest_int_device_,EqualityTestdevice){this->EqualityTest();}
 TEST_F(HashedArrayTreeTest_int_device_,ConstructorTestdevice){this->ConstructorTest();}
 TEST_F(HashedArrayTreeTest_int_device_,AssignmentTestdevice){this->AssignmentTest();}

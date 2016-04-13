@@ -33,7 +33,6 @@ class HashedArrayTreeTest : public ::testing::Test{
 	DEFINE(AssignmentTest,	HASHEDARRAYTREE_THREADS)	
 	DEFINE(EqualityTest,	HASHEDARRAYTREE_THREADS)
 	DEFINE(BeginEndTest,	HASHEDARRAYTREE_THREADS)
-	DEFINE(LockTest,		HASHEDARRAYTREE_THREADS)
 	DEFINE(QuerryTest,		HASHEDARRAYTREE_THREADS)
 	DEFINE(InsertTest,		HASHEDARRAYTREE_THREADS)
 	DEFINE(AccessTest,		HASHEDARRAYTREE_THREADS)
@@ -68,53 +67,37 @@ void HashedArrayTreeTest<T,M>::ModifyTest(){
 }
 template<typename T,Region M>
 void HashedArrayTreeTest<T,M>::ConstructorTest(){
-//	Container local_vector; 
+	Container local_vector; 
 };
 template<typename T,Region M>
 void HashedArrayTreeTest<T,M>::AssignmentTest(){
-/*
 	Container local_vector; 
 	local_vector=vector;	
 	EXPECT_TRUE(local_vector==vector); 
-*/
 };
 template<typename T,Region M>
 void HashedArrayTreeTest<T,M>::EqualityTest(){
-//	EXPECT_TRUE(vector==vector);
+	EXPECT_TRUE(vector==vector);
 };
 template<typename T,Region M>
 void HashedArrayTreeTest<T,M>::BeginEndTest(){
-/*
+
 	typedef typename Container::iterator iterator; 
 	
 	iterator b=vector.begin();
 	iterator e=vector.end();
 	iterator cb=vector.cbegin();
 	iterator ce=vector.cbegin();
-*/
 };
 template<typename T,Region M>
-void HashedArrayTreeTest<T,M>::LockTest(){
-/*
-	vector.lock();
-	global_host[0]++;
-	vector.unlock();
-
-	bool p=vector.try_lock();
-	if(p)
-		vector.unlock();
-*/
-}
-template<typename T,Region M>
 void HashedArrayTreeTest<T,M>::QuerryTest(){
-/*
+
 	typedef typename Container::size_type size;	
 
 	size a=vector.size();
 	size b=vector.max_size();
 	size c=vector.capacity();
 	bool d=vector.empty();
-*/
 }
 ///device**********************
 const Region host=Region::host;
@@ -122,7 +105,7 @@ const Region device=Region::device;
 const Region pinned=Region::pinned;
 const Region unified=Region::unified;
 
-//python:key:testsH=InsertTest AccessTest ModifyTest QuerryTest LockTest EqualityTest ConstructorTest AssignmentTest
+//python:key:testsH=InsertTest AccessTest ModifyTest QuerryTest EqualityTest ConstructorTest AssignmentTest
 //python:key:locationH=host device
 //python:template=TEST_F($HashedArrayTreeTest<int,|locationH|>$,|testsH||locationH|){this->|testsH|();}
 

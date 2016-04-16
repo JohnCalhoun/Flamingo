@@ -22,7 +22,7 @@ class HashedArrayTree {
 
 	typedef typename allocator_type::value_type		value_type;
 	typedef Vector::reference_wrapper<T,M>			reference;
-	typedef Vector::reference_wrapper<const T,M>		const_reference;
+	typedef Vector::reference_wrapper<T,M>		const_reference;
 	typedef typename allocator_type::difference_type	difference_type;
 	typedef typename allocator_type::size_type		size_type;
 	typedef typename allocator_type::pointer		pointer;
@@ -47,7 +47,7 @@ class HashedArrayTree {
 
 		
 		__both__ Iterator();
-			    Iterator(tree&); 
+			    Iterator(const tree&); 
 			    Iterator(tree&,Iterator&); 
 		__both__ Iterator(const Iterator&);
 		__both__ ~Iterator();
@@ -92,35 +92,37 @@ class HashedArrayTree {
 	allocator_type		_allocator;
 	Location			location; 
 	tree				_tree;
-	size_type			_size;	
+	size_type			_cap;	
+	size_type			_count;
 	
 	//construcors, destructors
 	HashedArrayTree();
 	HashedArrayTree(const HashedArrayTree&);
-	HashedArrayTree(int,T);
+	HashedArrayTree(size_type);
+	HashedArrayTree(size_type,T);
 	~HashedArrayTree();
 	
 	//internal functions
-	void	resize(int); 
-	iterator add_end(int,iterator); 
-	void remove_end(int);
+	void	resize(size_type); 
+	iterator add_end(size_type,iterator); 
+	void remove_end(size_type);
 	template<typename D>
-		void shift(iterator,int);
+		void shift(iterator,size_type);
 	template<typename I>
-		void	copy(I,int,const T&); 
+		void	copy(I,size_type,const T&); 
 	template<typename I>
-		void copy(I,int,I);
+		void copy(I,size_type,I);
 	
-	int calculate_width(int);
+	size_type calculate_width(size_type);
 	//interface	
 	iterator begin();
 	iterator end();
-	const_iterator cbegin();
-	const_iterator cend(); 
+	const_iterator cbegin()const;
+	const_iterator cend()const; 
 	reverse_iterator rbegin();
 	reverse_iterator rend();
-	const_reverse_iterator crbegin();
-	const_reverse_iterator crend(); 
+	const_reverse_iterator crbegin()const;
+	const_reverse_iterator crend()const; 
 	
 	template<Memory::Region O>
 		HashedArrayTree& operator=(const HashedArrayTree<T,O>&);
@@ -134,7 +136,7 @@ class HashedArrayTree {
 	size_type		capacity()const;
 	bool			empty()const; 
 	
-	void reserve(int);
+	void reserve(size_type);
 	void shrink_to_fit(); 
 
 	//template<class ...Args>
@@ -164,13 +166,18 @@ class HashedArrayTree {
 	reference at(size_type);
 	reference front(); 
 	reference back();
-	
+
+	const_reference operator[](size_type)const; 	
+	const_reference at(size_type)const;
+	const_reference front()const; 
+	const_reference back()const;
+
 	allocator_type get_allocator(); 
 };
 //test between different arrays
 //conversion between different arrays
-#include"iterator.inl"
-#include"HashedArrayTree.inl"
+#include "iterator.inl"
+#include "HashedArrayTree.inl"
 
 }
 }

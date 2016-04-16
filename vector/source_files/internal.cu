@@ -34,9 +34,9 @@ void Internal::Cordinate<T,L>::setDistance(int x){
 	}
 };
 template<typename T,typename L>
-void Internal::Cordinate<T,L>::setTree(Internal::Cordinate<T,L>::tree& t){
-	begin=t.begin(); 
-	end=t.end(); 
+void Internal::Cordinate<T,L>::setTree(const Internal::Cordinate<T,L>::tree& t){
+	begin=t.cbegin(); 
+	end=t.cend(); 
 };
 template<typename T,typename L>
 void Internal::Cordinate<T,L>::set(int x, int y){
@@ -72,6 +72,78 @@ Internal::Cordinate<T,L>::pointer Internal::Cordinate<T,L>::access(){
 
 	return output; 
 };	
+
+template<typename T,typename L>
+Internal::Cordinate<T,L>& 
+	Internal::Cordinate<T,L>::operator++()
+{
+	operator+(1); 
+	return *this;
+};
+template<typename T,typename L>
+Internal::Cordinate<T,L> 
+	Internal::Cordinate<T,L>::operator++(int x)
+{
+	Cordinate tmp(*this); 
+	operator++(); 
+	return tmp; 
+};
+template<typename T,typename L>
+Internal::Cordinate<T,L>& 
+	Internal::Cordinate<T,L>::operator--()
+{
+	operator-(1); 
+	return *this; 
+};
+template<typename T,typename L>
+Internal::Cordinate<T,L> 
+	Internal::Cordinate<T,L>::operator--(int x)
+{
+	Cordinate tmp(*this); 
+	operator--(); 
+	return tmp; 
+};
+template<typename T,typename L>
+Internal::Cordinate<T,L>& 
+	Internal::Cordinate<T,L>::operator+=(int x)
+{
+	int d=distance(); 
+	d+=x; 
+	setDistance(d);
+	return *this; 
+};
+template<typename T,typename L>
+Internal::Cordinate<T,L>& 
+	Internal::Cordinate<T,L>::operator-=(int x)
+{
+	int d=distance(); 
+	d-=x; 
+	setDistance(d);
+	return *this; 
+};
+template<typename T,typename L>
+Internal::Cordinate<T,L> 
+	Internal::Cordinate<T,L>::operator+(int x)
+{
+	Cordinate tmp(*this);
+	tmp+=x;
+	return tmp; 
+};
+template<typename T,typename L>
+Internal::Cordinate<T,L> 
+	Internal::Cordinate<T,L>::operator-(int x)
+{
+	Cordinate tmp(*this); 
+	return tmp+(-x); 
+};
+template<typename T,typename L>
+int 
+	Internal::Cordinate<T,L>::operator-( Internal::Cordinate<T,L> other)
+{
+	int top=other.distance(); 
+	int bottom=other.distance();
+	return top-bottom; 
+};
 //*****************************Cordinate*********************
 template<typename U>
 void Internal::UP::operator()(U& vector){
@@ -94,16 +166,11 @@ int Internal::shift_functions<D,V,T,L>::next_size(Internal::shift_functions<D,V,
 	return std::min(a,b); 
 };
 template<typename D,typename V,typename T,typename L>
-Internal::shift_functions<D,V,T,L>::cordinate Internal::shift_functions<D,V,T,L>::next(Internal::shift_functions<D,V,T,L>::cordinate p){
-	return move(increment,p); 
-};
-template<typename D,typename V,typename T,typename L>
-Internal::shift_functions<D,V,T,L>::cordinate Internal::shift_functions<D,V,T,L>::move(int x,Internal::shift_functions<D,V,T,L>::cordinate p){
-	int d=p.distance(); 
-	d=op(d,x); 
-	
-	p.setDistance(d);
-	return p; 
+Internal::shift_functions<D,V,T,L>::cordinate 
+	Internal::shift_functions<D,V,T,L>::next(
+		Internal::shift_functions<D,V,T,L>::cordinate p)
+{
+	return p+=next_size(p); 
 };
 template<typename D,typename V,typename T,typename L>
 void Internal::shift_functions<D,V,T,L>::adjust(V& vector){

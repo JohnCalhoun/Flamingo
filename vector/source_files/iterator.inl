@@ -11,15 +11,15 @@ template<typename T, Memory::Region M>
 template<typename U>
 HashedArrayTree<T,M>::Iterator<U>::Iterator(
 				HashedArrayTree<T,M>::tree& tree,
-				HashedArrayTree<T,M>::Iterator<U>& it){
-	_cordinate.setTree(tree);
-	_cordinate.setDistance(it._cordinate.distance() ); 
-};
+				HashedArrayTree<T,M>::Iterator<U>& it)
+	:_cordinate(tree,it._cordinate.distance() )
+{};
 template<typename T, Memory::Region M>
 template<typename U>
-HashedArrayTree<T,M>::Iterator<U>::Iterator(HashedArrayTree<T,M>::tree& tree){
-	_cordinate.setTree(tree);
-};
+HashedArrayTree<T,M>::Iterator<U>::Iterator(
+	const HashedArrayTree<T,M>::tree& tree)
+	:_cordinate(tree)
+{};
 
 template<typename T, Memory::Region M>
 template<typename U>
@@ -34,8 +34,7 @@ HashedArrayTree<T,M>::Iterator<U>::~Iterator(){};
 template<typename T,Memory::Region M>
 template<typename U>
 void HashedArrayTree<T,M>::Iterator<U>::initalize(int x,int y){
-	_cordinate.setRow(x);	
-	_cordinate.setOffset(y);
+	_cordinate.set(x,y);	
 }
 
 template<typename T,Memory::Region M>

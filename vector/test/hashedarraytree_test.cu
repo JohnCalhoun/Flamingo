@@ -41,10 +41,12 @@ class HashedArrayTreeTest : public ::testing::Test{
 
 template<typename T,Region M>
 void HashedArrayTreeTest<T,M>::InsertTest(){
-	Container local;
-	int s=local.size();
-	local.insert(local.begin(),1);
-	EXPECT_TRUE(s<local.size());
+	for(	int start_size=20; start_size<5;start_size++){
+		Container local(start_size);
+		int s=local.size();
+		local.insert(local.begin(),1);
+		EXPECT_EQ(	local.size(),(start_size+1) );
+	}
 }
 template<typename T,Region M>
 void HashedArrayTreeTest<T,M>::AccessTest(){
@@ -67,7 +69,12 @@ void HashedArrayTreeTest<T,M>::ModifyTest(){
 }
 template<typename T,Region M>
 void HashedArrayTreeTest<T,M>::ConstructorTest(){
-	Container local_vector; 
+	Container local_vector;
+
+	Container vector1(10); 
+	Container vector2(vector1); 
+
+	EXPECT_TRUE(vector1==vector2); 
 };
 template<typename T,Region M>
 void HashedArrayTreeTest<T,M>::AssignmentTest(){
@@ -86,8 +93,11 @@ void HashedArrayTreeTest<T,M>::BeginEndTest(){
 	
 	iterator b=vector.begin();
 	iterator e=vector.end();
+	EXPECT_TRUE( b <= e); 
+
 	iterator cb=vector.cbegin();
 	iterator ce=vector.cbegin();
+	EXPECT_TRUE( cb <= ce); 
 };
 template<typename T,Region M>
 void HashedArrayTreeTest<T,M>::QuerryTest(){

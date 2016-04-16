@@ -15,18 +15,10 @@ namespace Flamingo {
 namespace Vector {
 
 template<typename T, typename A>
-Tree<T,A>::Tree(){
-	resize(0);
-	setopenbranch(0);
-
-	for(auto it=_root.begin();it<_root.end(); it++){
-		*it=NULL; 
-	}
-};
+Tree<T,A>::Tree():Tree(0){};
 
 template<typename T, typename A>
 Tree<T,A>::Tree(int size){
-	setopenbranch(0);
 	resize(size); 
 	for(auto it=_root.begin();it<_root.end(); it++){
 		*it=NULL; 
@@ -106,6 +98,7 @@ void Tree<T,A>::clear(){
 	while(openbranch()>0){
 		removebranch(); 		
 	}
+
 };
 template<typename T, typename A>
 size_t Tree<T,A>::size()const{
@@ -113,7 +106,30 @@ size_t Tree<T,A>::size()const{
 };
 template<typename T, typename A>
 void Tree<T,A>::resize(int y){
-	_root.resize(y,NULL); 
+
+	if( width()==0 ){
+		_root.resize(y,NULL); 
+		setopenbranch(0); 
+	}else if( y!=width() )
+	{
+		if(y > width()) { 
+			Tree<T,A> tmp(y); 
+			int factor=y/width(); 
+			for(int i=0;i<openbranch(); i++){
+				int mod		=i%factor;
+				int row_into	=i/factor; 
+
+				if(mod==0){
+					tmp.addbranch(); 
+				}				
+				pointer dst=tmp.getbranch(row_into)+width()*mod; 
+				Location::MemCopy(	getbranch(i),
+								dst,
+								width()*sizeof(pointer));
+			}
+			swap(tmp); 
+		}else if(y < (width()-2) ){}
+	}
 };
 template<typename T, typename A>
 Tree<T,A>::const_iterator Tree<T,A>::cbegin()const{	
@@ -186,7 +202,7 @@ bool operator==(const Tree<A,B>& tree_1, const Tree<C,D>& tree_2){
 
 template<typename A,typename B>
 void Tree<A,B>::swap(Tree<A,B>& other){
-	std::swap(this->_root,		other._root);
+	_root.swap(other._root); 	
 	std::swap(this->_openbranch,	other._openbranch);
 };
 

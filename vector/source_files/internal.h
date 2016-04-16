@@ -21,9 +21,29 @@ namespace Internal {
 		typedef typename tree::pointer	pointer;
 		typedef typename tree::iterator	iterator;	
 	
-		__both__ Cordinate(int x, int y):_data(x,y){}; 
-		
-		__both__ Cordinate():_data(0,0){};
+
+		Cordinate(const tree& t):
+				Cordinate(0,0)
+				{setTree(t);};			  
+		Cordinate(const tree& t,int d):
+				Cordinate(t) 
+				{setDistance(d);};
+		Cordinate(const tree& t,int x,int y):
+				Cordinate(x,y)
+				{setTree(t);};
+
+
+		__both__ Cordinate(int x, int y):
+				Cordinate()
+				{set(x,y);}; 	
+		__both__ Cordinate(int d):
+				Cordinate()
+				{setDistance(d);};
+		__both__ Cordinate():
+				_data(0,0),
+				begin(NULL),
+				end(NULL){};
+
 		struct data{
 			__both__ data(int x,int y):first(x),second(y){};
 			int first;
@@ -41,11 +61,24 @@ namespace Internal {
 		__both__ void setRow(int x);
 		__both__ void setOffset(int x);
 		__both__ void setDistance(int x);
-			    void setTree(tree& t);
+			    void setTree(const tree& t);
 		__both__ void set(int x, int y);
 		__both__ bool operator<(Cordinate other);
 		__both__ bool operator>(Cordinate other);
 		__both__ pointer access();
+
+		__both__ Cordinate& operator++();
+		__both__ Cordinate  operator++(int);
+		__both__ Cordinate& operator--();
+		__both__ Cordinate  operator--(int);
+
+		__both__ Cordinate & operator+=(int);
+		__both__ Cordinate & operator-=(int);
+
+		__both__ Cordinate operator+(int);
+		__both__ Cordinate operator-(int);
+
+		__both__ int operator-(Cordinate);
 	};
 
 	struct UP{

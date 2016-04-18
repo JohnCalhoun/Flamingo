@@ -6,6 +6,7 @@ typedef HashedArrayTreeTest<int,host> HashedArrayTreeTest_int_host_;
 typedef HashedArrayTreeTest<int,host> HashedArrayTreeTest_int_host_; 
 typedef HashedArrayTreeTest<int,host> HashedArrayTreeTest_int_host_; 
 typedef HashedArrayTreeTest<int,host> HashedArrayTreeTest_int_host_; 
+typedef HashedArrayTreeTest<int,host> HashedArrayTreeTest_int_host_; 
 typedef HashedArrayTreeTest<int,device> HashedArrayTreeTest_int_device_; 
 typedef HashedArrayTreeTest<int,device> HashedArrayTreeTest_int_device_; 
 typedef HashedArrayTreeTest<int,device> HashedArrayTreeTest_int_device_; 
@@ -13,7 +14,25 @@ typedef HashedArrayTreeTest<int,device> HashedArrayTreeTest_int_device_;
 typedef HashedArrayTreeTest<int,device> HashedArrayTreeTest_int_device_; 
 typedef HashedArrayTreeTest<int,device> HashedArrayTreeTest_int_device_; 
 typedef HashedArrayTreeTest<int,device> HashedArrayTreeTest_int_device_; 
+typedef HashedArrayTreeTest<int,device> HashedArrayTreeTest_int_device_; 
+typedef HashedArrayTreeTest<int,pinned> HashedArrayTreeTest_int_pinned_; 
+typedef HashedArrayTreeTest<int,pinned> HashedArrayTreeTest_int_pinned_; 
+typedef HashedArrayTreeTest<int,pinned> HashedArrayTreeTest_int_pinned_; 
+typedef HashedArrayTreeTest<int,pinned> HashedArrayTreeTest_int_pinned_; 
+typedef HashedArrayTreeTest<int,pinned> HashedArrayTreeTest_int_pinned_; 
+typedef HashedArrayTreeTest<int,pinned> HashedArrayTreeTest_int_pinned_; 
+typedef HashedArrayTreeTest<int,pinned> HashedArrayTreeTest_int_pinned_; 
+typedef HashedArrayTreeTest<int,pinned> HashedArrayTreeTest_int_pinned_; 
+typedef HashedArrayTreeTest<int,unified> HashedArrayTreeTest_int_unified_; 
+typedef HashedArrayTreeTest<int,unified> HashedArrayTreeTest_int_unified_; 
+typedef HashedArrayTreeTest<int,unified> HashedArrayTreeTest_int_unified_; 
+typedef HashedArrayTreeTest<int,unified> HashedArrayTreeTest_int_unified_; 
+typedef HashedArrayTreeTest<int,unified> HashedArrayTreeTest_int_unified_; 
+typedef HashedArrayTreeTest<int,unified> HashedArrayTreeTest_int_unified_; 
+typedef HashedArrayTreeTest<int,unified> HashedArrayTreeTest_int_unified_; 
+typedef HashedArrayTreeTest<int,unified> HashedArrayTreeTest_int_unified_; 
 //Tests/benchmarks 
+TEST_F(HashedArrayTreeTest_int_host_,CopyTesthost){this->CopyTest();}
 TEST_F(HashedArrayTreeTest_int_host_,InsertTesthost){this->InsertTest();}
 TEST_F(HashedArrayTreeTest_int_host_,AccessTesthost){this->AccessTest();}
 TEST_F(HashedArrayTreeTest_int_host_,ModifyTesthost){this->ModifyTest();}
@@ -21,6 +40,7 @@ TEST_F(HashedArrayTreeTest_int_host_,QuerryTesthost){this->QuerryTest();}
 TEST_F(HashedArrayTreeTest_int_host_,EqualityTesthost){this->EqualityTest();}
 TEST_F(HashedArrayTreeTest_int_host_,ConstructorTesthost){this->ConstructorTest();}
 TEST_F(HashedArrayTreeTest_int_host_,AssignmentTesthost){this->AssignmentTest();}
+TEST_F(HashedArrayTreeTest_int_device_,CopyTestdevice){this->CopyTest();}
 TEST_F(HashedArrayTreeTest_int_device_,InsertTestdevice){this->InsertTest();}
 TEST_F(HashedArrayTreeTest_int_device_,AccessTestdevice){this->AccessTest();}
 TEST_F(HashedArrayTreeTest_int_device_,ModifyTestdevice){this->ModifyTest();}
@@ -28,3 +48,19 @@ TEST_F(HashedArrayTreeTest_int_device_,QuerryTestdevice){this->QuerryTest();}
 TEST_F(HashedArrayTreeTest_int_device_,EqualityTestdevice){this->EqualityTest();}
 TEST_F(HashedArrayTreeTest_int_device_,ConstructorTestdevice){this->ConstructorTest();}
 TEST_F(HashedArrayTreeTest_int_device_,AssignmentTestdevice){this->AssignmentTest();}
+TEST_F(HashedArrayTreeTest_int_pinned_,CopyTestpinned){this->CopyTest();}
+TEST_F(HashedArrayTreeTest_int_pinned_,InsertTestpinned){this->InsertTest();}
+TEST_F(HashedArrayTreeTest_int_pinned_,AccessTestpinned){this->AccessTest();}
+TEST_F(HashedArrayTreeTest_int_pinned_,ModifyTestpinned){this->ModifyTest();}
+TEST_F(HashedArrayTreeTest_int_pinned_,QuerryTestpinned){this->QuerryTest();}
+TEST_F(HashedArrayTreeTest_int_pinned_,EqualityTestpinned){this->EqualityTest();}
+TEST_F(HashedArrayTreeTest_int_pinned_,ConstructorTestpinned){this->ConstructorTest();}
+TEST_F(HashedArrayTreeTest_int_pinned_,AssignmentTestpinned){this->AssignmentTest();}
+TEST_F(HashedArrayTreeTest_int_unified_,CopyTestunified){this->CopyTest();}
+TEST_F(HashedArrayTreeTest_int_unified_,InsertTestunified){this->InsertTest();}
+TEST_F(HashedArrayTreeTest_int_unified_,AccessTestunified){this->AccessTest();}
+TEST_F(HashedArrayTreeTest_int_unified_,ModifyTestunified){this->ModifyTest();}
+TEST_F(HashedArrayTreeTest_int_unified_,QuerryTestunified){this->QuerryTest();}
+TEST_F(HashedArrayTreeTest_int_unified_,EqualityTestunified){this->EqualityTest();}
+TEST_F(HashedArrayTreeTest_int_unified_,ConstructorTestunified){this->ConstructorTest();}
+TEST_F(HashedArrayTreeTest_int_unified_,AssignmentTestunified){this->AssignmentTest();}

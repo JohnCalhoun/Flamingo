@@ -155,6 +155,15 @@ template<typename T, typename A>
 Tree<T,A>::Root& Tree<T,A>::root(){
 	return _root; 
 };
+template<typename T, typename A>
+template<typename U>
+void Tree<T,A>::copy_to_array(U ptr)const{
+	for(int i=0; i<openbranch(); i++){
+		Location::MemCopy(	getbranch(i), 
+						pointer(ptr+i*width()),
+						width()*sizeof(T)); 
+	}
+};
 
 template<typename T, typename A>
 template<typename B>
@@ -174,7 +183,7 @@ Tree<T,A>& Tree<T,A>::operator=(const Tree<T,B>& other){
 	Root& this_root=this->root(); 
 
 	for(int n=0; n<other.openbranch(); n++){
-		pointer src_ptr=pointer(other_root[n]); 
+		pointer src_ptr=Other_pointer(other_root[n]); 
 		pointer dst	=this_root[n]; 
 
 		if( src_ptr ){

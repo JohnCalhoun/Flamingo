@@ -5,6 +5,9 @@
 #include <iterator>
 #include "columns.cpp"
 
+namespace Flamingo{
+namespace DataFrame{
+
 template<typename ref_type,typename pointer_type, class ... Type>
 class dataframe_iterator: public traits<Type...> {
 	public:
@@ -16,7 +19,7 @@ class dataframe_iterator: public traits<Type...> {
 	typedef typename column_tuple<Type...>::type			ColumnTuple;
 	typedef std::random_access_iterator_tag				iterator_category;
 	typedef dataframe_iterator<ref_type,pointer_type,Type...> self; 	
-	pointer _pointer; 
+
 
 	pointer get_pointer()const;
 	public:
@@ -56,9 +59,14 @@ class dataframe_iterator: public traits<Type...> {
 	typename traits<Type...>::Return<n>::pointer_base get();
 
 	explicit operator bool(); 
+
+	private:
+		pointer _pointer; 
 };
 
 #include "iterator.inl"
 
+}//end dataframe
+}//end flamingo
 #endif 
 

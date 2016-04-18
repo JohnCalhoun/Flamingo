@@ -37,7 +37,22 @@ class HashedArrayTreeTest : public ::testing::Test{
 	DEFINE(InsertTest,		HASHEDARRAYTREE_THREADS)
 	DEFINE(AccessTest,		HASHEDARRAYTREE_THREADS)
 	DEFINE(ModifyTest,		HASHEDARRAYTREE_THREADS)
+	DEFINE(CopyTest,		HASHEDARRAYTREE_THREADS)
 };
+
+template<typename T,Region M>
+void HashedArrayTreeTest<T,M>::CopyTest(){
+	const int start_size=40; 
+	Container local(start_size,0);
+	std::array<int,start_size> array; 
+	array.fill(1); 
+
+	local.copy_to_array( array.begin() ); 
+
+	for(int i=0; i<start_size; i++){
+		EXPECT_EQ( array[i],local[i]);
+	}
+}
 
 template<typename T,Region M>
 void HashedArrayTreeTest<T,M>::InsertTest(){
@@ -115,8 +130,8 @@ const Region device=Region::device;
 const Region pinned=Region::pinned;
 const Region unified=Region::unified;
 
-//python:key:testsH=InsertTest AccessTest ModifyTest QuerryTest EqualityTest ConstructorTest AssignmentTest
-//python:key:locationH=host device
+//python:key:testsH=CopyTest InsertTest AccessTest ModifyTest QuerryTest EqualityTest ConstructorTest AssignmentTest
+//python:key:locationH=host device pinned unified
 //python:template=TEST_F($HashedArrayTreeTest<int,|locationH|>$,|testsH||locationH|){this->|testsH|();}
 
 //python:start

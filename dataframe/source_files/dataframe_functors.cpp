@@ -1,7 +1,7 @@
 //functors.cpp
 #include "columns.cpp"
 
-namespace dataframe_functors{
+namespace Functors{
 
 	template<int n,class ... Type>
 	struct fill {
@@ -9,7 +9,7 @@ namespace dataframe_functors{
 
 		typedef typename traits<Type...>::size_type size_type;
 		typedef typename traits<Type...>::value_type value_type; 
-		
+	
 		typedef typename column_tuple<Type...>::element<n>::type Column; 
 
 		void operator()(	ColumnTuple&& column_tuple,
@@ -455,7 +455,7 @@ namespace dataframe_functors{
 			column.reserve(s);
 		}
 	};
-	template<int n,Memory M,class ... Type>
+	template<int n,Memory::Region M,class ... Type>
 	struct Move {
 		typedef typename dataframe<Type...>::ColumnTuple ColumnTuple;
 		typedef typename column_tuple<Type...>::element<n>::type Column; 
@@ -469,7 +469,7 @@ namespace dataframe_functors{
 			recursive(std::forward<ColumnTuple>(column_tuple)); 
 		}
 	};
-	template<Memory M,class ... Type>
+	template<Memory::Region M,class ... Type>
 	struct Move<0,M,Type...> {
 		typedef typename dataframe<Type...>::ColumnTuple ColumnTuple;
 		typedef typename column_tuple<Type...>::element<0>::type Column; 
@@ -513,10 +513,4 @@ namespace dataframe_functors{
 		}
 	};
 
-
-
-
-
-
-
-}
+}//end functors 

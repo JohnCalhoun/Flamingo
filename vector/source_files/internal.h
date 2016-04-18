@@ -20,23 +20,23 @@ namespace Internal {
 		typedef Tree<T,L>				tree;
 		typedef typename tree::pointer	pointer;
 		typedef typename tree::iterator	iterator;	
-	
+		typedef typename tree::size_type	size_type; 	
 
 		Cordinate(const tree& t):
 				Cordinate(0,0)
 				{setTree(t);};			  
-		Cordinate(const tree& t,int d):
+		Cordinate(const tree& t,size_type d):
 				Cordinate(t) 
 				{setDistance(d);};
-		Cordinate(const tree& t,int x,int y):
+		Cordinate(const tree& t,size_type x,size_type y):
 				Cordinate(x,y)
 				{setTree(t);};
 
 
-		__both__ Cordinate(int x, int y):
+		__both__ Cordinate(size_type x, size_type y):
 				Cordinate()
 				{set(x,y);}; 	
-		__both__ Cordinate(int d):
+		__both__ Cordinate(size_type d):
 				Cordinate()
 				{setDistance(d);};
 		__both__ Cordinate():
@@ -45,24 +45,21 @@ namespace Internal {
 				end(NULL){};
 
 		struct data{
-			__both__ data(int x,int y):first(x),second(y){};
-			int first;
-			int second;
+			__both__ data(size_type x,size_type y):first(x),second(y){};
+			size_type first;
+			size_type second;
 		}; 
-		data _data;
-		iterator begin;
-		iterator end; 
-			
-		__both__ int width()const;
-		__both__ int row()const;
-		__both__ int offset()const;
-		__both__ int distance()const;
+		
+		__both__ size_type width()const;
+		__both__ size_type row()const;
+		__both__ size_type offset()const;
+		__both__ size_type distance()const;
 
-		__both__ void setRow(int x);
-		__both__ void setOffset(int x);
-		__both__ void setDistance(int x);
+		__both__ void setRow(size_type x);
+		__both__ void setOffset(size_type x);
+		__both__ void setDistance(size_type x);
 			    void setTree(const tree& t);
-		__both__ void set(int x, int y);
+		__both__ void set(size_type x, size_type y);
 		__both__ bool operator<(Cordinate other);
 		__both__ bool operator>(Cordinate other);
 		__both__ pointer access();
@@ -72,13 +69,17 @@ namespace Internal {
 		__both__ Cordinate& operator--();
 		__both__ Cordinate  operator--(int);
 
-		__both__ Cordinate & operator+=(int);
-		__both__ Cordinate & operator-=(int);
+		__both__ Cordinate & operator+=(size_type);
+		__both__ Cordinate & operator-=(size_type);
 
-		__both__ Cordinate operator+(int);
-		__both__ Cordinate operator-(int);
+		__both__ Cordinate operator+(size_type);
+		__both__ Cordinate operator-(size_type);
 
-		__both__ int operator-(Cordinate);
+		__both__ size_type operator-(Cordinate);
+
+		data _data;
+		iterator begin;
+		iterator end; 	
 	};
 
 	struct UP{

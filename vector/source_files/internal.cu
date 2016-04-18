@@ -1,30 +1,38 @@
 //******************************Cordinate**********************
 template<typename T,typename L>
-int Internal::Cordinate<T,L>::width()const{
+Internal::Cordinate<T,L>::size_type 
+	Internal::Cordinate<T,L>::width()const
+{
 	return end-begin;
 };
 template<typename T,typename L>
-int Internal::Cordinate<T,L>::row()const{
+Internal::Cordinate<T,L>::size_type 
+	Internal::Cordinate<T,L>::row()const
+{
 	return _data.first;
 };
 template<typename T,typename L>
-int Internal::Cordinate<T,L>::offset()const{
+Internal::Cordinate<T,L>::size_type 
+	Internal::Cordinate<T,L>::offset()const
+{
 	return _data.second; 
 };
 template<typename T,typename L>
-int Internal::Cordinate<T,L>::distance()const{
+Internal::Cordinate<T,L>::size_type 
+	Internal::Cordinate<T,L>::distance()const
+{
 	return row()*width()+offset(); 
 };
 template<typename T,typename L>
-void Internal::Cordinate<T,L>::setRow(int x){
+void Internal::Cordinate<T,L>::setRow(Internal::Cordinate<T,L>::size_type x){
 	_data.first=x;
 };
 template<typename T,typename L>
-void Internal::Cordinate<T,L>::setOffset(int x){
+void Internal::Cordinate<T,L>::setOffset(Internal::Cordinate<T,L>::size_type x){
 	_data.second=x;
 };
 template<typename T,typename L>
-void Internal::Cordinate<T,L>::setDistance(int x){
+void Internal::Cordinate<T,L>::setDistance(Internal::Cordinate<T,L>::size_type x){
 	if(width()!=0){
 		setRow(x/width());
 		setOffset(x%width()); 
@@ -39,7 +47,7 @@ void Internal::Cordinate<T,L>::setTree(const Internal::Cordinate<T,L>::tree& t){
 	end=t.cend(); 
 };
 template<typename T,typename L>
-void Internal::Cordinate<T,L>::set(int x, int y){
+void Internal::Cordinate<T,L>::set(Internal::Cordinate<T,L>::size_type x, Internal::Cordinate<T,L>::size_type y){
 	setRow(x);
 	setOffset(y);
 };
@@ -105,25 +113,25 @@ Internal::Cordinate<T,L>
 };
 template<typename T,typename L>
 Internal::Cordinate<T,L>& 
-	Internal::Cordinate<T,L>::operator+=(int x)
+	Internal::Cordinate<T,L>::operator+=(Internal::Cordinate<T,L>::size_type x)
 {
-	int d=distance(); 
+	size_type d=distance(); 
 	d+=x; 
 	setDistance(d);
 	return *this; 
 };
 template<typename T,typename L>
 Internal::Cordinate<T,L>& 
-	Internal::Cordinate<T,L>::operator-=(int x)
+	Internal::Cordinate<T,L>::operator-=(Internal::Cordinate<T,L>::size_type x)
 {
-	int d=distance(); 
+	size_type d=distance(); 
 	d-=x; 
 	setDistance(d);
 	return *this; 
 };
 template<typename T,typename L>
 Internal::Cordinate<T,L> 
-	Internal::Cordinate<T,L>::operator+(int x)
+	Internal::Cordinate<T,L>::operator+(Internal::Cordinate<T,L>::size_type x)
 {
 	Cordinate tmp(*this);
 	tmp+=x;
@@ -131,17 +139,17 @@ Internal::Cordinate<T,L>
 };
 template<typename T,typename L>
 Internal::Cordinate<T,L> 
-	Internal::Cordinate<T,L>::operator-(int x)
+	Internal::Cordinate<T,L>::operator-(Internal::Cordinate<T,L>::size_type x)
 {
 	Cordinate tmp(*this); 
 	return tmp+(-x); 
 };
 template<typename T,typename L>
-int 
+Internal::Cordinate<T,L>::size_type 
 	Internal::Cordinate<T,L>::operator-( Internal::Cordinate<T,L> other)
 {
-	int top=other.distance(); 
-	int bottom=other.distance();
+	size_type top=other.distance(); 
+	size_type bottom=other.distance();
 	return top-bottom; 
 };
 //*****************************Cordinate*********************

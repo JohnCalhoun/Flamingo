@@ -3,7 +3,9 @@
 #include <string>
 #include <sstream>
 
-namespace dataframe_exceptions {
+namespace Flamingo{
+namespace DataFrame{
+namespace Exceptions {
 class base_exception : public std::exception{}; 
 
 template<class ... Other_Types>
@@ -27,4 +29,6 @@ struct host_exception : public base_exception, Other_Types...{
 		return msg.c_str();
 	}
 };
-}
+}//end exceptions
+}//end Dataframe
+}//end Flamingo

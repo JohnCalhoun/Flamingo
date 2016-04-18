@@ -44,7 +44,13 @@ HashedArrayTree<T,M>::~HashedArrayTree(){};
 //**********INTERNAL FUNCTIONS*****************************
 template<typename T,Memory::Region M>
 HashedArrayTree<T,M>::size_type HashedArrayTree<T,M>::calculate_width(HashedArrayTree<T,M>::size_type x){
-	size_type tmp=std::ceil(	std::log2(x)/2	);
+	size_type tmp; 
+	if(x==0){
+		tmp=1;
+	}else{
+		tmp=std::ceil(	std::log2(x)/2	);
+	}
+
 	return std::pow(2,tmp); 
 }
 
@@ -55,8 +61,7 @@ void HashedArrayTree<T,M>::resize(HashedArrayTree<T,M>::size_type x){
 		size_type width_new=calculate_width(x);
 		_tree.resize(width_new); 
 	
-		Cordinate cor(_tree,x);
-		int needed_leaves	=cor.row(); 
+		int needed_leaves	=x/_tree.width(); 	
 		int current_leaves	=_tree.openbranch();
 
 		if(needed_leaves>=current_leaves){
@@ -66,8 +71,8 @@ void HashedArrayTree<T,M>::resize(HashedArrayTree<T,M>::size_type x){
 			}
 		}	
 	}else{
-		Cordinate cor(_tree,x);
-		int needed_leaves	=cor.row(); 
+
+		int needed_leaves	=x/_tree.width(); 	
 		int current_leaves	=_tree.openbranch();
 
 		if(needed_leaves<=current_leaves){
@@ -188,7 +193,7 @@ HashedArrayTree<T,M>::const_iterator HashedArrayTree<T,M>::cbegin()const{
 };
 
 template<typename T,Memory::Region M>
-HashedArrayTree<T,M>::iterator HashedArrayTree<T,M>::cend()const{
+HashedArrayTree<T,M>::const_iterator HashedArrayTree<T,M>::cend()const{
 	const_iterator it(_tree);
 	it.initalize( capacity() );
 	return it; 
@@ -428,4 +433,21 @@ template<typename T,Memory::Region M>
 HashedArrayTree<T,M>::const_reference HashedArrayTree<T,M>::back()const{
 	return at(size() ); 
 };
+
+template<typename T,Memory::Region M>
+template<typename U>
+void HashedArrayTree<T,M>::copy_to_array(U ptr)const{
+	_tree.copy_to_array(ptr); 	
+};
+
+
+
+
+
+
+
+
+
+
+
 

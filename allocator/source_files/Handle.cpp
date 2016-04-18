@@ -44,9 +44,7 @@ class Handle {
      // utility functions
      int buddy_offset();
      void combine(const Handle<T>&);
-     size_t size() {
-          return _size;
-     };
+     size_t size() {return _size;};
      // operator overloads,
      // basic pointer
      __both__ T& operator*();

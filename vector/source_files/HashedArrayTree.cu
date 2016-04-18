@@ -8,6 +8,7 @@
 #include<type_traits>
 #include"internal.h"
 #include "reference.cu"
+#include "iterator.cpp"
 #define __both__ __host__ __device__ 
 
 namespace Flamingo {
@@ -26,7 +27,7 @@ class HashedArrayTree {
 	typedef typename allocator_type::difference_type	difference_type;
 	typedef typename allocator_type::size_type		size_type;
 	typedef typename allocator_type::pointer		pointer;
-	typedef Tree<int,allocator_type>				tree;
+	typedef Tree<T,allocator_type>				tree;
 	
 	//iterators
 	typedef Internal::forward forward;
@@ -35,59 +36,10 @@ class HashedArrayTree {
 	typedef Internal::UP UP;
 	typedef Internal::DOWN DOWN;
 
-	template<typename operation>
-	class Iterator : public operation {
-		public:
-		typedef std::random_access_iterator_tag			iterator_category;
-		typedef typename tree::pointer				pointer_branch;
-		typedef typename tree::Root::iterator			root_iterator;
-
-		friend HashedArrayTree<T,M>;
-
-
-		
-		__both__ Iterator();
-			    Iterator(const tree&); 
-			    Iterator(tree&,Iterator&); 
-		__both__ Iterator(const Iterator&);
-		__both__ ~Iterator();
-	
-		__both__ void initalize(int);
-		__both__ void initalize(int,int); 
-		__both__ void initalize(int,int,pointer); 
-		__both__ void initalize(Cordinate);
-		__both__ void setWidth(int x);
-		
-		__both__ Iterator<operation>& operator=(const Iterator<operation>&);
-		__both__ bool operator==(const Iterator<operation>&) const;
-		__both__ bool operator!=(const Iterator<operation>&) const;
-		__both__ bool operator<(const Iterator<operation>&) const; 
-		__both__ bool operator>(const Iterator<operation>&) const; 
-		__both__ bool operator<=(const Iterator<operation>&) const; 
-		__both__ bool operator>=(const Iterator<operation>&) const; 
-		
-		__both__ Iterator& operator++();
-		__both__ Iterator operator++(int); 
-		__both__ Iterator& operator--(); 
-		__both__ Iterator operator--(int); 
-		__both__ Iterator& operator+=(size_type); 
-		
-		__both__ Iterator<operation> operator+(size_type) const; 
-		__both__ Iterator<operation>& operator-=(size_type);  
-		__both__ Iterator<operation> operator-(size_type) const; 
-		__both__ difference_type operator-(Iterator<operation>) const; 
-
-		__both__ reference operator*();
-		__both__ pointer operator->();
-		__both__ reference operator[](size_type); //optional
-
-		private: 
-		Cordinate			_cordinate;
-	};
-	typedef Iterator<forward> const_iterator;
-	typedef Iterator<forward> iterator;
-	typedef Iterator<reverse> reverse_iterator;
-	typedef Iterator<reverse> const_reverse_iterator;
+	typedef Iterator<T,allocator_type,forward> const_iterator;
+	typedef Iterator<T,allocator_type,forward> iterator;
+	typedef Iterator<T,allocator_type,reverse> reverse_iterator;
+	typedef Iterator<T,allocator_type,reverse> const_reverse_iterator;
 
 	allocator_type		_allocator;
 	Location			location; 
@@ -171,12 +123,14 @@ class HashedArrayTree {
 	const_reference at(size_type)const;
 	const_reference front()const; 
 	const_reference back()const;
+	
+	template<typename U>
+	void copy_to_array(U)const; 
 
 	allocator_type get_allocator(); 
 };
 //test between different arrays
 //conversion between different arrays
-#include "iterator.inl"
 #include "HashedArrayTree.inl"
 
 }

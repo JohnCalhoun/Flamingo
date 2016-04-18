@@ -10,44 +10,37 @@
 template<typename Object,typename Guard>
 void cordinator<Object,Guard>::ARC::request(
 	cordinator<Object,Guard>::Key key,
-	Memory M)
+	Memory::Region M)
 {
 	//assume write access to the key dataframe
 
 	lock_guard guard(*_mutex_ptr); 
 	Value dataframe_ptr=get_ptr(key); 
 	
-	#ifndef RELEASE
-	if(dataframe_ptr->device_size() > cache_size()){
-		dataframe_exceptions::host_exception<> ex(	__FILE__,
-							__LINE__);
-		throw ex; 
-	}
-	#endif
 	if(dataframe_ptr->location() != M){
 		cases Case=find_case(key); 	
 		remove_key(key); 
 		switch(M){
-			case device:
+			case Memory::Region::device:
 			{
 				arc_body(key,Case);
 				break;
 			}
-			case pinned:
+			case Memory::Region::pinned:
 			{
 				pinned_request(key);
 				break;
 			}
-			case host: 
+			case Memory::Region::host: 
 			{
-				if(dataframe_ptr->location() != device){
-					unsafe_move(key,host);
+				if(dataframe_ptr->location() != Memory::Region::device){
+					unsafe_move(key,Memory::Region::host);
 				}
 				break;
 			}
-			case unified:
+			case Memory::Region::unified:
 			{
-				unsafe_move(key,unified);		
+				unsafe_move(key,Memory::Region::unified);		
 				break;
 			}
 		}//switch
@@ -136,7 +129,7 @@ void cordinator<Object,Guard>::ARC::remove_key(
 template<typename Object,typename Guard>
 void cordinator<Object,Guard>::ARC::unsafe_move(
 			cordinator<Object,Guard>::Key key,
-			Memory M)
+			Memory::Region M)
 {
 	//assumes write access to the key
 	Value ptr=get_ptr(key);
@@ -207,7 +200,7 @@ void cordinator<Object,Guard>::ARC::arc_body(
 						Key key_tmp=std::get<0>(result); 
 
 						push_front_NONE(key_tmp);
-						unsafe_move(key_tmp,host);				
+						unsafe_move(key_tmp,Memory::Region::host);				
 
 						std::get<1>(result)->downgrade_to_reader();
 						lock_list.push_back(result);
@@ -228,7 +221,7 @@ void cordinator<Object,Guard>::ARC::arc_body(
 						Key key_tmp=std::get<0>(result); 
 
 						push_front_NONE(key_tmp);
-						unsafe_move(key_tmp,host);			
+						unsafe_move(key_tmp,Memory::Region::host);			
 
 						std::get<1>(result)->downgrade_to_reader();
 						lock_list.push_back(result);
@@ -311,13 +304,13 @@ void cordinator<Object,Guard>::ARC::pinned_request(
 		Key key_tmp=std::get<0>(result); 
 
 		change_placement(key_tmp,NONE); 
-		unsafe_move(key_tmp,host);
+		unsafe_move(key_tmp,Memory::Region::host);
 			
 		std::get<1>(result)->downgrade_to_reader();	
 		lock_list.push_back(result); 
 		size=LRU_byte_size(_pinned); 
 	}
-	unsafe_move(key,pinned); 
+	unsafe_move(key,Memory::Region::pinned); 
 	unlock_list(lock_list); 
 };
 //----------------------------------------------------
@@ -344,7 +337,7 @@ void cordinator<Object,Guard>::ARC::push_front_t2(
 {
 	_T2.push_front(key); 
 	change_placement(key,t2); 
-	unsafe_move(key,device);
+	unsafe_move(key,Memory::Region::device);
 };
 template<typename Object,typename Guard>
 void cordinator<Object,Guard>::ARC::push_front_t1(		
@@ -352,7 +345,7 @@ void cordinator<Object,Guard>::ARC::push_front_t1(
 {
 	_T1.push_front(key); 
 	change_placement(key,t1); 
-	unsafe_move(key,device);
+	unsafe_move(key,Memory::Region::device);
 };
 
 template<typename Object,typename Guard>
@@ -376,7 +369,7 @@ void cordinator<Object,Guard>::ARC::push_front_NONE(
 			cordinator<Object,Guard>::Key key)
 {
 	change_placement(key,NONE); 
-	unsafe_move(key,host);
+	unsafe_move(key,Memory::Region::host);
 };
 //----------------------------------------------
 template<typename Object,typename Guard>

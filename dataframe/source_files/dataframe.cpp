@@ -11,6 +11,9 @@
 #include <iterator>
 #include "dataframe_base.cpp"
 
+namespace Flamingo{
+namespace DataFrame{
+
 template<class ... Type>
 class dataframe : public dataframeBase{	
 
@@ -65,8 +68,8 @@ class dataframe : public dataframeBase{
 	const ColumnTuple& tuple_const()const;
 	
 	public:
-	void unsafe_move(Memory);
-	Memory location()const; 
+	void unsafe_move(Memory::Region);
+	Memory::Region location()const; 
 
 	void assign(iterator,iterator);
 	void assign(size_type,value_type);
@@ -122,5 +125,7 @@ class dataframe : public dataframeBase{
 };
 
 #include"dataframe.inl"
+}//end datafarme
+}//end flamingo
 #endif 
 

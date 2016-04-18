@@ -10,6 +10,9 @@
 #include "traits.cpp"
 #include "exceptions.cpp"
 
+namespace Flamingo{
+namespace DataFrame{
+
 template<typename Object,typename Guard>
 class cordinator {
 	public:
@@ -42,26 +45,18 @@ class cordinator {
 		public:	
 		ARC(cordinator& cor):_cordinator(cor),p(0)
 		{	_mutex_ptr=new Mutex;
-			max_device=location<device>::max_memory(); 
-			max_pinned=location<pinned>::max_memory();
-			max_host=location<host>::max_memory(); 
-			#ifndef RELEASE
-				if(max_device > max_pinned){
-					dataframe_exceptions::
-					host_exception<> ex(	__FILE__,
-										__LINE__);
-					throw ex; 
-				}
-			#endif
+			max_device=Memory::location<Memory::Region::device>::max_memory(); 
+			max_pinned=Memory::location<Memory::Region::pinned>::max_memory();
+			max_host=Memory::location<Memory::Region::host>::max_memory(); 
 		}; 	
 		~ARC(){delete _mutex_ptr;}; 
-		void request(Key,Memory); 
+		void request(Key,Memory::Region); 
 
 		private:
 			//key functions used in request
 		cases	find_case(Key); 
 		void		remove_key(Key); 
-		void		unsafe_move(Key,Memory); 
+		void		unsafe_move(Key,Memory::Region); 
 		void		arc_body(Key,cases); 
 		Value	get_ptr(Key);		
 			//functions used in 
@@ -121,7 +116,7 @@ class cordinator {
 	Value find(Key);
 	void change(Key,Key);	
 
-	void move(Key,Memory,lock_guard&); 
+	void move(Key,Memory::Region,lock_guard&); 
 	private:
 	//data members
 	Map		_map;
@@ -130,5 +125,7 @@ class cordinator {
 #include "arc.inl"
 #include "cordinator.inl"
 
+}//end dataframe
+}//end flamingo
 #endif 
 

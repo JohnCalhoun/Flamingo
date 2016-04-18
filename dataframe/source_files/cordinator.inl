@@ -57,10 +57,10 @@ void cordinator<Object,Guard>::change(
 template<typename Object,typename Guard>
 void cordinator<Object,Guard>::move(
 					cordinator<Object,Guard>::Key key,
-					Memory M,
+					Memory::Region M,
 					cordinator<Object,Guard>::lock_guard& guard)
 {
-	Memory current=find(key)->location(); 
+	Memory::Region current=find(key)->location(); 
 	if(M != current){
 		bool was_released=guard->upgrade_to_writer(); 
 		current=find(key)->location();	

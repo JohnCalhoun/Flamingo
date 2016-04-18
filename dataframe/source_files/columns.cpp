@@ -10,40 +10,41 @@
 #include <type_traits>
 #include <boost/mpl/int.hpp>
 #include <tuple>
+#include <HashedArrayTree.cu>
 
-template<Memory M>
+namespace Flamingo {
+namespace DataFrame {
+
+template<Memory::Region M>
 struct memory2type{
 	typedef boost::mpl::int_<0> type; 
 };
 template<>
-struct memory2type<device>{
+struct memory2type<Memory::Region::device>{
 	typedef boost::mpl::int_<1> type; 
 };
 template<>
-struct memory2type<pinned>{
+struct memory2type<Memory::Region::pinned>{
 	typedef boost::mpl::int_<2> type; 
 };
 template<>
-struct memory2type<unified>{
+struct memory2type<Memory::Region::unified>{
 	typedef boost::mpl::int_<3> type; 
 };
 
 template<typename T>
 struct column  {
-	typedef typename allocation_policy<T,device>::allocator device_allocator; 
-	typedef typename allocation_policy<T,pinned>::allocator pinned_allocator; 
-	typedef typename allocation_policy<T,unified>::allocator unified_allocator; 
 
-	typedef thrust::device_vector<T,device_allocator>		device_column;
-	typedef thrust::host_vector<T,pinned_allocator>		pinned_column;
-	typedef thrust::device_vector<T,unified_allocator>	unified_column;
-	typedef thrust::host_vector<T>					host_column;
-	
+	typedef Vector::HashedArrayTree<T,Memory::Region::device>		device_column; 
+	typedef Vector::HashedArrayTree<T,Memory::Region::pinned>		pinned_column; 
+	typedef Vector::HashedArrayTree<T,Memory::Region::host>			host_column; 
+	typedef Vector::HashedArrayTree<T,Memory::Region::unified>		unified_column; 
+
 	typedef boost::mpl::map<	
-		boost::mpl::pair<typename memory2type<device>::type,device_column>,
-		boost::mpl::pair<typename memory2type<host>::type,host_column>,
-		boost::mpl::pair<typename memory2type<pinned>::type,pinned_column>,
-		boost::mpl::pair<typename memory2type<unified>::type,unified_column>
+		boost::mpl::pair<typename memory2type<Memory::Region::device>::type,device_column>,
+		boost::mpl::pair<typename memory2type<Memory::Region::host>::type,host_column>,
+		boost::mpl::pair<typename memory2type<Memory::Region::pinned>::type,pinned_column>,
+		boost::mpl::pair<typename memory2type<Memory::Region::unified>::type,unified_column>
 	> map; 
 	typedef std::tuple<	
 					host_column,
@@ -56,12 +57,12 @@ struct column  {
 	typedef value_type*			pointer; 
 	typedef const value_type*	const_pointer; 	
 
-	template<Memory M>
+	template<Memory::Region M>
 	struct Return{
 		typedef typename boost::mpl::at<map,typename memory2type<M>::type>::type column;
 	};
 
-	Memory		_location;
+	Memory::Region		_location;
 	MemoryTuple	_tuple; 
 
 	column();
@@ -76,12 +77,12 @@ struct column  {
 	template<typename Aloc>
 	column(const thrust::host_vector<T,Aloc>&); 
 
-	template<Memory M>
+	template<Memory::Region M>
 	void move();
 
-	Memory getlocation()const; 
+	Memory::Region getlocation()const; 
 
-	template<Memory M>
+	template<Memory::Region M>
 	typename Return<M>::column& access(); 	
 
 	pointer data(); 
@@ -153,4 +154,7 @@ struct column_tuple {
 };
 
 #include "columns.inl"
+
+}
+}
 #endif 

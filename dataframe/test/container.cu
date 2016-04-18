@@ -12,6 +12,9 @@
 #include <chrono>
 #include <random>
 
+using namespace Flamingo::DataFrame;
+
+
 template<class ... Type>
 class dataframeTest : public ::testing::Test{
 	public:

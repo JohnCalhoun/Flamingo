@@ -17,6 +17,8 @@ class Tree {
 
 	typedef typename Allocator::Location_Policy	Location;
 	typedef typename Allocator::pointer		pointer;
+	typedef typename Allocator::const_pointer	const_pointer;
+	typedef typename Allocator::size_type		size_type;
 	typedef typename 
 		Root_vector<pointer,Location::memory>::type		Root;
 
@@ -48,6 +50,9 @@ class Tree {
 	void		resize(int); 
 	const Root&	root()const;
 	Root&	root(); 
+
+	template<typename U>
+	void copy_to_array(U)const; 
 
 	iterator begin();
 	const_iterator begin()const{return cbegin(); }; 

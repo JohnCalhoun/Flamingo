@@ -1,6 +1,6 @@
 CC=nvcc
 UTIL=../../utilities
-FOLDERS=-I ../source_files -I ../../allocator/source_files -isystem /usr/include -L/usr/lib64 -I $(UTIL) 
+FOLDERS=-I ../source_files -I ../../allocator/source_files -I ../../vector/source_files -isystem /usr/include -L/usr/lib64 -I $(UTIL) 
 LINKS=-lgtest -lpthread -lboost_thread -ltbb 
 SOURCE_DIR=../source_files
 COVERAGE=$(UTIL)/coverage.py

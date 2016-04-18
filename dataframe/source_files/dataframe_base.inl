@@ -27,7 +27,7 @@ void dataframeBase::id(int x){
 	_key=x; 
 }
 
-dataframeBase::lock_guard dataframeBase::use(Memory M)
+dataframeBase::lock_guard dataframeBase::use(Memory::Region M)
 {
 	bool write=false;
 	lock_guard guard=lock(write);

@@ -17,6 +17,9 @@
 #include <type_traits>
 #include <functional>
 
+namespace Flamingo{
+namespace DataFrame{
+
 #include "traits.inl"
 template<class ... Type>
 struct traits {
@@ -76,5 +79,7 @@ struct traits {
 	};
 };
 
+}//end dataframe
+}//end flamingo
 #endif 
 

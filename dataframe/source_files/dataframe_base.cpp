@@ -12,6 +12,9 @@
 #include <iterator>
 #include <tbb/queuing_rw_mutex.h>
 
+namespace Flamingo {
+namespace DataFrame {
+
 class dataframeBase {
 	private:
 	typedef tbb::queuing_rw_mutex				Mutex;
@@ -33,12 +36,12 @@ class dataframeBase {
 	Key id();
 	void id(int); //value must be unique  
 
-	lock_guard use(Memory);
-	virtual Memory location()const=0; 	
+	lock_guard use(Memory::Region);
+	virtual Memory::Region location()const=0; 	
 	virtual size_t device_size()const=0; 
 	void release(lock_guard&); 
 	dataframeBase& operator=(const dataframeBase& other){return *this;}; 
-	virtual void unsafe_move(Memory)=0;
+	virtual void unsafe_move(Memory::Region)=0;
 	std::tuple<	lock_guard,
 				bool> try_lock(bool); 
 
@@ -54,5 +57,7 @@ class dataframeBase {
 dataframeBase::Cordinator dataframeBase::_cordinator; 
 
 #include"dataframe_base.inl"
+}//end dataframe
+}//end flamingo 
 #endif 
 

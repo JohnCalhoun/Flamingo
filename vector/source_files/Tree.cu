@@ -16,7 +16,7 @@ class Tree {
 	typedef A	Allocator;
 
 	typedef typename Allocator::Location_Policy	Location;
-	typedef typename Allocator::pointer		pointer;
+	typedef T*							pointer;
 	typedef typename Allocator::const_pointer	const_pointer;
 	typedef typename Allocator::size_type		size_type;
 	typedef typename 

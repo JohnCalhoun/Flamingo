@@ -14,23 +14,26 @@ namespace Flamingo {
 namespace Vector {
 namespace Internal {
 	//********************************Cordinate*****************
-	template<typename T,typename L>
+	template<typename T>
 	class Cordinate{	
 		public:
-		typedef Tree<T,L>				tree;
-		typedef typename tree::pointer	pointer;
-		typedef typename tree::iterator	iterator;	
-		typedef typename tree::size_type	size_type; 	
+		typedef T*					pointer;
+		typedef pointer*				iterator;	
+		typedef size_t					size_type; 	
 
-		Cordinate(const tree& t):
+		template<typename A>
+		Cordinate(const Tree<T,A>& t):
 				Cordinate(0,0)
-				{setTree(t);};			  
-		Cordinate(const tree& t,size_type d):
+				{setTree(t);}
+		template<typename A>			  
+		Cordinate(const Tree<T,A>& t,size_type d):
 				Cordinate(t) 
-				{setDistance(d);};
-		Cordinate(const tree& t,size_type x,size_type y):
+				{setDistance(d);}
+
+		template<typename A>
+		Cordinate(const Tree<T,A>& t,size_type x,size_type y):
 				Cordinate(x,y)
-				{setTree(t);};
+				{setTree(t);}
 
 
 		__both__ Cordinate(size_type x, size_type y):
@@ -58,10 +61,13 @@ namespace Internal {
 		__both__ void setRow(size_type x);
 		__both__ void setOffset(size_type x);
 		__both__ void setDistance(size_type x);
-			    void setTree(const tree& t);
+
+			    template<typename A>
+			    void setTree(const Tree<T,A>& t);
+
 		__both__ void set(size_type x, size_type y);
-		__both__ bool operator<(Cordinate other);
-		__both__ bool operator>(Cordinate other);
+		__both__ bool operator<(Cordinate<T> other);
+		__both__ bool operator>(Cordinate<T> other);
 		__both__ pointer access();
 
 		__both__ Cordinate& operator++();
@@ -99,7 +105,7 @@ namespace Internal {
 	class shift_functions{
 		public:
 		typedef typename D::operation operation; 
-		typedef Cordinate<T,L>	cordinate;
+		typedef Cordinate<T>	cordinate;
 
 		operation		op; 
 		D			direction; 

@@ -22,8 +22,8 @@ class HashedArrayTree {
 	typedef Memory::location<M>				Location;
 
 	typedef typename allocator_type::value_type		value_type;
-	typedef Vector::reference_wrapper<T,M>			reference;
-	typedef Vector::reference_wrapper<T,M>		const_reference;
+	typedef Vector::reference_wrapper<T>			reference;
+	typedef Vector::reference_wrapper<T>		const_reference;
 	typedef typename allocator_type::difference_type	difference_type;
 	typedef typename allocator_type::size_type		size_type;
 	typedef typename allocator_type::pointer		pointer;
@@ -32,14 +32,14 @@ class HashedArrayTree {
 	//iterators
 	typedef Internal::forward forward;
 	typedef Internal::reverse reverse;
-	typedef Internal::Cordinate<T,allocator_type> Cordinate;
+	typedef Internal::Cordinate<T> Cordinate;
 	typedef Internal::UP UP;
 	typedef Internal::DOWN DOWN;
 
-	typedef Iterator<T,allocator_type,forward> const_iterator;
-	typedef Iterator<T,allocator_type,forward> iterator;
-	typedef Iterator<T,allocator_type,reverse> reverse_iterator;
-	typedef Iterator<T,allocator_type,reverse> const_reverse_iterator;
+	typedef Iterator<T,forward> const_iterator;
+	typedef Iterator<T,forward> iterator;
+	typedef Iterator<T,reverse> reverse_iterator;
+	typedef Iterator<T,reverse> const_reverse_iterator;
 
 	allocator_type		_allocator;
 	Location			location; 

@@ -4,47 +4,49 @@
 #include<functional>
 //***************************CONSTRUCTION?DESTRUCTION***********************
 
-template<typename V,typename A,typename U>
-Iterator<V,A,U>::Iterator(){};
+template<typename V,typename U>
+Iterator<V,U>::Iterator(){};
 
 
-template<typename V,typename A,typename U>
-Iterator<V,A,U>::Iterator(
-				Iterator<V,A,U>::tree& tree,
-				Iterator<V,A,U>& it)
+template<typename V,typename U>
+template<typename A>
+Iterator<V,U>::Iterator(
+				Tree<V,A>& tree,
+				Iterator<V,U>& it)
 	:_cordinate(tree,it._cordinate.distance() )
 {};
 
-template<typename V,typename A,typename U>
-Iterator<V,A,U>::Iterator(
-	const Iterator<V,A,U>::tree& tree)
+template<typename V,typename U>
+template<typename A>
+Iterator<V,U>::Iterator(
+	const Tree<V,A>& tree)
 	:_cordinate(tree)
 {};
 
 
-template<typename V,typename A,typename U>
-Iterator<V,A,U>::Iterator(const Iterator<V,A,U>& it ){
+template<typename V,typename U>
+Iterator<V,U>::Iterator(const Iterator<V,U>& it ){
 	_cordinate=it._cordinate;
 };
 
 
-template<typename V,typename A,typename U>
-Iterator<V,A,U>::~Iterator(){};
+template<typename V,typename U>
+Iterator<V,U>::~Iterator(){};
 
 
-template<typename V,typename A,typename U>
-void Iterator<V,A,U>::initalize(Iterator<V,A,U>::size_type x,Iterator<V,A,U>::size_type y){
+template<typename V,typename U>
+void Iterator<V,U>::initalize(Iterator<V,U>::size_type x,Iterator<V,U>::size_type y){
 	_cordinate.set(x,y);	
 }
 
 
-template<typename V,typename A,typename U>
-void Iterator<V,A,U>::initalize(Iterator<V,A,U>::size_type x){
+template<typename V,typename U>
+void Iterator<V,U>::initalize(Iterator<V,U>::size_type x){
 	_cordinate.setDistance(x);
 }
 
-template<typename V,typename A,typename U>
-void Iterator<V,A,U>::initalize(Cordinate C){
+template<typename V,typename U>
+void Iterator<V,U>::initalize(Cordinate C){
 	_cordinate=C;
 }
 
@@ -52,46 +54,46 @@ void Iterator<V,A,U>::initalize(Cordinate C){
 //***************************CONSTRUCTION?DESTRUCTION***********************
 ///***************************comparison operators***********************
 
-template<typename V,typename A,typename U>
-Iterator<V,A,U>& Iterator<V,A,U>::operator=(const Iterator<V,A,U>& other){
+template<typename V,typename U>
+Iterator<V,U>& Iterator<V,U>::operator=(const Iterator<V,U>& other){
 	this->_cordinate=other._cordinate;
 	return *this;
 };
 
 
-template<typename V,typename A,typename U>
-bool Iterator<V,A,U>::operator==(const Iterator<V,A,U>& it) const{
+template<typename V,typename U>
+bool Iterator<V,U>::operator==(const Iterator<V,U>& it) const{
 	bool cor=this->_cordinate==it._cordinate;
 	return (cor);
 };
 
 
-template<typename V,typename A,typename U>
-bool Iterator<V,A,U>::operator!=(const Iterator<V,A,U>& it) const{
+template<typename V,typename U>
+bool Iterator<V,U>::operator!=(const Iterator<V,U>& it) const{
 	return !(*this==it);
 };
 
 
-template<typename V,typename A,typename U>
-bool Iterator<V,A,U>::operator<(const Iterator<V,A,U>& it) const{
+template<typename V,typename U>
+bool Iterator<V,U>::operator<(const Iterator<V,U>& it) const{
 	return comp(_cordinate,it._cordinate);
 }; 
 
 
-template<typename V,typename A,typename U>
-bool Iterator<V,A,U>::operator>(const Iterator<V,A,U>& it) const{
+template<typename V,typename U>
+bool Iterator<V,U>::operator>(const Iterator<V,U>& it) const{
 	return *this<it;
 }; 
 
 
-template<typename V,typename A,typename U>
-bool Iterator<V,A,U>::operator<=(const Iterator<V,A,U>& it) const{
+template<typename V,typename U>
+bool Iterator<V,U>::operator<=(const Iterator<V,U>& it) const{
 	return !(*this>it);
 }; 
 
 
-template<typename V,typename A,typename U>
-bool Iterator<V,A,U>::operator>=(const Iterator<V,A,U>& it) const{
+template<typename V,typename U>
+bool Iterator<V,U>::operator>=(const Iterator<V,U>& it) const{
 	return !(*this<it);
 }; 
 
@@ -99,40 +101,40 @@ bool Iterator<V,A,U>::operator>=(const Iterator<V,A,U>& it) const{
 //***************************arithmic operators**********************
 
 
-template<typename V,typename A,typename U>
-Iterator<V,A,U>& Iterator<V,A,U>::operator++(){
+template<typename V,typename U>
+Iterator<V,U>& Iterator<V,U>::operator++(){
 	iterator temp(*this);
 	*this=temp+1; 
 	return *this; 
 };
 
 
-template<typename V,typename A,typename U>
-Iterator<V,A,U> Iterator<V,A,U>::operator++(int){
+template<typename V,typename U>
+Iterator<V,U> Iterator<V,U>::operator++(int){
 	iterator temp(*this);
 	++(*this);
 	return temp; 
 }; 
 
 
-template<typename V,typename A,typename U>
-Iterator<V,A,U>& Iterator<V,A,U>::operator--(){
+template<typename V,typename U>
+Iterator<V,U>& Iterator<V,U>::operator--(){
 	iterator temp(*this);
 	this*=temp-1; 
 	return *this; 
 }; 
 
 
-template<typename V,typename A,typename U>
-Iterator<V,A,U> Iterator<V,A,U>::operator--(int){
+template<typename V,typename U>
+Iterator<V,U> Iterator<V,U>::operator--(int){
 	iterator temp(*this);
 	--(*this);
 	return temp; 
 }; 
 
 
-template<typename V,typename A,typename U>
-Iterator<V,A,U> Iterator<V,A,U>::operator+(Iterator<V,A,U>::size_type x) const{
+template<typename V,typename U>
+Iterator<V,U> Iterator<V,U>::operator+(Iterator<V,U>::size_type x) const{
 	iterator it(*this);
 	int dist=this->op(	_cordinate.distance(),
 					x); 
@@ -142,31 +144,31 @@ Iterator<V,A,U> Iterator<V,A,U>::operator+(Iterator<V,A,U>::size_type x) const{
 }; 
 
 
-template<typename V,typename A,typename U>
-Iterator<V,A,U> Iterator<V,A,U>::operator-(Iterator<V,A,U>::size_type x) const{
+template<typename V,typename U>
+Iterator<V,U> Iterator<V,U>::operator-(Iterator<V,U>::size_type x) const{
 	iterator it(*this);
 	return it+(-x);
 };
 
 
-template<typename V,typename A,typename U>
-Iterator<V,A,U>::difference_type Iterator<V,A,U>::operator-(Iterator<V,A,U> other) const{
+template<typename V,typename U>
+Iterator<V,U>::difference_type Iterator<V,U>::operator-(Iterator<V,U> other) const{
 	int this_total=_cordinate.distance();
 	int other_total=(other._cordinate).offset();
 	return this_total-other_total; 
 };
 
 
-template<typename V,typename A,typename U>
-Iterator<V,A,U>& Iterator<V,A,U>::operator+=(Iterator<V,A,U>::size_type x){
+template<typename V,typename U>
+Iterator<V,U>& Iterator<V,U>::operator+=(Iterator<V,U>::size_type x){
 	iterator temp(*this);
 	this*=temp+x; 
 	return *this; 
 }; 
 
 
-template<typename V,typename A,typename U>
-Iterator<V,A,U>& Iterator<V,A,U>::operator-=(Iterator<V,A,U>::size_type x){
+template<typename V,typename U>
+Iterator<V,U>& Iterator<V,U>::operator-=(Iterator<V,U>::size_type x){
 	iterator temp(*this);
 	this*=temp-x; 
 	return *this; 
@@ -175,21 +177,21 @@ Iterator<V,A,U>& Iterator<V,A,U>::operator-=(Iterator<V,A,U>::size_type x){
 //***************************pointer operators***********************
 
 
-template<typename V,typename A,typename U>
-Iterator<V,A,U>::reference Iterator<V,A,U>::operator*(){
+template<typename V,typename U>
+Iterator<V,U>::reference Iterator<V,U>::operator*(){
 	auto tmp=_cordinate.access(); 
 	return reference(tmp);
 };
 
 
-template<typename V,typename A,typename U>
-Iterator<V,A,U>::pointer Iterator<V,A,U>::operator->(){
+template<typename V,typename U>
+Iterator<V,U>::pointer Iterator<V,U>::operator->(){
 	return _cordinate.access();
 };
 
 
-template<typename V,typename A,typename U>
-Iterator<V,A,U>::reference Iterator<V,A,U>::operator[](Iterator<V,A,U>::size_type x){
+template<typename V,typename U>
+Iterator<V,U>::reference Iterator<V,U>::operator[](Iterator<V,U>::size_type x){
 	Cordinate tmp=_cordinate; 
 	tmp.setdistance(tmp.distance()+x);
 	return *_cordinate.access(); 

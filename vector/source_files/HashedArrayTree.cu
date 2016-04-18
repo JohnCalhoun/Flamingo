@@ -14,33 +14,51 @@
 namespace Flamingo {
 namespace Vector {
 
+template<typename T>
+struct HashedArrayTree_base {	
+	typedef Vector::reference_wrapper<T>			reference;
+	typedef Vector::reference_wrapper<T>		const_reference;
+
+	typedef Internal::Cordinate<T> Cordinate;
+
+	typedef Internal::forward forward;
+	typedef Internal::reverse reverse;
+
+	typedef Iterator<T,forward> const_iterator;
+	typedef Iterator<T,forward> iterator;
+	typedef Iterator<T,reverse> reverse_iterator;
+	typedef Iterator<T,reverse> const_reverse_iterator;
+};
+	
 template<typename T,Memory::Region M>
-class HashedArrayTree {
+class HashedArrayTree : public HashedArrayTree_base<T>{
+	public:
+	typedef typename HashedArrayTree_base<T>::reference		reference;
+	typedef typename HashedArrayTree_base<T>::const_reference	const_reference;
+	typedef typename HashedArrayTree_base<T>::Cordinate Cordinate;
+
+	private:
+	typedef Internal::UP UP;
+	typedef Internal::DOWN DOWN;
+
+	public:
+	typedef typename HashedArrayTree_base<T>::const_iterator const_iterator;
+	typedef typename HashedArrayTree_base<T>::iterator iterator;
+	typedef typename HashedArrayTree_base<T>::reverse_iterator reverse_iterator;
+	typedef typename HashedArrayTree_base<T>::const_reverse_iterator const_reverse_iterator;
+
 	public:
 	typedef typename 
 		Memory::allocation_policy<T,M>::allocator		allocator_type;
 	typedef Memory::location<M>				Location;
 
 	typedef typename allocator_type::value_type		value_type;
-	typedef Vector::reference_wrapper<T>			reference;
-	typedef Vector::reference_wrapper<T>		const_reference;
 	typedef typename allocator_type::difference_type	difference_type;
 	typedef typename allocator_type::size_type		size_type;
 	typedef typename allocator_type::pointer		pointer;
 	typedef Tree<T,allocator_type>				tree;
 	
 	//iterators
-	typedef Internal::forward forward;
-	typedef Internal::reverse reverse;
-	typedef Internal::Cordinate<T> Cordinate;
-	typedef Internal::UP UP;
-	typedef Internal::DOWN DOWN;
-
-	typedef Iterator<T,forward> const_iterator;
-	typedef Iterator<T,forward> iterator;
-	typedef Iterator<T,reverse> reverse_iterator;
-	typedef Iterator<T,reverse> const_reverse_iterator;
-
 	allocator_type		_allocator;
 	Location			location; 
 	tree				_tree;

@@ -513,4 +513,147 @@ namespace Functors{
 		}
 	};
 
+	template<int n,class ... Type>
+	struct pop_to_array {
+		typedef dataframe<Type...>	DataFrame;
+		typedef traits<Type...>		Traits; 
+
+		template<int N,class ... K>
+		using Column_type=typename column_tuple<K...>::element<N>::type; 
+		
+		template<int N>
+		using Element_type=typename traits<Type...>::Return<N>::type_base;
+
+ 
+		typedef typename DataFrame::ColumnTuple		ColumnTuple;
+		typedef typename DataFrame::size_type		size_type;
+		typedef typename DataFrame::iterator		iterator; 
+	
+		typedef Column_type<n,Type...>			Column; 
+		typedef Element_type<n>					T; 
+		typedef typename Column::iterator			col_iterator; 
+
+		template<typename P>
+		void operator()(P ptr, iterator it,ColumnTuple&& column_tuple)
+		{
+			const Column& column=std::get<n>(column_tuple);
+
+			size_type size=column.size()*sizeof(T); 
+			col_iterator col_it=std::get<n>(it); 
+			T* ptr_t=static_cast<T*>(ptr); 
+			
+			column.copy_to_array(ptr_t,col_it);
+
+			pop_to_array<n-1,Type...> recursive;
+			recursive(
+				static_cast<P>(ptr+size),
+				it, 
+				std::forward<const ColumnTuple>(column_tuple)); 
+		}
+	};
+	template<class ... Type>
+	struct pop_to_array<0,Type...> {
+		typedef dataframe<Type...>	DataFrame;
+		typedef traits<Type...>		Traits; 
+
+		template<int N,class ... K>
+		using Column_type=typename column_tuple<K...>::element<N>::type; 
+		
+		template<int N>
+		using Element_type=typename traits<Type...>::Return<N>::type_base;
+
+		typedef typename DataFrame::ColumnTuple		ColumnTuple;
+		typedef typename DataFrame::size_type		size_type;
+		typedef typename DataFrame::iterator		iterator; 
+	
+		typedef Column_type<0,Type...>			Column; 
+		typedef Element_type<0>					T; 
+		typedef typename Column::iterator			col_iterator; 
+
+		template<typename P>
+		void operator()(P ptr, iterator it,ColumnTuple&& column_tuple)
+		{
+
+			const Column& column=std::get<0>(column_tuple);
+	
+			size_type size=column.size()*sizeof(T); 
+			col_iterator col_it=std::get<0>(it); 
+			T* ptr_t=static_cast<T*>(ptr); 
+			
+			column.copy_to_array(ptr_t,col_it);
+		}
+	};
+	template<int n,class ... Type>
+	struct push_from_array {
+		typedef dataframe<Type...>	DataFrame;
+		typedef traits<Type...>		Traits; 
+		template<int N,class ... K>
+		using Column_type=typename column_tuple<K...>::element<N>::type; 
+	
+		
+		template<int N>
+		using Element_type=typename traits<Type...>::Return<N>::type_base;
+
+ 
+		typedef typename DataFrame::ColumnTuple		ColumnTuple;
+		typedef typename DataFrame::size_type		size_type;
+		typedef typename DataFrame::iterator		iterator; 
+	
+		typedef Column_type<n,Type...>					Column; 
+		typedef Element_type<n>					T; 
+		typedef typename Column::iterator			col_iterator; 
+
+		template<typename P>
+		void operator()(P ptr, ColumnTuple&& column_tuple)
+		{
+			const Column& column=std::get<n>(column_tuple);
+
+			size_type size=column.size()*sizeof(T); 
+			T* ptr_t=static_cast<T*>(ptr); 
+			
+			column.push_from_array(ptr_t);
+
+			push_from_array<n-1,Type...> recursive;
+			recursive(
+				static_cast<P>(ptr+size),
+				std::forward<const ColumnTuple>(column_tuple)); 
+		}
+	};
+	template<class ... Type>
+	struct push_from_array<0,Type...> {
+		typedef dataframe<Type...>	DataFrame;
+		typedef traits<Type...>		Traits; 
+
+		template<int N,class ... K>
+		using Column_type=typename column_tuple<K...>::element<N>::type; 
+		
+		template<int N>
+		using Element_type=typename traits<Type...>::Return<N>::type_base;
+
+		typedef typename DataFrame::ColumnTuple		ColumnTuple;
+		typedef typename DataFrame::size_type		size_type;
+		typedef typename DataFrame::iterator		iterator; 
+	
+		typedef Column_type<0,Type...>					Column; 
+		typedef Element_type<0>					T; 
+		typedef typename Column::iterator			col_iterator; 
+
+		template<typename P>
+		void operator()(P ptr, ColumnTuple&& column_tuple)
+		{
+			const Column& column=std::get<0>(column_tuple);
+	
+			size_type size=column.size()*sizeof(T); 
+			T* ptr_t=static_cast<T*>(ptr); 
+			
+			column.push_from_array(ptr_t);
+		}
+	};
+
+
+
+
+
+
+
 }//end functors 

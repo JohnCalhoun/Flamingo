@@ -21,6 +21,7 @@ struct column  {
 	typedef column_traits<T>				Traits; 
 	typedef typename Traits::MemoryTuple	MemoryTuple;	
 	typedef typename Traits::pointer		pointer;
+	typedef pointer					iterator; 
 	typedef typename Traits::const_pointer	const_pointer;
 	typedef typename Traits::size_type		size_type; 
 	typedef typename Traits::value_type	value_type;
@@ -91,6 +92,12 @@ struct column  {
 
 	void resize(size_type); 
 	void resize(size_type,value_type);
+
+	template<typename iter>
+	void copy_to_array(iter,pointer)const; 
+
+	template<typename iter>
+	void push_from_array(iter); 
 
 	private:	
 	Memory::Region	_location;

@@ -475,28 +475,47 @@ template<class ... Type>
 {
 	return !(*this==other); 	
 };
-
-template<class ... Type> 
-template<typename P, typename iter>
-void dataframe<Type...>::pop_to_array(
-			P out,
-			iter begin)const
+///--------------------comms-----------------------------------
+template<class ... Type>
+void dataframe<Type...>::broadcast(
+		dataframe<Type...>::iterator begin)
 {
+	const size_type byte_size=size()*traits<Type...>::row_size(); 
+	std::vector<char> buffer(byte_size); 
+	pop_to_array(buffer.begin(),begin); 	
+	//broadcast buffer
+};
+
+template<class ... Type>
+void dataframe<Type...>::scatter(
+		dataframe<Type...>::iterator begin,
+		std::vector<int>& stencil)
+{
+	const size_type byte_size=size()*traits<Type...>::row_size(); 
+	std::vector<char> buffer(byte_size); 
+	pop_to_array(buffer.begin(),begin); 	
+	//scatter buffer and stencil
 };
 
 template<class ... Type> 
 template<typename P>
-void dataframe<Type...>::copy_to_array(
-			P out)const
+void dataframe<Type...>::pop_to_array(
+			P out,
+			dataframe<Type...>::iterator begin)const
 {
-	pop_to_array(out,begin()); 
+	Functors::pop_to_array<traits<Type...>::_numCol-1,Type...> recurs;
+	recurs(out,begin,std::forward<ColumnTuple>(_column_tuple) ); 
 };
+
 template<class ... Type> 
 template<typename P>
 void dataframe<Type...>::push_back_from_array(
 			P out,
 			dataframe<Type...>::size_type count)
 {
+
+	Functors::push_from_array<traits<Type...>::_numCol-1,Type...> recurs;
+	recurs(out,begin,std::forward<ColumnTuple>(_column_tuple) ); 
 };
 
 

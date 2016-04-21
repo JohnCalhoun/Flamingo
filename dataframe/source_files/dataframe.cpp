@@ -45,10 +45,6 @@ class dataframe : public dataframeBase{
 
 	typedef typename Traits::type_vector			type_vector;
 	typedef typename column_tuple<Type...>::type		ColumnTuple;
-
-	private:
-	ColumnTuple		_column_tuple;
-
 	public:
 	dataframe();
 	dataframe(const dataframe<Type...>& other):
@@ -60,13 +56,6 @@ class dataframe : public dataframeBase{
 
 	~dataframe(); 
 
-	private:
-	template<int n>
-	typename column_tuple<Type...>::element<n>::type& column_access();
-
-	ColumnTuple& tuple(); 
-	const ColumnTuple& tuple_const()const;
-	
 	public:
 	void unsafe_move(Memory::Region);
 	Memory::Region location()const; 
@@ -123,12 +112,21 @@ class dataframe : public dataframeBase{
 	reference operator[](size_type);
 	dataframe<Type...>& operator=(const dataframe<Type...>&);
 
-	template<typename P,typename iter>
-	void pop_to_array(P,iter)const;
+	void broadcast(iterator);
+	void scatter(iterator,std::vector<int>&); 
+	
+	private:
+	ColumnTuple		_column_tuple;
+
+	private:
+	template<int n>
+	typename column_tuple<Type...>::element<n>::type& column_access();
+
+	ColumnTuple& tuple(); 
+	const ColumnTuple& tuple_const()const;
+
 	template<typename P>
-	void copy_to_array(P)const;
-	template<typename P,typename iter>
-	void copy_to_array(P,iter,iter)const; 
+	void pop_to_array(P,iterator)const;
 	
 	template<typename P>
 	void push_back_from_array(P,size_type);

@@ -476,7 +476,28 @@ template<class ... Type>
 	return !(*this==other); 	
 };
 
+template<class ... Type> 
+template<typename P, typename iter>
+void dataframe<Type...>::pop_to_array(
+			P out,
+			iter begin)const
+{
+};
 
+template<class ... Type> 
+template<typename P>
+void dataframe<Type...>::copy_to_array(
+			P out)const
+{
+	pop_to_array(out,begin()); 
+};
+template<class ... Type> 
+template<typename P>
+void dataframe<Type...>::push_back_from_array(
+			P out,
+			dataframe<Type...>::size_type count)
+{
+};
 
 
 

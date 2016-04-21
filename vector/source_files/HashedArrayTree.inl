@@ -341,7 +341,6 @@ template<class iter>
 	shift<DOWN>(new_iter_1,n);
 
 	copy(new_iter_1,n,iter_3);
-	new_iter_1.setWidth( _tree.width() ); 
 	return new_iter_1+1;	
 };
 /*
@@ -375,12 +374,18 @@ void	HashedArrayTree<T,M>::clear(){
 	_cap=0; 
 	_count=0; 
 };
-/*
-template<typename T,Memory::Region M>
-template<class iter> void HashedArrayTree<T,M>::assign(iter it_1, iter it_2){
 
+template<typename T,Memory::Region M>
+template<class iter> 
+void HashedArrayTree<T,M>::assign(iter it_1, iter it_2){
+	clear(); 
+	size_type count=it_2-it_1; 
+	resize(count); 
+	for(int i=0; i<count; i++){
+		at(i)=*(it_1+i); 
+	}
 };
-*/
+
 template<typename T,Memory::Region M>
 void	HashedArrayTree<T,M>::assign(std::initializer_list<T> list){
 	assign(list.begin(),list.end()); 
@@ -433,15 +438,6 @@ template<typename T,Memory::Region M>
 HashedArrayTree<T,M>::const_reference HashedArrayTree<T,M>::back()const{
 	return at(size() ); 
 };
-
-template<typename T,Memory::Region M>
-template<typename U>
-void HashedArrayTree<T,M>::copy_to_array(U ptr)const{
-	_tree.copy_to_array(ptr); 	
-};
-
-
-
 
 
 

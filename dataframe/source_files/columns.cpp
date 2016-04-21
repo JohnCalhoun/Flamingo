@@ -11,64 +11,30 @@
 #include <boost/mpl/int.hpp>
 #include <tuple>
 #include <HashedArrayTree.cu>
+#include <traits.cpp>
 
 namespace Flamingo {
 namespace DataFrame {
 
-template<Memory::Region M>
-struct memory2type{
-	typedef boost::mpl::int_<0> type; 
-};
-template<>
-struct memory2type<Memory::Region::device>{
-	typedef boost::mpl::int_<1> type; 
-};
-template<>
-struct memory2type<Memory::Region::pinned>{
-	typedef boost::mpl::int_<2> type; 
-};
-template<>
-struct memory2type<Memory::Region::unified>{
-	typedef boost::mpl::int_<3> type; 
-};
-
 template<typename T>
 struct column  {
-
-	typedef Vector::HashedArrayTree<T,Memory::Region::device>		device_column; 
-	typedef Vector::HashedArrayTree<T,Memory::Region::pinned>		pinned_column; 
-	typedef Vector::HashedArrayTree<T,Memory::Region::host>			host_column; 
-	typedef Vector::HashedArrayTree<T,Memory::Region::unified>		unified_column; 
-
-	typedef boost::mpl::map<	
-		boost::mpl::pair<typename memory2type<Memory::Region::device>::type,device_column>,
-		boost::mpl::pair<typename memory2type<Memory::Region::host>::type,host_column>,
-		boost::mpl::pair<typename memory2type<Memory::Region::pinned>::type,pinned_column>,
-		boost::mpl::pair<typename memory2type<Memory::Region::unified>::type,unified_column>
-	> map; 
-	typedef std::tuple<	
-					host_column,
-					device_column,
-					pinned_column,
-					unified_column
-				> MemoryTuple; 
-
-	typedef T					value_type;
-	typedef value_type*			pointer; 
-	typedef const value_type*	const_pointer; 	
+	typedef column_traits<T>				Traits; 
+	typedef typename Traits::MemoryTuple	MemoryTuple;	
+	typedef typename Traits::pointer		pointer;
+	typedef typename Traits::const_pointer	const_pointer;
+	typedef typename Traits::size_type		size_type; 
+	typedef typename Traits::value_type	value_type;
 
 	template<Memory::Region M>
-	struct Return{
-		typedef typename boost::mpl::at<map,typename memory2type<M>::type>::type column;
-	};
+		using Return=typename Traits::Return<M>; 
 
-	Memory::Region		_location;
-	MemoryTuple	_tuple; 
+	template<Memory::Region M>
+		using Memory2Type=memory2type<M>; 
 
 	column();
 	column(int);
 	column(const column<T>& );
-	column(pointer ,pointer);
+	column(pointer ,pointer );
 	~column(); 
 
 	template<typename Aloc>
@@ -92,8 +58,8 @@ struct column  {
 	column<T>& operator=(const column<T>& );
 	bool operator==(const column<T>&)const;
 	bool operator!=(const column<T>&)const; 
+
 	//--------vector functions
-	typedef typename host_column::size_type size_type; 
 	
 	size_type size()const;
 	size_type max_size()const;
@@ -125,32 +91,11 @@ struct column  {
 
 	void resize(size_type); 
 	void resize(size_type,value_type);
-};
 
-template<int n,class ... Type>
-struct column_return{
-	typedef typename traits<Type...>::Return<n>::type		base; 
-	typedef typename column<base>::type				type;  
-};
+	private:	
+	Memory::Region	_location;
+	MemoryTuple	_tuple; 
 
-template<typename T>
-struct type2column {
-	typedef column<T> type; 
-};
-
-template<class ... Type>
-struct column_tuple {
-	typedef traits<Type...> Traits; 
-
-	typedef typename Traits::type_vector vec; 
-	typedef typename transform<vec,type2column<_1> >::type col_vec;
-	typedef typename vec2tuple<Traits::_numCol-1,col_vec>::type type; 
-
-	template<int n>
-	struct element {
-		typedef boost::mpl::int_<n> position;
-		typedef typename boost::mpl::at<col_vec,position>::type type; 
-	};
 };
 
 #include "columns.inl"

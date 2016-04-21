@@ -3,7 +3,7 @@
 #include <tuple>
 #include <thrust/device_ptr.h>
 #define DEFAULT_LOCATION Memory::Region::host
-#define DEFAULT_COLUMN host_column
+#define DEFAULT_COLUMN Traits::host_column
 
 template<typename T>
 column<T>::column(){
@@ -28,7 +28,7 @@ column<T>::~column(){}
 template<typename T>
 template<typename Aloc>
 column<T>::column(const thrust::device_vector<T,Aloc>& other){
-	const int destination=memory2type<Memory::Region::device>::type::value;
+	const int destination=Memory2Type<Memory::Region::device>::type::value;
 	std::get<destination>(_tuple)=other; 
 	_location=Memory::Region::device;
 } 
@@ -36,7 +36,7 @@ column<T>::column(const thrust::device_vector<T,Aloc>& other){
 template<typename T>
 template<typename Aloc>
 column<T>::column(const thrust::host_vector<T,Aloc>& other){
-	const int destination=memory2type<Memory::Region::host>::type::value;
+	const int destination=Memory2Type<Memory::Region::host>::type::value;
 	std::get<destination>(_tuple)=other; 
 	_location=Memory::Region::host;
 } 
@@ -49,8 +49,8 @@ void column<T>::move(){
 		{
 			case Memory::Region::host:
 			{
-				const int source=memory2type<Memory::Region::host>::type::value;
-				const int destination=memory2type<M>::type::value;
+				const int source=Memory2Type<Memory::Region::host>::type::value;
+				const int destination=Memory2Type<M>::type::value;
 
 				std::get<destination>(_tuple)=std::get<source>(_tuple); 
 				std::get<source>(_tuple).clear(); 
@@ -58,8 +58,8 @@ void column<T>::move(){
 			}
 			case Memory::Region::device:
 			{
-				const int source=memory2type<Memory::Region::device>::type::value;
-				const int destination=memory2type<M>::type::value;
+				const int source=Memory2Type<Memory::Region::device>::type::value;
+				const int destination=Memory2Type<M>::type::value;
 
 				std::get<destination>(_tuple)=std::get<source>(_tuple); 
 				std::get<source>(_tuple).clear(); 
@@ -67,8 +67,8 @@ void column<T>::move(){
 			}
 			case Memory::Region::pinned:
 			{
-				const int source=memory2type<Memory::Region::pinned>::type::value;
-				const int destination=memory2type<M>::type::value;
+				const int source=Memory2Type<Memory::Region::pinned>::type::value;
+				const int destination=Memory2Type<M>::type::value;
 
 				std::get<destination>(_tuple)=std::get<source>(_tuple); 
 				std::get<source>(_tuple).clear(); 
@@ -76,8 +76,8 @@ void column<T>::move(){
 			}
 			case Memory::Region::unified:
 			{
-				const int source=memory2type<Memory::Region::unified>::type::value;
-				const int destination=memory2type<M>::type::value;
+				const int source=Memory2Type<Memory::Region::unified>::type::value;
+				const int destination=Memory2Type<M>::type::value;
 
 				std::get<destination>(_tuple)=std::get<source>(_tuple); 
 				std::get<source>(_tuple).clear(); 
@@ -95,7 +95,7 @@ Memory::Region column<T>::getlocation()const{
 template<typename T>
 template<Memory::Region M>
 typename column<T>::Return<M>::column& column<T>::access(){
-	const int position=memory2type<M>::type::value;
+	const int position=Memory2Type<M>::type::value;
 	return std::get<position>(_tuple); 
 } 
 template<typename T>
@@ -105,26 +105,26 @@ column<T>::pointer column<T>::data(){
 	{
 			case Memory::Region::host:
 			{
-				const int position=memory2type<Memory::Region::host>::type::value;
-				ptr=std::get<position>(_tuple).begin()();
+				const int position=Memory2Type<Memory::Region::host>::type::value;
+				ptr=std::get<position>(_tuple).begin();
 				break;
 			}
 			case Memory::Region::device:
 			{
-				const int position=memory2type<Memory::Region::device>::type::value;
-				ptr=std::get<position>(_tuple).begin()();
+				const int position=Memory2Type<Memory::Region::device>::type::value;
+				ptr=std::get<position>(_tuple).begin();
 				break;
 			}
 			case Memory::Region::pinned:
 			{
-				const int position=memory2type<Memory::Region::pinned>::type::value;
-				ptr=std::get<position>(_tuple).begin()();
+				const int position=Memory2Type<Memory::Region::pinned>::type::value;
+				ptr=std::get<position>(_tuple).begin();
 				break;
 			}
 			case Memory::Region::unified:
 			{
-				const int position=memory2type<Memory::Region::unified>::type::value;
-				ptr=std::get<position>(_tuple).begin()();
+				const int position=Memory2Type<Memory::Region::unified>::type::value;
+				ptr=std::get<position>(_tuple).begin();
 				break;
 			}
 	}
@@ -136,23 +136,23 @@ column<T>::const_pointer column<T>::data()const{
 	{
 			case Memory::Region::host:
 			{
-				const int position=memory2type<Memory::Region::host>::type::value;
-				return std::get<position>(_tuple).begin()();
+				const int position=Memory2Type<Memory::Region::host>::type::value;
+				return std::get<position>(_tuple).begin();
 			}
 			case Memory::Region::device:
 			{
-				const int position=memory2type<Memory::Region::device>::type::value;
-				return std::get<position>(_tuple).begin()();
+				const int position=Memory2Type<Memory::Region::device>::type::value;
+				return std::get<position>(_tuple).begin();
 			}
 			case Memory::Region::pinned:
 			{
-				const int position=memory2type<Memory::Region::pinned>::type::value;
-				return std::get<position>(_tuple).begin()();
+				const int position=Memory2Type<Memory::Region::pinned>::type::value;
+				return std::get<position>(_tuple).begin();
 			}
 			case Memory::Region::unified:
 			{
-				const int position=memory2type<Memory::Region::unified>::type::value;
-				return std::get<position>(_tuple).begin()();
+				const int position=Memory2Type<Memory::Region::unified>::type::value;
+				return std::get<position>(_tuple).begin();
 			}
 			default:
 			{
@@ -197,25 +197,25 @@ column<T>::size_type column<T>::size()const
 	{
 		case Memory::Region::host:
 		{
-			const int position=memory2type<Memory::Region::host>::type::value;
+			const int position=Memory2Type<Memory::Region::host>::type::value;
 			size=std::get<position>(_tuple).size();
 			break; 
 		}
 		case Memory::Region::device:
 		{
-			const int position=memory2type<Memory::Region::device>::type::value;
+			const int position=Memory2Type<Memory::Region::device>::type::value;
 			size=std::get<position>(_tuple).size();
 			break; 
 		}
 		case Memory::Region::pinned:
 		{
-			const int position=memory2type<Memory::Region::pinned>::type::value;
+			const int position=Memory2Type<Memory::Region::pinned>::type::value;
 			size=std::get<position>(_tuple).size();
 			break; 
 		}
 		case Memory::Region::unified:
 		{
-			const int position=memory2type<Memory::Region::unified>::type::value;
+			const int position=Memory2Type<Memory::Region::unified>::type::value;
 			size=std::get<position>(_tuple).size();
 			break; 
 		}
@@ -231,25 +231,25 @@ column<T>::size_type column<T>::max_size()const
 	{
 		case Memory::Region::host:
 		{
-			const int position=memory2type<Memory::Region::host>::type::value;
+			const int position=Memory2Type<Memory::Region::host>::type::value;
 			max_size=std::get<position>(_tuple).max_size();
 			break; 
 		}
 		case Memory::Region::device:
 		{
-			const int position=memory2type<Memory::Region::device>::type::value;
+			const int position=Memory2Type<Memory::Region::device>::type::value;
 			max_size=std::get<position>(_tuple).max_size();
 			break; 
 		}
 		case Memory::Region::pinned:
 		{
-			const int position=memory2type<Memory::Region::pinned>::type::value;
+			const int position=Memory2Type<Memory::Region::pinned>::type::value;
 			max_size=std::get<position>(_tuple).max_size();
 			break; 
 		}
 		case Memory::Region::unified:
 		{
-			const int position=memory2type<Memory::Region::unified>::type::value;
+			const int position=Memory2Type<Memory::Region::unified>::type::value;
 			max_size=std::get<position>(_tuple).max_size();
 			break; 
 		}
@@ -264,25 +264,25 @@ bool column<T>::empty()const{
 	{
 		case Memory::Region::host:
 		{
-			const int position=memory2type<Memory::Region::host>::type::value;
+			const int position=Memory2Type<Memory::Region::host>::type::value;
 			empty=std::get<position>(_tuple).empty();
 			break; 
 		}
 		case Memory::Region::device:
 		{
-			const int position=memory2type<Memory::Region::device>::type::value;
+			const int position=Memory2Type<Memory::Region::device>::type::value;
 			empty=std::get<position>(_tuple).empty();
 			break; 
 		}
 		case Memory::Region::pinned:
 		{
-			const int position=memory2type<Memory::Region::pinned>::type::value;
+			const int position=Memory2Type<Memory::Region::pinned>::type::value;
 			empty=std::get<position>(_tuple).empty();
 			break; 
 		}
 		case Memory::Region::unified:
 		{
-			const int position=memory2type<Memory::Region::unified>::type::value;
+			const int position=Memory2Type<Memory::Region::unified>::type::value;
 			empty=std::get<position>(_tuple).empty();
 			break; 
 		}
@@ -296,25 +296,25 @@ void column<T>::reserve(size_type size){
 	{
 		case Memory::Region::host:
 		{
-			const int position=memory2type<Memory::Region::host>::type::value;
+			const int position=Memory2Type<Memory::Region::host>::type::value;
 			std::get<position>(_tuple).reserve(size);
 			break; 
 		}
 		case Memory::Region::device:
 		{
-			const int position=memory2type<Memory::Region::device>::type::value;
+			const int position=Memory2Type<Memory::Region::device>::type::value;
 			std::get<position>(_tuple).reserve(size);
 			break; 
 		}
 		case Memory::Region::pinned:
 		{
-			const int position=memory2type<Memory::Region::pinned>::type::value;
+			const int position=Memory2Type<Memory::Region::pinned>::type::value;
 			std::get<position>(_tuple).reserve(size);
 			break; 
 		}
 		case Memory::Region::unified:
 		{
-			const int position=memory2type<Memory::Region::unified>::type::value;
+			const int position=Memory2Type<Memory::Region::unified>::type::value;
 			std::get<position>(_tuple).reserve(size);
 			break; 
 		}
@@ -328,25 +328,25 @@ column<T>::size_type column<T>::capacity()const{
 	{
 		case Memory::Region::host:
 		{
-			const int position=memory2type<Memory::Region::host>::type::value;
+			const int position=Memory2Type<Memory::Region::host>::type::value;
 			size=std::get<position>(_tuple).capacity();
 			break; 
 		}
 		case Memory::Region::device:
 		{
-			const int position=memory2type<Memory::Region::device>::type::value;
+			const int position=Memory2Type<Memory::Region::device>::type::value;
 			size=std::get<position>(_tuple).capacity();
 			break; 
 		}
 		case Memory::Region::pinned:
 		{
-			const int position=memory2type<Memory::Region::pinned>::type::value;
+			const int position=Memory2Type<Memory::Region::pinned>::type::value;
 			size=std::get<position>(_tuple).capacity();
 			break; 
 		}
 		case Memory::Region::unified:
 		{
-			const int position=memory2type<Memory::Region::unified>::type::value;
+			const int position=Memory2Type<Memory::Region::unified>::type::value;
 			size=std::get<position>(_tuple).capacity();
 			break; 
 		}
@@ -361,25 +361,25 @@ void column<T>::fill(T t){
 	{
 		case Memory::Region::host:
 		{
-			const int position=memory2type<Memory::Region::host>::type::value;
+			const int position=Memory2Type<Memory::Region::host>::type::value;
 			std::get<position>(_tuple).assign(s,t);
 			break; 
 		}
 		case Memory::Region::device:
 		{
-			const int position=memory2type<Memory::Region::device>::type::value;
+			const int position=Memory2Type<Memory::Region::device>::type::value;
 			std::get<position>(_tuple).assign(s,t);
 			break; 
 		}
 		case Memory::Region::pinned:
 		{
-			const int position=memory2type<Memory::Region::pinned>::type::value;
+			const int position=Memory2Type<Memory::Region::pinned>::type::value;
 			std::get<position>(_tuple).assign(s,t);
 			break; 
 		}
 		case Memory::Region::unified:
 		{
-			const int position=memory2type<Memory::Region::unified>::type::value;
+			const int position=Memory2Type<Memory::Region::unified>::type::value;
 			std::get<position>(_tuple).assign(s,t);
 			break; 
 		}
@@ -389,19 +389,19 @@ void column<T>::fill(T t){
 template<typename T>
 template<typename iter>
 void column<T>::copy(iter start, iter stop){
-	typedef typename host_column::iterator host_it;
-	typedef typename device_column::iterator device_it; 
+	typedef typename Traits::host_column::iterator host_it;
+	typedef typename Traits::device_column::iterator device_it; 
 	switch(getlocation())
 	{
 		case Memory::Region::host:
 		{
-			const int position=memory2type<Memory::Region::host>::type::value;
+			const int position=Memory2Type<Memory::Region::host>::type::value;
 			std::get<position>(_tuple).assign(start,stop);
 			break; 
 		}
 		case Memory::Region::device:
 		{
-			const int position=memory2type<Memory::Region::device>::type::value;
+			const int position=Memory2Type<Memory::Region::device>::type::value;
 			device_it ptr_start(start); 
 			device_it ptr_stop(stop); 	
 			std::get<position>(_tuple).assign(ptr_start,ptr_stop);
@@ -409,7 +409,7 @@ void column<T>::copy(iter start, iter stop){
 		}
 		case Memory::Region::pinned:
 		{
-			const int position=memory2type<Memory::Region::pinned>::type::value;
+			const int position=Memory2Type<Memory::Region::pinned>::type::value;
 			device_it ptr_start(start); 
 			device_it ptr_stop(stop); 	
 			std::get<position>(_tuple).assign(ptr_start,ptr_stop);
@@ -417,7 +417,7 @@ void column<T>::copy(iter start, iter stop){
 		}
 		case Memory::Region::unified:
 		{
-			const int position=memory2type<Memory::Region::unified>::type::value;
+			const int position=Memory2Type<Memory::Region::unified>::type::value;
 			device_it ptr_start(start); 
 			device_it ptr_stop(stop); 	
 			std::get<position>(_tuple).assign(ptr_start,ptr_stop);
@@ -432,25 +432,25 @@ void column<T>::clear(){
 	{
 		case Memory::Region::host:
 		{
-			const int position=memory2type<Memory::Region::host>::type::value;
+			const int position=Memory2Type<Memory::Region::host>::type::value;
 			std::get<position>(_tuple).clear();
 			break; 
 		}
 		case Memory::Region::device:
 		{
-			const int position=memory2type<Memory::Region::device>::type::value;
+			const int position=Memory2Type<Memory::Region::device>::type::value;
 			std::get<position>(_tuple).clear();
 			break; 
 		}
 		case Memory::Region::pinned:
 		{
-			const int position=memory2type<Memory::Region::pinned>::type::value;
+			const int position=Memory2Type<Memory::Region::pinned>::type::value;
 			std::get<position>(_tuple).clear();
 			break; 
 		}
 		case Memory::Region::unified:
 		{
-			const int position=memory2type<Memory::Region::unified>::type::value;
+			const int position=Memory2Type<Memory::Region::unified>::type::value;
 			std::get<position>(_tuple).clear();
 			break; 
 		}
@@ -463,25 +463,25 @@ void column<T>::resize(column<T>::size_type n){
 	{
 		case Memory::Region::host:
 		{
-			const int position=memory2type<Memory::Region::host>::type::value;
+			const int position=Memory2Type<Memory::Region::host>::type::value;
 			std::get<position>(_tuple).resize(n);
 			break; 
 		}
 		case Memory::Region::device:
 		{
-			const int position=memory2type<Memory::Region::device>::type::value;
+			const int position=Memory2Type<Memory::Region::device>::type::value;
 			std::get<position>(_tuple).resize(n);
 			break; 
 		}
 		case Memory::Region::pinned:
 		{
-			const int position=memory2type<Memory::Region::pinned>::type::value;
+			const int position=Memory2Type<Memory::Region::pinned>::type::value;
 			std::get<position>(_tuple).resize(n);
 			break; 
 		}
 		case Memory::Region::unified:
 		{
-			const int position=memory2type<Memory::Region::unified>::type::value;
+			const int position=Memory2Type<Memory::Region::unified>::type::value;
 			std::get<position>(_tuple).resize(n);
 			break; 
 		}
@@ -494,25 +494,25 @@ void column<T>::resize(column<T>::size_type n,column<T>::value_type v){
 	{
 		case Memory::Region::host:
 		{
-			const int position=memory2type<Memory::Region::host>::type::value;
+			const int position=Memory2Type<Memory::Region::host>::type::value;
 			std::get<position>(_tuple).resize(n,v);
 			break; 
 		}
 		case Memory::Region::device:
 		{
-			const int position=memory2type<Memory::Region::device>::type::value;
+			const int position=Memory2Type<Memory::Region::device>::type::value;
 			std::get<position>(_tuple).resize(n,v);
 			break; 
 		}
 		case Memory::Region::pinned:
 		{
-			const int position=memory2type<Memory::Region::pinned>::type::value;
+			const int position=Memory2Type<Memory::Region::pinned>::type::value;
 			std::get<position>(_tuple).resize(n,v);
 			break; 
 		}
 		case Memory::Region::unified:
 		{
-			const int position=memory2type<Memory::Region::unified>::type::value;
+			const int position=Memory2Type<Memory::Region::unified>::type::value;
 			std::get<position>(_tuple).resize(n,v);
 			break; 
 		}
@@ -527,25 +527,25 @@ void column<T>::assign(
 	{
 		case Memory::Region::host:
 		{
-			const int position=memory2type<Memory::Region::host>::type::value;
+			const int position=Memory2Type<Memory::Region::host>::type::value;
 			std::get<position>(_tuple).assign(s,v);
 			break; 
 		}
 		case Memory::Region::device:
 		{
-			const int position=memory2type<Memory::Region::device>::type::value;
+			const int position=Memory2Type<Memory::Region::device>::type::value;
 			std::get<position>(_tuple).assign(s,v);
 			break; 
 		}
 		case Memory::Region::pinned:
 		{
-			const int position=memory2type<Memory::Region::pinned>::type::value;
+			const int position=Memory2Type<Memory::Region::pinned>::type::value;
 			std::get<position>(_tuple).assign(s,v);
 			break; 
 		}
 		case Memory::Region::unified:
 		{
-			const int position=memory2type<Memory::Region::unified>::type::value;
+			const int position=Memory2Type<Memory::Region::unified>::type::value;
 			std::get<position>(_tuple).assign(s,v);
 			break; 
 		}
@@ -555,19 +555,19 @@ void column<T>::assign(
 template<typename T>
 template<typename iter> 
 void column<T>::assign(iter it_1,iter it_2){
-	typedef typename device_column::iterator device_it; 
-	typedef typename host_column::iterator host_it;
+	typedef typename Traits::device_column::iterator device_it; 
+	typedef typename Traits::host_column::iterator host_it;
 	switch(getlocation())
 	{
 		case Memory::Region::host:
 		{
-			const int position=memory2type<Memory::Region::host>::type::value;
+			const int position=Memory2Type<Memory::Region::host>::type::value;
 			std::get<position>(_tuple).assign(it_1,it_2);
 			break; 
 		}
 		case Memory::Region::device:
 		{
-			const int position=memory2type<Memory::Region::device>::type::value;
+			const int position=Memory2Type<Memory::Region::device>::type::value;
 			device_it ptr_1(it_1); 
 			device_it ptr_2(it_2); 
 			std::get<position>(_tuple).assign(ptr_1,ptr_2);
@@ -575,7 +575,7 @@ void column<T>::assign(iter it_1,iter it_2){
 		}
 		case Memory::Region::pinned:
 		{
-			const int position=memory2type<Memory::Region::pinned>::type::value;
+			const int position=Memory2Type<Memory::Region::pinned>::type::value;
 			device_it ptr_1(it_1); 
 			device_it ptr_2(it_2); 
 			std::get<position>(_tuple).assign(ptr_1,ptr_2);
@@ -583,7 +583,7 @@ void column<T>::assign(iter it_1,iter it_2){
 		}
 		case Memory::Region::unified:
 		{
-			const int position=memory2type<Memory::Region::unified>::type::value;
+			const int position=Memory2Type<Memory::Region::unified>::type::value;
 			device_it ptr_1(it_1); 
 			device_it ptr_2(it_2); 
 			std::get<position>(_tuple).assign(ptr_1,ptr_2);
@@ -595,35 +595,35 @@ void column<T>::assign(iter it_1,iter it_2){
 template<typename T>
 template<typename iter> 
 iter column<T>::insert(iter it, column<T>::value_type v){	
-	typedef typename device_column::iterator device_it; 
-	typedef typename host_column::iterator host_it;
+	typedef typename Traits::device_column::iterator device_it; 
+	typedef typename Traits::host_column::iterator host_it;
 	iter out=it;
 	switch(getlocation())
 	{
 		case Memory::Region::host:
 		{
-			const int position=memory2type<Memory::Region::host>::type::value;
+			const int position=Memory2Type<Memory::Region::host>::type::value;
 			host_it ptr_h(it); 
 			std::get<position>(_tuple).insert(ptr_h,v);
 			break; 
 		}
 		case Memory::Region::device:
 		{
-			const int position=memory2type<Memory::Region::device>::type::value;
+			const int position=Memory2Type<Memory::Region::device>::type::value;
 			device_it ptr_d(it); 
 			std::get<position>(_tuple).insert(ptr_d,v);
 			break; 
 		}
 		case Memory::Region::pinned:
 		{
-			const int position=memory2type<Memory::Region::pinned>::type::value;
+			const int position=Memory2Type<Memory::Region::pinned>::type::value;
 			device_it ptr_d(it); 
 			std::get<position>(_tuple).insert(ptr_d,v);
 			break; 
 		}
 		case Memory::Region::unified:
 		{
-			const int position=memory2type<Memory::Region::unified>::type::value;
+			const int position=Memory2Type<Memory::Region::unified>::type::value;
 			device_it ptr_d(it); 
 			std::get<position>(_tuple).insert(ptr_d,v);
 			break; 
@@ -635,13 +635,13 @@ iter column<T>::insert(iter it, column<T>::value_type v){
 template<typename T>
 template<typename iter_pos,typename iter> 
 void column<T>::insert(iter_pos pos,iter start,iter stop){
-	typedef typename host_column::iterator host_it;
-	typedef typename device_column::iterator device_it; 
+	typedef typename Traits::host_column::iterator host_it;
+	typedef typename Traits::device_column::iterator device_it; 
 	switch(getlocation())
 	{
 		case Memory::Region::host:
 		{
-			const int position=memory2type<Memory::Region::host>::type::value;
+			const int position=Memory2Type<Memory::Region::host>::type::value;
 			host_it ptr_pos(pos); 
 			host_it ptr_start(start); 
 			host_it ptr_stop(stop); 		
@@ -650,7 +650,7 @@ void column<T>::insert(iter_pos pos,iter start,iter stop){
 		}
 		case Memory::Region::device:
 		{
-			const int position=memory2type<Memory::Region::device>::type::value;
+			const int position=Memory2Type<Memory::Region::device>::type::value;
 			device_it ptr_pos(pos); 
 			device_it ptr_start(start); 
 			device_it ptr_stop(stop); 		
@@ -659,7 +659,7 @@ void column<T>::insert(iter_pos pos,iter start,iter stop){
 		}
 		case Memory::Region::pinned:
 		{
-			const int position=memory2type<Memory::Region::pinned>::type::value;
+			const int position=Memory2Type<Memory::Region::pinned>::type::value;
 			device_it ptr_pos(pos); 
 			device_it ptr_start(start); 
 			device_it ptr_stop(stop); 		
@@ -668,7 +668,7 @@ void column<T>::insert(iter_pos pos,iter start,iter stop){
 		}
 		case Memory::Region::unified:
 		{
-			const int position=memory2type<Memory::Region::unified>::type::value;
+			const int position=Memory2Type<Memory::Region::unified>::type::value;
 			device_it ptr_pos(pos); 
 			device_it ptr_start(start); 
 			device_it ptr_stop(stop); 		
@@ -681,34 +681,34 @@ void column<T>::insert(iter_pos pos,iter start,iter stop){
 template<typename T>
 template<typename iter> 
 iter column<T>::erase(iter pos){
-	typedef typename host_column::iterator host_it;
-	typedef typename device_column::iterator device_it; 
+	typedef typename Traits::host_column::iterator host_it;
+	typedef typename Traits::device_column::iterator device_it; 
 	iter out; 
 	switch(getlocation())
 	{
 		case Memory::Region::host:
 		{
-			const int position=memory2type<Memory::Region::host>::type::value;
+			const int position=Memory2Type<Memory::Region::host>::type::value;
 			out=std::get<position>(_tuple).erase(pos);
 			break; 
 		}
 		case Memory::Region::device:
 		{
-			const int position=memory2type<Memory::Region::device>::type::value;
+			const int position=Memory2Type<Memory::Region::device>::type::value;
 			device_it ptr_pos(pos); 
 			out=std::get<position>(_tuple).erase(ptr_pos);
 			break; 
 		}
 		case Memory::Region::pinned:
 		{
-			const int position=memory2type<Memory::Region::pinned>::type::value;
+			const int position=Memory2Type<Memory::Region::pinned>::type::value;
 			device_it ptr_pos(pos); 
 			out=std::get<position>(_tuple).erase(ptr_pos);
 			break; 
 		}
 		case Memory::Region::unified:
 		{
-			const int position=memory2type<Memory::Region::unified>::type::value;
+			const int position=Memory2Type<Memory::Region::unified>::type::value;
 			device_it ptr_pos(pos); 
 			out=std::get<position>(_tuple).erase(ptr_pos);
 			break; 
@@ -720,19 +720,19 @@ iter column<T>::erase(iter pos){
 template<typename T>
 template<typename iter> 
 iter column<T>::erase(iter start, iter stop){
-	typedef typename device_column::iterator device_it; 
-	typedef typename host_column::iterator host_it;
+	typedef typename Traits::device_column::iterator device_it; 
+	typedef typename Traits::host_column::iterator host_it;
 	switch(getlocation())
 	{
 		case Memory::Region::host:
 		{
-			const int position=memory2type<Memory::Region::host>::type::value;
+			const int position=Memory2Type<Memory::Region::host>::type::value;
 			std::get<position>(_tuple).erase(start,stop);
 			break; 
 		}
 		case Memory::Region::device:
 		{
-			const int position=memory2type<Memory::Region::device>::type::value;
+			const int position=Memory2Type<Memory::Region::device>::type::value;
 			device_it ptr_start(start); 
 			device_it ptr_stop(stop); 
 			std::get<position>(_tuple).erase(ptr_start,ptr_stop);
@@ -740,7 +740,7 @@ iter column<T>::erase(iter start, iter stop){
 		}
 		case Memory::Region::pinned:
 		{
-			const int position=memory2type<Memory::Region::pinned>::type::value;
+			const int position=Memory2Type<Memory::Region::pinned>::type::value;
 			device_it ptr_start(start); 
 			device_it ptr_stop(stop); 
 			std::get<position>(_tuple).erase(ptr_start,ptr_stop);
@@ -748,7 +748,7 @@ iter column<T>::erase(iter start, iter stop){
 		}
 		case Memory::Region::unified:
 		{
-			const int position=memory2type<Memory::Region::unified>::type::value;
+			const int position=Memory2Type<Memory::Region::unified>::type::value;
 			device_it ptr_start(start); 
 			device_it ptr_stop(stop); 
 			std::get<position>(_tuple).erase(ptr_start,ptr_stop);

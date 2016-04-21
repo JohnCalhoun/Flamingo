@@ -76,7 +76,8 @@ bool Iterator<V,U>::operator!=(const Iterator<V,U>& it) const{
 
 template<typename V,typename U>
 bool Iterator<V,U>::operator<(const Iterator<V,U>& it) const{
-	return comp(_cordinate,it._cordinate);
+	U op; 
+	return op.comp(_cordinate,it._cordinate);
 }; 
 
 
@@ -120,7 +121,7 @@ Iterator<V,U> Iterator<V,U>::operator++(int){
 template<typename V,typename U>
 Iterator<V,U>& Iterator<V,U>::operator--(){
 	iterator temp(*this);
-	this*=temp-1; 
+	*this =temp-1; 
 	return *this; 
 }; 
 
@@ -162,7 +163,7 @@ Iterator<V,U>::difference_type Iterator<V,U>::operator-(Iterator<V,U> other) con
 template<typename V,typename U>
 Iterator<V,U>& Iterator<V,U>::operator+=(Iterator<V,U>::size_type x){
 	iterator temp(*this);
-	this*=temp+x; 
+	*this = temp+x; 
 	return *this; 
 }; 
 
@@ -170,7 +171,7 @@ Iterator<V,U>& Iterator<V,U>::operator+=(Iterator<V,U>::size_type x){
 template<typename V,typename U>
 Iterator<V,U>& Iterator<V,U>::operator-=(Iterator<V,U>::size_type x){
 	iterator temp(*this);
-	this*=temp-x; 
+	*this=temp-x; 
 	return *this; 
 };
 //***************************arithmic operators***********************
@@ -193,7 +194,7 @@ Iterator<V,U>::pointer Iterator<V,U>::operator->(){
 template<typename V,typename U>
 Iterator<V,U>::reference Iterator<V,U>::operator[](Iterator<V,U>::size_type x){
 	Cordinate tmp=_cordinate; 
-	tmp.setdistance(tmp.distance()+x);
+	tmp.setDistance(tmp.distance()+x);
 	return *_cordinate.access(); 
 };
 

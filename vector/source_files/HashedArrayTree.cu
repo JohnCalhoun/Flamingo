@@ -6,6 +6,7 @@
 #include<cmath>
 #include"Tree.cu"
 #include<type_traits>
+#include "cordinate.h"
 #include"internal.h"
 #include "reference.cu"
 #include "iterator.cpp"
@@ -32,25 +33,27 @@ struct HashedArrayTree_base {
 	
 template<typename T,Memory::Region M>
 class HashedArrayTree : public HashedArrayTree_base<T>{
+	using Base=HashedArrayTree_base<T>; 
+
 	public:
-	typedef typename HashedArrayTree_base<T>::reference		reference;
-	typedef typename HashedArrayTree_base<T>::const_reference	const_reference;
-	typedef typename HashedArrayTree_base<T>::Cordinate Cordinate;
+	typedef typename Base::reference		reference;
+	typedef typename Base::const_reference	const_reference;
+	typedef typename Base::Cordinate		Cordinate;
 
 	private:
 	typedef Internal::UP UP;
 	typedef Internal::DOWN DOWN;
 
 	public:
-	typedef typename HashedArrayTree_base<T>::const_iterator const_iterator;
-	typedef typename HashedArrayTree_base<T>::iterator iterator;
-	typedef typename HashedArrayTree_base<T>::reverse_iterator reverse_iterator;
-	typedef typename HashedArrayTree_base<T>::const_reverse_iterator const_reverse_iterator;
+	typedef typename Base::const_iterator			const_iterator;
+	typedef typename Base::iterator				iterator;
+	typedef typename Base::reverse_iterator			reverse_iterator;
+	typedef typename Base::const_reverse_iterator	const_reverse_iterator;
 
 	public:
 	typedef typename 
-		Memory::allocation_policy<T,M>::allocator		allocator_type;
-	typedef Memory::location<M>				Location;
+		Memory::allocation_policy<T,M>::allocator	allocator_type;
+	typedef Memory::location<M>					Location;
 
 	typedef typename allocator_type::value_type		value_type;
 	typedef typename allocator_type::difference_type	difference_type;
@@ -88,6 +91,7 @@ class HashedArrayTree : public HashedArrayTree_base<T>{
 	iterator begin();
 	iterator end();
 	const_iterator cbegin()const;
+	const_iterator begin()const{return cbegin();};
 	const_iterator cend()const; 
 	reverse_iterator rbegin();
 	reverse_iterator rend();
@@ -121,10 +125,11 @@ class HashedArrayTree : public HashedArrayTree_base<T>{
 	iterator		erase(const_iterator); 
 	iterator		erase(const_iterator, const_iterator); 
 	void			clear(); 
-//	template<class iter>
-//		void		assign(iter, iter); 
+	template<class iter>
+		void		assign(iter, iter); 
 	void			assign(std::initializer_list<T>); 
 	void			assign(size_type, const T&); 
+	
 
 	void push_back(const T&);
 	void push_back(T&&);
@@ -141,9 +146,6 @@ class HashedArrayTree : public HashedArrayTree_base<T>{
 	const_reference at(size_type)const;
 	const_reference front()const; 
 	const_reference back()const;
-	
-	template<typename U>
-	void copy_to_array(U)const; 
 
 	allocator_type get_allocator(); 
 };

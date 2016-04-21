@@ -4,6 +4,7 @@
 
 #include <iterator>
 #include "columns.cpp"
+#include "dataframe_traits.cpp"
 
 namespace Flamingo{
 namespace DataFrame{

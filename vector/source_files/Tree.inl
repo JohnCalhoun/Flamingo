@@ -8,6 +8,7 @@
 #include<algorithm>
 #include<stdio.h>
 #include"internal.h"
+#include "cordinate.h"
 #include <thrust/device_ptr.h>
 
 

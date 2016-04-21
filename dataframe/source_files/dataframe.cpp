@@ -10,7 +10,7 @@
 #include <array>
 #include <iterator>
 #include "dataframe_base.cpp"
-
+#include "dataframe_traits.cpp"
 namespace Flamingo{
 namespace DataFrame{
 
@@ -122,6 +122,16 @@ class dataframe : public dataframeBase{
 	bool operator!=(const dataframe<Type...>&)const;
 	reference operator[](size_type);
 	dataframe<Type...>& operator=(const dataframe<Type...>&);
+
+	template<typename P,typename iter>
+	void pop_to_array(P,iter)const;
+	template<typename P>
+	void copy_to_array(P)const;
+	template<typename P,typename iter>
+	void copy_to_array(P,iter,iter)const; 
+	
+	template<typename P>
+	void push_back_from_array(P,size_type);
 };
 
 #include"dataframe.inl"
